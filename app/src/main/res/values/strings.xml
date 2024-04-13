@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">VaultGuard</string>
+    <string name="app_name">Vault Guard</string>
+    <string name="app_pg_title">Password Generator</string>
+    <string name="app_length">Length</string>
+    <string name="app_upper">Include upper case (A–Z)</string>
+    <string name="app_lower">Include lower case (a–z)</string>
+    <string name="app_number">Include number (0–9)</string>
+    <string name="app_special_char">Include special character (!@#$%^*)</string>
+    <string name="app_copy_password">Copy password</string>
+    <string name="app_regenerate_password">Regenerate password</string>
+    <string name="app_copied_password">Copied!</string>
+    <string name="app_charset_required">Please select at least one character set</string>
 </resources>
