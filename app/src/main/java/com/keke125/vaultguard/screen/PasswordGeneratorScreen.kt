@@ -135,8 +135,8 @@ fun PasswordGenerator(
             Spacer(modifier = Modifier.padding(8.dp))
             Slider(
                 value = length,
-                onValueChange = {
-                    onLengthChange(it)
+                onValueChange = {onLengthChange(it)},
+                onValueChangeFinished = {
                     onPasswordChange(
                         generatePassword(
                             length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController
