@@ -1,5 +1,6 @@
 package com.keke125.vaultguard
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,22 +17,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
 import com.keke125.vaultguard.screen.VaultScreen
-import com.keke125.vaultguard.ui.login.LoginActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 class MainActivity : ComponentActivity() {
+    // At the top level of your kotlin file:
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -90,43 +92,21 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.UnAuthenticated.UnAuthenticatedRoute.route,
+            startDestination = Screen.Vault.route,
             modifier = Modifier.padding(paddingValues = innerPadding)
-        ) {/*
-            composable(Screen.Authenticated.Vault.route) {
+        ) {
+            composable(Screen.Vault.route) {
                 VaultScreen(navController = navController)
             }
-            composable(Screen.Authenticated.PasswordGenerator.route) {
+            composable(Screen.PasswordGenerator.route) {
                 PasswordGeneratorScreen(navController = navController)
             }
-            composable(Screen.Authenticated.Setting.route) {
+            composable(Screen.Setting.route) {
                 SettingScreen(navController = navController)
-            }*/
-            unAuthenticatedGraph()
-            authenticatedGraph(navController)
-        }
-    }
-}
-
-fun NavGraphBuilder.authenticatedGraph(navController: NavController) {
-    navigation(startDestination = Screen.Authenticated.Vault.route, route = Screen.Authenticated.AuthenticatedRoute.route ) {
-        composable(Screen.Authenticated.Vault.route) {
-            VaultScreen(navController = navController)
-        }
-        composable(Screen.Authenticated.PasswordGenerator.route) {
-            PasswordGeneratorScreen(navController = navController)
-        }
-        composable(Screen.Authenticated.Setting.route) {
-            SettingScreen(navController = navController)
-        }
-    }
-}
-
-fun NavGraphBuilder.unAuthenticatedGraph() {
-    navigation(startDestination = Screen.UnAuthenticated.Login.route, route = Screen.UnAuthenticated.UnAuthenticatedRoute.route ) {
-        activity(Screen.UnAuthenticated.Login.route) {
-            label = "login_screen"
-            activityClass = LoginActivity::class
+            }
+            composable(Screen.Login.route){
+                LoginScreen(navController = navController)
+            }
         }
     }
 }

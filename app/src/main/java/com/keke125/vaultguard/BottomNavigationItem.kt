@@ -1,6 +1,7 @@
 package com.keke125.vaultguard
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -28,6 +29,11 @@ data class BottomNavigationItem(
                 icon = Icons.Default.Settings,
                 route = Screen.Authenticated.Setting.route
             ),
+            BottomNavigationItem(
+                label = "Login",
+                icon = Icons.Default.AccountBox,
+                route = Screen.Login.route
+            )
         )
     }
 }
