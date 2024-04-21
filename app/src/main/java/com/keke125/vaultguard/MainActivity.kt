@@ -1,6 +1,5 @@
 package com.keke125.vaultguard
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,9 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,16 +28,13 @@ import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 class MainActivity : ComponentActivity() {
-    // At the top level of your kotlin file:
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             VaultGuardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen()
                 }
@@ -55,41 +48,36 @@ fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
-            ) {
-                NavigationBar {
-                    BottomNavigationItem().bottomNavigationItems()
-                        .forEachIndexed { _, navigationItem ->
-                            NavigationBarItem(
-                                selected = navigationItem.route == currentDestination?.route,
-                                label = {
-                                    Text(navigationItem.label)
-                                },
-                                icon = {
-                                    Icon(
-                                        navigationItem.icon,
-                                        contentDescription = navigationItem.label
-                                    )
-                                },
-                                onClick = {
-                                    navController.navigate(navigationItem.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
+    Scaffold(bottomBar = {
+        BottomAppBar(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.primary,
+        ) {
+            NavigationBar {
+                BottomNavigationItem().bottomNavigationItems().forEachIndexed { _, navigationItem ->
+                        NavigationBarItem(selected = navigationItem.route == currentDestination?.route,
+                            label = {
+                                Text(navigationItem.label)
+                            },
+                            icon = {
+                                Icon(
+                                    navigationItem.icon,
+                                    contentDescription = navigationItem.label
+                                )
+                            },
+                            onClick = {
+                                navController.navigate(navigationItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
                                     }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                            )
-                        }
-                }
+                            })
+                    }
             }
         }
-    ) { innerPadding ->
+    }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Screen.Vault.route,
@@ -104,7 +92,7 @@ fun MainScreen() {
             composable(Screen.Setting.route) {
                 SettingScreen(navController = navController)
             }
-            composable(Screen.Login.route){
+            composable(Screen.Login.route) {
                 LoginScreen(navController = navController)
             }
         }

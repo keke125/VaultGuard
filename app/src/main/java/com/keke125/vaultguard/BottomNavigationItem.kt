@@ -17,17 +17,17 @@ data class BottomNavigationItem(
             BottomNavigationItem(
                 label = "Vault",
                 icon = Icons.Default.Lock,
-                route = Screen.Authenticated.Vault.route
+                route = Screen.Vault.route
             ),
             BottomNavigationItem(
                 label = "Password Generator",
                 icon = Icons.Default.Refresh,
-                route = Screen.Authenticated.PasswordGenerator.route
+                route = Screen.PasswordGenerator.route
             ),
             BottomNavigationItem(
                 label = "Setting",
                 icon = Icons.Default.Settings,
-                route = Screen.Authenticated.Setting.route
+                route = Screen.Setting.route
             ),
             BottomNavigationItem(
                 label = "Login",
