@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.keke125.vaultguard.screen.AddVaultScreen
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
@@ -84,7 +85,7 @@ fun MainScreen() {
             modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
             composable(Screen.Vault.route) {
-                VaultScreen(navController = navController)
+                AddVaultScreen(navController = navController)
             }
             composable(Screen.PasswordGenerator.route) {
                 PasswordGeneratorScreen(navController = navController)
