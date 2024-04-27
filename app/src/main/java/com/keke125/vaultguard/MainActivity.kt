@@ -21,11 +21,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.keke125.vaultguard.data.AppDB
+import com.keke125.vaultguard.data.OfflineVaultsRepository
+import com.keke125.vaultguard.data.VaultDAO
 import com.keke125.vaultguard.screen.AddVaultScreen
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
-import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +42,17 @@ class MainActivity : ComponentActivity() {
                     MainScreen()
                 }
             }
+        }
+        db = AppDB.getDatabase(this)
+        vaultDAO = db.vaultDAO()
+        offlineVaultsRepository = OfflineVaultsRepository(vaultDAO)
+    }
+    companion object {
+        private lateinit var db: AppDB
+        private lateinit var vaultDAO: VaultDAO
+        private lateinit var offlineVaultsRepository: OfflineVaultsRepository
+        fun getOfflineVaultsRepository() : OfflineVaultsRepository{
+            return offlineVaultsRepository
         }
     }
 }
