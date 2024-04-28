@@ -1,9 +1,11 @@
 package com.keke125.vaultguard.data
 
-class OfflineVaultsRepository(private val vaultDAO: VaultDAO) : VaultsRepository {
-    override fun getAllVaults(): List<Vault> = vaultDAO.getAll()
+import kotlinx.coroutines.flow.Flow
 
-    override fun getVault(uid: Int): Vault? = vaultDAO.get(uid)
+class OfflineVaultsRepository(private val vaultDAO: VaultDAO) : VaultsRepository {
+    override fun getAllVaults(): Flow<List<Vault>> = vaultDAO.getAll()
+
+    override fun getVault(uid: Int): Flow<Vault?> = vaultDAO.get(uid)
 
     override suspend fun insertVault(vault: Vault) = vaultDAO.insert(vault)
 

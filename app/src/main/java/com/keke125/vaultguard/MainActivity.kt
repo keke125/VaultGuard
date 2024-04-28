@@ -1,11 +1,16 @@
 package com.keke125.vaultguard
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -24,10 +29,11 @@ import androidx.navigation.compose.rememberNavController
 import com.keke125.vaultguard.data.AppDB
 import com.keke125.vaultguard.data.OfflineVaultsRepository
 import com.keke125.vaultguard.data.VaultDAO
-import com.keke125.vaultguard.screen.AddVaultScreen
+import com.keke125.vaultguard.screen.AddVaultActivity
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
+import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +45,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen(this)
                 }
             }
         }
@@ -47,18 +53,19 @@ class MainActivity : ComponentActivity() {
         vaultDAO = db.vaultDAO()
         offlineVaultsRepository = OfflineVaultsRepository(vaultDAO)
     }
+
     companion object {
         private lateinit var db: AppDB
         private lateinit var vaultDAO: VaultDAO
         private lateinit var offlineVaultsRepository: OfflineVaultsRepository
-        fun getOfflineVaultsRepository() : OfflineVaultsRepository{
+        fun getOfflineVaultsRepository(): OfflineVaultsRepository {
             return offlineVaultsRepository
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(context: Context) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -69,27 +76,37 @@ fun MainScreen() {
         ) {
             NavigationBar {
                 BottomNavigationItem().bottomNavigationItems().forEachIndexed { _, navigationItem ->
-                        NavigationBarItem(selected = navigationItem.route == currentDestination?.route,
-                            label = {
-                                Text(navigationItem.label)
-                            },
-                            icon = {
-                                Icon(
-                                    navigationItem.icon,
-                                    contentDescription = navigationItem.label
-                                )
-                            },
-                            onClick = {
-                                navController.navigate(navigationItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
+                    NavigationBarItem(selected = navigationItem.route == currentDestination?.route,
+                        label = {
+                            Text(navigationItem.label)
+                        },
+                        icon = {
+                            Icon(
+                                navigationItem.icon,
+                                contentDescription = navigationItem.label
+                            )
+                        },
+                        onClick = {
+                            navController.navigate(navigationItem.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                            })
-                    }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        })
+                }
             }
+        }
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = {
+                val intent = Intent()
+                intent.setClass(context, AddVaultActivity::class.java)
+                context.startActivity(intent)
+            },
+        ) {
+            Icon(Icons.Filled.Add, "")
         }
     }) { innerPadding ->
         NavHost(
@@ -98,7 +115,7 @@ fun MainScreen() {
             modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
             composable(Screen.Vault.route) {
-                AddVaultScreen(navController = navController)
+                VaultScreen(navController = navController)
             }
             composable(Screen.PasswordGenerator.route) {
                 PasswordGeneratorScreen(navController = navController)

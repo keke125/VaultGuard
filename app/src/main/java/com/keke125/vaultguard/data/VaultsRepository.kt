@@ -1,9 +1,11 @@
 package com.keke125.vaultguard.data
 
-interface VaultsRepository {
-    fun getAllVaults(): List<Vault>
+import kotlinx.coroutines.flow.Flow
 
-    fun getVault(uid: Int): Vault?
+interface VaultsRepository {
+    fun getAllVaults(): Flow<List<Vault>>
+
+    fun getVault(uid: Int): Flow<Vault?>
 
     suspend fun insertVault(vault: Vault)
 

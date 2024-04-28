@@ -58,7 +58,7 @@ fun PasswordGeneratorScreen(navController: NavController) {
             val (password, onPasswordChange) = remember {
                 mutableStateOf(
                     generatePassword(
-                        length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController
+                        length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
                     )
                 )
             }
@@ -139,7 +139,7 @@ fun PasswordGenerator(
                 onValueChangeFinished = {
                     onPasswordChange(
                         generatePassword(
-                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController
+                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
                         )
                     )
                 },
@@ -156,7 +156,7 @@ fun PasswordGenerator(
                         onUpperChange(!isUpper)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), it, isLower, isNumber, isSpecialChar, navController
+                                length.toInt(), it, isLower, isNumber, isSpecialChar, navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -166,7 +166,7 @@ fun PasswordGenerator(
             Checkbox(checked = isUpper, onCheckedChange = {
                 onPasswordChange(
                     generatePassword(
-                        length.toInt(), it, isLower, isNumber, isSpecialChar, navController
+                        length.toInt(), it, isLower, isNumber, isSpecialChar, navController.context
                     )
                 )
                 onUpperChange(!isUpper)
@@ -187,7 +187,7 @@ fun PasswordGenerator(
                         onLowerChange(!isLower)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, it, isNumber, isSpecialChar, navController
+                                length.toInt(), isUpper, it, isNumber, isSpecialChar, navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -197,7 +197,7 @@ fun PasswordGenerator(
             Checkbox(checked = isLower, onCheckedChange = {
                 onPasswordChange(
                     generatePassword(
-                        length.toInt(), isUpper, it, isNumber, isSpecialChar, navController
+                        length.toInt(), isUpper, it, isNumber, isSpecialChar, navController.context
                     )
                 )
                 onLowerChange(!isLower)
@@ -218,7 +218,7 @@ fun PasswordGenerator(
                         onNumberChange(!isNumber)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, isLower, it, isSpecialChar, navController
+                                length.toInt(), isUpper, isLower, it, isSpecialChar, navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -228,7 +228,7 @@ fun PasswordGenerator(
             Checkbox(checked = isNumber, onCheckedChange = {
                 onPasswordChange(
                     generatePassword(
-                        length.toInt(), isUpper, isLower, it, isSpecialChar, navController
+                        length.toInt(), isUpper, isLower, it, isSpecialChar, navController.context
                     )
                 )
                 onNumberChange(!isNumber)
@@ -249,7 +249,7 @@ fun PasswordGenerator(
                         onSpecialCharChange(!isSpecialChar)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, isLower, isNumber, it, navController
+                                length.toInt(), isUpper, isLower, isNumber, it, navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -259,7 +259,7 @@ fun PasswordGenerator(
             Checkbox(checked = isSpecialChar, onCheckedChange = {
                 onPasswordChange(
                     generatePassword(
-                        length.toInt(), isUpper, isLower, isNumber, it, navController
+                        length.toInt(), isUpper, isLower, isNumber, it, navController.context
                     )
                 )
                 onSpecialCharChange(!isSpecialChar)
@@ -280,7 +280,7 @@ fun PasswordGenerator(
                 onClick = {
                     onPasswordChange(
                         generatePassword(
-                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController
+                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
                         )
                     )
                 }, modifier = Modifier.padding(start = 16.dp)
@@ -311,14 +311,14 @@ fun generatePassword(
     isLower: Boolean,
     isNumber: Boolean,
     isSpecialChar: Boolean,
-    navController: NavController
+    context: Context
 ): String {
     val charSet = mutableListOf<Char>()
     val secureRandom = SecureRandom()
     if (!isUpper && !isLower && !isNumber && !isSpecialChar) {
         Toast.makeText(
-            navController.context,
-            ContextCompat.getString(navController.context, R.string.app_charset_required),
+            context,
+            ContextCompat.getString(context, R.string.app_charset_required),
             Toast.LENGTH_LONG
         ).show()
         return ""
