@@ -29,7 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.keke125.vaultguard.data.AppDB
 import com.keke125.vaultguard.data.OfflineVaultsRepository
 import com.keke125.vaultguard.data.VaultDAO
-import com.keke125.vaultguard.screen.AddVaultActivity
+import com.keke125.vaultguard.activity.AddVaultActivity
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen

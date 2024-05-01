@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
+import com.keke125.vaultguard.activity.ViewVaultActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import com.keke125.vaultguard.util.DatabaseUtil
@@ -84,7 +86,10 @@ fun VaultScreen(navController: NavController) {
                                     }
                                 },
                                 modifier = Modifier.clickable {
-
+                                    val intent = Intent()
+                                    intent.setClass(context, ViewVaultActivity::class.java)
+                                    intent.putExtra("vault", vault)
+                                    context.startActivity(intent)
                                 })
                             HorizontalDivider()
                             VaultDialog(expanded, onExpandedChange, vault, clipboard, context)
@@ -137,6 +142,11 @@ fun VaultDialog(
                         Icon(
                             Icons.Outlined.Visibility, contentDescription = ""
                         )
+                    }, modifier = Modifier.clickable {
+                        val intent = Intent()
+                        intent.setClass(context, ViewVaultActivity::class.java)
+                        intent.putExtra("vault", vault)
+                        context.startActivity(intent)
                     })
                     ListItem(headlineContent = { Text("Edit") }, leadingContent = {
                         Icon(
@@ -178,9 +188,7 @@ fun copyUsername(clipboardManager: ClipboardManager, username: String, context: 
     // Only show a toast for Android 12 and lower.
     //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context,
-        "Copied",
-        Toast.LENGTH_SHORT
+        context, "Copied", Toast.LENGTH_SHORT
     ).show()
 }
 
@@ -196,8 +204,6 @@ fun copyPassword(clipboardManager: ClipboardManager, password: String, context: 
     // Only show a toast for Android 12 and lower.
     // if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context,
-        "Copied",
-        Toast.LENGTH_SHORT
+        context, "Copied", Toast.LENGTH_SHORT
     ).show()
 }
