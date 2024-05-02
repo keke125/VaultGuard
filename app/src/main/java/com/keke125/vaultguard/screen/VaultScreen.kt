@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
+import com.keke125.vaultguard.activity.EditVaultActivity
 import com.keke125.vaultguard.activity.ViewVaultActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -147,11 +148,18 @@ fun VaultDialog(
                         intent.setClass(context, ViewVaultActivity::class.java)
                         intent.putExtra("vault", vault)
                         context.startActivity(intent)
+                        onExpandedChange(false)
                     })
                     ListItem(headlineContent = { Text("Edit") }, leadingContent = {
                         Icon(
                             Icons.Outlined.Edit, contentDescription = ""
                         )
+                    }, modifier = Modifier.clickable {
+                        val intent = Intent()
+                        intent.setClass(context, EditVaultActivity::class.java)
+                        intent.putExtra("vault", vault)
+                        context.startActivity(intent)
+                        onExpandedChange(false)
                     })
                     ListItem(headlineContent = { Text("Copy Username") }, leadingContent = {
                         Icon(
@@ -161,6 +169,7 @@ fun VaultDialog(
                         copyUsername(
                             clipboardManager, vault.username, context
                         )
+                        onExpandedChange(false)
                     })
                     ListItem(headlineContent = { Text("Copy Password") }, leadingContent = {
                         Icon(
@@ -170,6 +179,7 @@ fun VaultDialog(
                         copyPassword(
                             clipboardManager, vault.password, context
                         )
+                        onExpandedChange(false)
                     })
                     ListItem(headlineContent = { }, trailingContent = {
                         TextButton(onClick = { onExpandedChange(false) }) {

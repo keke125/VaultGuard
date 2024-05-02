@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class DatabaseUtil {
-    companion object{
+    companion object {
         private val offlineVaultsRepository = MainActivity.getOfflineVaultsRepository()
-        fun saveVault(name: String, username: String, password: String, context: Context){
-            val vault = Vault(name = name,username = username, password = password)
+        fun saveVault(name: String, username: String, password: String, context: Context) {
+            val vault = Vault(name = name, username = username, password = password)
             CoroutineScope(Dispatchers.IO).launch {
                 offlineVaultsRepository.insertVault(
                     vault
@@ -24,8 +24,19 @@ class DatabaseUtil {
             ).show()
         }
 
-         fun getAllVaults(): Flow<List<Vault>> {
-             return offlineVaultsRepository.getAllVaults()
+        fun getAllVaults(): Flow<List<Vault>> {
+            return offlineVaultsRepository.getAllVaults()
+        }
+
+        fun updateVault(vault: Vault, context: Context) {
+            CoroutineScope(Dispatchers.IO).launch {
+                offlineVaultsRepository.updateVault(
+                    vault
+                )
+            }
+            Toast.makeText(
+                context, "成功更新", Toast.LENGTH_LONG
+            ).show()
         }
     }
 }
