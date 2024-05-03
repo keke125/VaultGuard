@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -36,14 +35,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
 import com.keke125.vaultguard.activity.EditVaultActivity
 import com.keke125.vaultguard.activity.ViewVaultActivity
+import com.keke125.vaultguard.data.AppDBDataContainer
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
-import com.keke125.vaultguard.util.DatabaseUtil
 
 @SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
 @Composable
@@ -52,21 +50,18 @@ fun VaultScreen(navController: NavController) {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val vaults = DatabaseUtil.getAllVaults().asLiveData()
-            val vaultsState = vaults.observeAsState(emptyList())
             val context = navController.context
+            val vaults = AppDBDataContainer(context).vaultsRepository.getAllVaults().asLiveData()
+                .observeAsState(
+                    emptyList()
+                )
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             Column {
-                Text(
-                    "Vault Screen",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 20.dp)
-                )
-                if (vaultsState.value.isNotEmpty()) {
+                if (vaults.value.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(vaultsState.value) { vault ->
+                        items(vaults.value) { vault ->
                             val (expanded, onExpandedChange) = remember {
                                 mutableStateOf(false)
                             }
@@ -89,7 +84,7 @@ fun VaultScreen(navController: NavController) {
                                 modifier = Modifier.clickable {
                                     val intent = Intent()
                                     intent.setClass(context, ViewVaultActivity::class.java)
-                                    intent.putExtra("vault", vault)
+                                    intent.putExtra("uid", vault.uid)
                                     context.startActivity(intent)
                                 })
                             HorizontalDivider()

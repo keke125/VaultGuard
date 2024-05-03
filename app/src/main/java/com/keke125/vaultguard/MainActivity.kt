@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,10 +29,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.keke125.vaultguard.activity.AddVaultActivity
 import com.keke125.vaultguard.data.AppDB
 import com.keke125.vaultguard.data.OfflineVaultsRepository
 import com.keke125.vaultguard.data.VaultDAO
-import com.keke125.vaultguard.activity.AddVaultActivity
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
@@ -64,6 +67,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(context: Context) {
     val navController = rememberNavController()
@@ -82,8 +86,7 @@ fun MainScreen(context: Context) {
                         },
                         icon = {
                             Icon(
-                                navigationItem.icon,
-                                contentDescription = navigationItem.label
+                                navigationItem.icon, contentDescription = navigationItem.label
                             )
                         },
                         onClick = {
@@ -99,15 +102,28 @@ fun MainScreen(context: Context) {
             }
         }
     }, floatingActionButton = {
-        FloatingActionButton(
-            onClick = {
-                val intent = Intent()
-                intent.setClass(context, AddVaultActivity::class.java)
-                context.startActivity(intent)
-            },
-        ) {
-            Icon(Icons.Filled.Add, "")
+        if (currentDestination?.route != Screen.Setting.route && currentDestination?.route != Screen.Login.route) {
+            FloatingActionButton(
+                onClick = {
+                    val intent = Intent()
+                    intent.setClass(context, AddVaultActivity::class.java)
+                    context.startActivity(intent)
+                },
+            ) {
+                Icon(Icons.Filled.Add, "")
+            }
         }
+    }, topBar = {
+        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ), title = {
+            if (currentDestination?.route == Screen.Vault.route) {
+                Text("My Vault")
+            } else if (currentDestination?.route == Screen.PasswordGenerator.route) {
+                Text("Password Generator")
+            }
+        })
     }) { innerPadding ->
         NavHost(
             navController = navController,

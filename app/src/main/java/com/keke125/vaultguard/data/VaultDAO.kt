@@ -3,6 +3,7 @@ package com.keke125.vaultguard.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -15,13 +16,10 @@ interface VaultDAO {
     @Query("SELECT * FROM vault WHERE uid IN (:vaultIds)")
     fun loadAllByIds(vaultIds: IntArray): Flow<List<Vault>>
 
-    @Query("SELECT * FROM vault WHERE name is :name")
-    fun findByName(name: String): Flow<Vault?>
-
     @Query("SELECT * FROM vault WHERE uid = :uid")
-    fun get(uid: Int): Flow<Vault?>
+    fun findById(uid: Int): Flow<Vault>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)
 
     @Insert

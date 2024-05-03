@@ -58,7 +58,12 @@ fun PasswordGeneratorScreen(navController: NavController) {
             val (password, onPasswordChange) = remember {
                 mutableStateOf(
                     generatePassword(
-                        length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
+                        length.toInt(),
+                        isUpper,
+                        isLower,
+                        isNumber,
+                        isSpecialChar,
+                        navController.context
                     )
                 )
             }
@@ -102,13 +107,11 @@ fun PasswordGenerator(
     onPasswordChange: (String) -> Unit
 ) {
     Column {
-        Text(
-            text = ContextCompat.getString(navController.context, R.string.app_pg_title),
+        Spacer(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp)
-                .padding(vertical = 16.dp),
-            fontSize = 32.sp
+                .padding(vertical = 16.dp)
         )
         SelectionContainer {
             Text(
@@ -135,11 +138,16 @@ fun PasswordGenerator(
             Spacer(modifier = Modifier.padding(8.dp))
             Slider(
                 value = length,
-                onValueChange = {onLengthChange(it)},
+                onValueChange = { onLengthChange(it) },
                 onValueChangeFinished = {
                     onPasswordChange(
                         generatePassword(
-                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
+                            length.toInt(),
+                            isUpper,
+                            isLower,
+                            isNumber,
+                            isSpecialChar,
+                            navController.context
                         )
                     )
                 },
@@ -156,7 +164,12 @@ fun PasswordGenerator(
                         onUpperChange(!isUpper)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), it, isLower, isNumber, isSpecialChar, navController.context
+                                length.toInt(),
+                                it,
+                                isLower,
+                                isNumber,
+                                isSpecialChar,
+                                navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -187,7 +200,12 @@ fun PasswordGenerator(
                         onLowerChange(!isLower)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, it, isNumber, isSpecialChar, navController.context
+                                length.toInt(),
+                                isUpper,
+                                it,
+                                isNumber,
+                                isSpecialChar,
+                                navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -218,7 +236,12 @@ fun PasswordGenerator(
                         onNumberChange(!isNumber)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, isLower, it, isSpecialChar, navController.context
+                                length.toInt(),
+                                isUpper,
+                                isLower,
+                                it,
+                                isSpecialChar,
+                                navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -249,7 +272,12 @@ fun PasswordGenerator(
                         onSpecialCharChange(!isSpecialChar)
                         onPasswordChange(
                             generatePassword(
-                                length.toInt(), isUpper, isLower, isNumber, it, navController.context
+                                length.toInt(),
+                                isUpper,
+                                isLower,
+                                isNumber,
+                                it,
+                                navController.context
                             )
                         )
                     }, role = Role.Checkbox
@@ -280,7 +308,12 @@ fun PasswordGenerator(
                 onClick = {
                     onPasswordChange(
                         generatePassword(
-                            length.toInt(), isUpper, isLower, isNumber, isSpecialChar, navController.context
+                            length.toInt(),
+                            isUpper,
+                            isLower,
+                            isNumber,
+                            isSpecialChar,
+                            navController.context
                         )
                     )
                 }, modifier = Modifier.padding(start = 16.dp)
