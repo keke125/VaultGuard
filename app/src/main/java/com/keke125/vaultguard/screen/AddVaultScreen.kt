@@ -39,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -59,7 +60,7 @@ import kotlinx.coroutines.launch
 
 object AddVaultDestination : NavigationDestination {
     override val route = "add_vault"
-    override val titleRes = R.string.app_pg_title
+    override val titleRes = R.string.app_add_vault_title
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +87,7 @@ fun AddVaultScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
-                    Text("新增密碼")
+                    Text(stringResource(AddVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
                         if (checkPassword(

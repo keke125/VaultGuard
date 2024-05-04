@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -60,7 +61,7 @@ import kotlinx.coroutines.launch
 
 object EditVaultDestination : NavigationDestination {
     override val route = "edit_vault"
-    override val titleRes = R.string.app_lower
+    override val titleRes = R.string.app_edit_vault_title
     const val vaultIdArg = "vaultId"
     val routeWithArgs = "$route/{$vaultIdArg}"
 }
@@ -88,7 +89,7 @@ fun EditVaultScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
-                    Text("編輯密碼")
+                    Text(stringResource(EditVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
                         if (checkPassword(

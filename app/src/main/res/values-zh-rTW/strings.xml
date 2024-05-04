@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vault Guard</string>
-    <string name="app_pg_title">密碼產生器</string>
+    <string name="app_password_generator_screen_title">密碼產生器</string>
     <string name="app_length">長度</string>
-    <string name="app_lower">包含小寫英文(a–z)</string>
-    <string name="app_upper">包含大寫英文(A–Z)</string>
-    <string name="app_number">包含數字(0–9)</string>
+    <string name="app_lower">小寫英文(a–z)</string>
+    <string name="app_upper">大寫英文(A–Z)</string>
+    <string name="app_number">數字(0–9)</string>
     <string name="app_special_char">特殊字元(!@#$%^*)</string>
     <string name="app_copy_password">複製密碼</string>
     <string name="app_regenerate_password">重新產生</string>
     <string name="app_copied_password">已複製密碼!</string>
     <string name="app_charset_required">請至少包含一組字集</string>
+    <string name="app_add_vault_title">新增密碼</string>
+    <string name="app_edit_vault_title">編輯密碼</string>
+    <string name="app_vault_details_title">檢視密碼</string>
+    <string name="app_vault_screen_title">我的密碼庫</string>
 </resources>

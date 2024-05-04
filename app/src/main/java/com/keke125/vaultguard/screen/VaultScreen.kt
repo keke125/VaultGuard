@@ -42,13 +42,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
@@ -80,7 +83,7 @@ fun VaultScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
-                    Text("My Vault")
+                    Text(stringResource(R.string.app_vault_screen_title))
                 })
             }) { innerPadding ->
                 Column(

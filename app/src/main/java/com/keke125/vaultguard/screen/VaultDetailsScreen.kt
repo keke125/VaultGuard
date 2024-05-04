@@ -43,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,7 @@ import kotlinx.coroutines.launch
 
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
-    override val titleRes = R.string.app_pg_title
+    override val titleRes = R.string.app_vault_details_title
     const val vaultIdArg = "vaultId"
     val routeWithArgs = "$route/{$vaultIdArg}"
 }
@@ -92,7 +93,7 @@ fun VaultDetailsScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
-                    Text("檢視密碼")
+                    Text(stringResource(VaultDetailsDestination.titleRes))
                 }, actions = {
                     IconButton(onClick = { onMoreOptionsExpandedChange(true) }) {
                         Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "")
