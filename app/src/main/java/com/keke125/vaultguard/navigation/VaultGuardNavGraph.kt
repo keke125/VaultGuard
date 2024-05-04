@@ -22,6 +22,8 @@ import com.keke125.vaultguard.BottomNavigationItem
 import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
+import com.keke125.vaultguard.screen.EditVaultDestination
+import com.keke125.vaultguard.screen.EditVaultScreen
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
@@ -97,6 +99,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 AddVaultScreen(
                     navController = navController
                 )
+            }
+            composable(
+                route = EditVaultDestination.routeWithArgs,
+                arguments = listOf(navArgument(EditVaultDestination.vaultIdArg) {
+                    type = NavType.IntType
+                })
+            ) {
+                EditVaultScreen(navController = navController)
             }
         }
     }

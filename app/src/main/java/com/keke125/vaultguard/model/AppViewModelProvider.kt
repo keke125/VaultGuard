@@ -22,6 +22,12 @@ object AppViewModelProvider {
         initializer {
             VaultViewModel(vaultGuardApplication().container.vaultsRepository)
         }
+
+        initializer {
+            EditVaultViewModel(
+                this.createSavedStateHandle(), vaultGuardApplication().container.vaultsRepository
+            )
+        }
     }
 }
 

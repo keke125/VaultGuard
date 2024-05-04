@@ -2,7 +2,6 @@ package com.keke125.vaultguard.screen
 
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,12 +36,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.activity.EditVaultActivity
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultDetailsViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -91,10 +88,7 @@ fun VaultDetailsScreen(
             }, floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        val intent = Intent()
-                        intent.setClass(context, EditVaultActivity::class.java)
-                        //intent.putExtra("vault", vault)
-                        startActivity(context, intent, null)
+                        navController.navigate("${EditVaultDestination.route}/${uiState.value.vaultDetails.uid}")
                     },
                 ) {
                     Icon(Icons.Filled.Edit, "")

@@ -3,6 +3,7 @@ package com.keke125.vaultguard.model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.screen.VaultDetailsDestination
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,7 +28,7 @@ class VaultDetailsViewModel(
         )
 
     suspend fun deleteItem() {
-        vaultsRepository.deleteVault(uiState.value.vaultDetails.toItem())
+        vaultsRepository.deleteVault(uiState.value.vaultDetails.toVault())
     }
 
     companion object {
@@ -37,4 +38,8 @@ class VaultDetailsViewModel(
 
 data class VaultDetailsUiState(
     val vaultDetails: VaultDetails = VaultDetails()
+)
+
+fun Vault.toVaultDetailsUiState(): VaultDetailsUiState = VaultDetailsUiState(
+    vaultDetails = this.toVaultDetails()
 )

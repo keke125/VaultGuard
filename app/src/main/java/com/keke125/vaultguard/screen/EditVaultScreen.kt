@@ -1,11 +1,6 @@
-package com.keke125.vaultguard.activity
+package com.keke125.vaultguard.screen
 
-import android.app.Activity
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Refresh
@@ -23,24 +19,27 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,152 +47,141 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.data.Vault
-import com.keke125.vaultguard.screen.checkPassword
-import com.keke125.vaultguard.screen.generatePassword
+import com.keke125.vaultguard.model.AppViewModelProvider
+import com.keke125.vaultguard.model.EditVaultViewModel
+import com.keke125.vaultguard.model.VaultDetails
+import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
-import com.keke125.vaultguard.util.DatabaseUtil
+import kotlinx.coroutines.launch
 
-
-class EditVaultActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            VaultGuardTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
-                    val intent = intent
-                    val vault: Vault? = if (Build.VERSION.SDK_INT >= 33) {
-                        intent.getParcelableExtra("vault", Vault::class.java)
-                    } else {
-                        intent.getParcelableExtra("vault")
-                    }
-                    if (vault != null) {
-                        EditVault(vault, this)
-                    } else {
-                        val activity = LocalContext.current as? Activity
-                        activity?.finish()
-                    }
-                }
-            }
-        }
-    }
+object EditVaultDestination : NavigationDestination {
+    override val route = "edit_vault"
+    override val titleRes = R.string.app_lower
+    const val vaultIdArg = "vaultId"
+    val routeWithArgs = "$route/{$vaultIdArg}"
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditVault(
-    vault: Vault,
-    context: Context,
+fun EditVaultScreen(
+    viewModel: EditVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navController: NavController
 ) {
+    val coroutineScope = rememberCoroutineScope()
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
+            val context = navController.context
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
-            }
-            val (name, onNameChange) = remember {
-                mutableStateOf(vault.name)
-            }
-            val (username, onUsernameChange) = remember {
-                mutableStateOf(vault.username)
-            }
-            val (password, onPasswordChange) = remember {
-                mutableStateOf(vault.password)
             }
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
-            val activity = LocalContext.current as? Activity
-            Column(
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "編輯密碼",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    fontSize = 32.sp
-                )
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { onNameChange(it) },
-                    singleLine = true,
-                    label = { Text("名稱") },
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .width(360.dp),
-                )
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { onUsernameChange(it) },
-                    singleLine = true,
-                    label = { Text("帳號") },
-                    leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .width(360.dp),
-                )
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = {
-                        onPasswordChange(it)
-                    },
-                    label = { Text("密碼") },
-                    leadingIcon = { Icon(Icons.Default.Password, "") },
-                    trailingIcon = {
-                        Row {
-                            IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
-                                if (isPasswordVisible) {
-                                    Icon(Icons.Default.VisibilityOff, "")
-                                } else {
-                                    Icon(Icons.Default.Visibility, "")
-                                }
-                            }
-                            IconButton(onClick = {
-                                onPasswordGeneratorVisibleChange(true)
-                            }) {
-                                Icon(Icons.Default.Refresh, "")
+            Scaffold(topBar = {
+                TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ), title = {
+                    Text("編輯密碼")
+                }, actions = {
+                    TextButton(onClick = {
+                        /*TODO*/
+                        if (checkPassword(
+                                viewModel.vaultUiState.vaultDetails.name,
+                                viewModel.vaultUiState.vaultDetails.username,
+                                viewModel.vaultUiState.vaultDetails.password,
+                                context
+                            )
+                        ) {
+                            coroutineScope.launch {
+                                viewModel.updateVault()
+                                navController.popBackStack()
                             }
                         }
-                    },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .width(360.dp),
-                )
-
-                Row {
-                    Button(onClick = {
-                        if (checkPassword(name, username, password, context)) {
-                            val newVault = Vault(vault.uid, name, username, password)
-                            DatabaseUtil.updateVault(newVault, context)
-                            onNameChange("")
-                            onUsernameChange("")
-                            onPasswordChange("")
-                            activity?.finish()
-                        }
-                    }, modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)) {
+                    }) {
                         Text("儲存")
                     }
-                    Button(onClick = {
-                        activity?.finish()
-                    }, modifier = Modifier.padding(vertical = 8.dp)) {
-                        Text("取消")
+                }, navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
                     }
+                })
+            }) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(innerPadding)
+                        .padding(vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    OutlinedTextField(
+                        value = viewModel.vaultUiState.vaultDetails.name,
+                        onValueChange = {
+                            viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(name = it))
+                        },
+                        singleLine = true,
+                        label = { Text("名稱") },
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = viewModel.vaultUiState.vaultDetails.username,
+                        onValueChange = {
+                            viewModel.updateUiState(
+                                viewModel.vaultUiState.vaultDetails.copy(
+                                    username = it
+                                )
+                            )
+                        },
+                        singleLine = true,
+                        label = { Text("帳號") },
+                        leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = viewModel.vaultUiState.vaultDetails.password,
+                        onValueChange = {
+                            viewModel.updateUiState(
+                                viewModel.vaultUiState.vaultDetails.copy(
+                                    password = it
+                                )
+                            )
+                        },
+                        label = { Text("密碼") },
+                        leadingIcon = { Icon(Icons.Default.Password, "") },
+                        trailingIcon = {
+                            Row {
+                                IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
+                                    if (isPasswordVisible) {
+                                        Icon(Icons.Default.VisibilityOff, "")
+                                    } else {
+                                        Icon(Icons.Default.Visibility, "")
+                                    }
+                                }
+                                IconButton(onClick = {
+                                    onPasswordGeneratorVisibleChange(true)
+                                }) {
+                                    Icon(Icons.Default.Refresh, "")
+                                }
+                            }
+                        },
+                        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
                 }
-
                 when {
                     isPasswordGeneratorVisible -> {
                         PasswordGeneratorDialogConfirm(
                             onDismissRequest = { onPasswordGeneratorVisibleChange(false) },
                             context,
-                            onPasswordChange
+                            { viewModel.updateUiState(it) },
+                            viewModel.vaultUiState.vaultDetails
                         )
                     }
                 }
@@ -204,7 +192,10 @@ fun EditVault(
 
 @Composable
 fun PasswordGeneratorDialogConfirm(
-    onDismissRequest: () -> Unit, context: Context, onRealPasswordChange: (String) -> Unit
+    onDismissRequest: () -> Unit,
+    context: Context,
+    onVaultDetailsChange: (VaultDetails) -> Unit,
+    vaultDetails: VaultDetails
 ) {
     val (length, onLengthChange) = remember {
         mutableFloatStateOf(16f)
@@ -271,7 +262,8 @@ fun PasswordGeneratorDialogConfirm(
                     )
                     Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                     Text(text = length.toInt().toString(), fontSize = 20.sp)
-                    Slider(value = length,
+                    Slider(
+                        value = length,
                         onValueChange = { onLengthChange(it) },
                         onValueChangeFinished = {
                             onPasswordChange(
@@ -400,6 +392,7 @@ fun PasswordGeneratorDialogConfirm(
                 Row {
                     TextButton(onClick = {
                         //onRealPasswordChange(password)
+                        onVaultDetailsChange(vaultDetails.copy(password = password))
                         onConfirmChange(true)
                         //onDismissRequest()
                     }) {
@@ -420,7 +413,7 @@ fun PasswordGeneratorDialogConfirm(
                 onConfirmDismissRequest = { onConfirmChange(false) },
                 onPasswordGeneratorDialogDismissRequest = { onDismissRequest() },
                 password,
-                onRealPasswordChange
+                onPasswordChange
             )
         }
     }

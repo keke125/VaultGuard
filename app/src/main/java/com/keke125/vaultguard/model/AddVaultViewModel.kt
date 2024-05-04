@@ -16,7 +16,7 @@ class AddVaultViewModel(private val vaultsRepository: VaultsRepository) : ViewMo
     }
 
     suspend fun saveVault() {
-        vaultsRepository.insertVault(vaultUiState.vaultDetails.toItem())
+        vaultsRepository.insertVault(vaultUiState.vaultDetails.toVault())
     }
 }
 
@@ -31,7 +31,7 @@ data class VaultDetails(
     val password: String = "",
 )
 
-fun VaultDetails.toItem(): Vault = Vault(
+fun VaultDetails.toVault(): Vault = Vault(
     uid = uid, name = name, username = username, password = password
 )
 

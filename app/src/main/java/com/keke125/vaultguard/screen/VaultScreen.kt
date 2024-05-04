@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -46,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.keke125.vaultguard.activity.EditVaultActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultViewModel
@@ -190,10 +188,7 @@ fun VaultDialog(
                             Icons.Outlined.Edit, contentDescription = ""
                         )
                     }, modifier = Modifier.clickable {
-                        val intent = Intent()
-                        intent.setClass(context, EditVaultActivity::class.java)
-                        intent.putExtra("vault", vault)
-                        context.startActivity(intent)
+                        /*TODO*/
                         onExpandedChange(false)
                     })
                     ListItem(headlineContent = { Text("Copy Username") }, leadingContent = {
