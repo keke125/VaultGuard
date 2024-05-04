@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.model
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -10,6 +11,16 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             AddVaultViewModel(vaultGuardApplication().container.vaultsRepository)
+        }
+
+        initializer {
+            VaultDetailsViewModel(
+                this.createSavedStateHandle(), vaultGuardApplication().container.vaultsRepository
+            )
+        }
+
+        initializer {
+            VaultViewModel(vaultGuardApplication().container.vaultsRepository)
         }
     }
 }

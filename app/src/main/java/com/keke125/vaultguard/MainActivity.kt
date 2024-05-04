@@ -1,42 +1,13 @@
 package com.keke125.vaultguard
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.keke125.vaultguard.activity.AddVaultActivity
-import com.keke125.vaultguard.data.AppDB
-import com.keke125.vaultguard.data.OfflineVaultsRepository
-import com.keke125.vaultguard.data.VaultDAO
-import com.keke125.vaultguard.screen.LoginScreen
-import com.keke125.vaultguard.screen.PasswordGeneratorScreen
-import com.keke125.vaultguard.screen.SettingScreen
-import com.keke125.vaultguard.screen.VaultScreen
+import com.keke125.vaultguard.navigation.MainScreen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,99 +19,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(this)
+                    MainScreen()
                 }
-            }
-        }
-        db = AppDB.getDatabase(this)
-        vaultDAO = db.vaultDAO()
-        offlineVaultsRepository = OfflineVaultsRepository(vaultDAO)
-    }
-
-    companion object {
-        private lateinit var db: AppDB
-        private lateinit var vaultDAO: VaultDAO
-        private lateinit var offlineVaultsRepository: OfflineVaultsRepository
-        fun getOfflineVaultsRepository(): OfflineVaultsRepository {
-            return offlineVaultsRepository
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScreen(context: Context) {
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    Scaffold(bottomBar = {
-        BottomAppBar(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.primary,
-        ) {
-            NavigationBar {
-                BottomNavigationItem().bottomNavigationItems().forEachIndexed { _, navigationItem ->
-                    NavigationBarItem(selected = navigationItem.route == currentDestination?.route,
-                        label = {
-                            Text(navigationItem.label)
-                        },
-                        icon = {
-                            Icon(
-                                navigationItem.icon, contentDescription = navigationItem.label
-                            )
-                        },
-                        onClick = {
-                            navController.navigate(navigationItem.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        })
-                }
-            }
-        }
-    }, floatingActionButton = {
-        if (currentDestination?.route != Screen.Setting.route && currentDestination?.route != Screen.Login.route) {
-            FloatingActionButton(
-                onClick = {
-                    val intent = Intent()
-                    intent.setClass(context, AddVaultActivity::class.java)
-                    context.startActivity(intent)
-                },
-            ) {
-                Icon(Icons.Filled.Add, "")
-            }
-        }
-    }, topBar = {
-        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = {
-            if (currentDestination?.route == Screen.Vault.route) {
-                Text("My Vault")
-            } else if (currentDestination?.route == Screen.PasswordGenerator.route) {
-                Text("Password Generator")
-            }
-        })
-    }) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Vault.route,
-            modifier = Modifier.padding(paddingValues = innerPadding)
-        ) {
-            composable(Screen.Vault.route) {
-                VaultScreen(navController = navController)
-            }
-            composable(Screen.PasswordGenerator.route) {
-                PasswordGeneratorScreen(navController = navController)
-            }
-            composable(Screen.Setting.route) {
-                SettingScreen(navController = navController)
-            }
-            composable(Screen.Login.route) {
-                LoginScreen(navController = navController)
             }
         }
     }

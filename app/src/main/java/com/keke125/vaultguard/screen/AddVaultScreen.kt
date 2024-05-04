@@ -1,10 +1,6 @@
-package com.keke125.vaultguard.activity
+package com.keke125.vaultguard.screen
 
-import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -51,49 +46,40 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.keke125.vaultguard.R
+import com.keke125.vaultguard.model.AddVaultUiState
 import com.keke125.vaultguard.model.AddVaultViewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultDetails
-import com.keke125.vaultguard.model.VaultUiState
-import com.keke125.vaultguard.screen.checkPassword
-import com.keke125.vaultguard.screen.generatePassword
+import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import kotlinx.coroutines.launch
 
-class AddVaultActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            VaultGuardTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) { AddVaultScreen(this) }
-            }
-        }
-    }
+object AddVaultDestination : NavigationDestination {
+    override val route = "add_vault"
+    override val titleRes = R.string.app_pg_title
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddVaultScreen(
-    context: Context,
+    navController: NavController,
     viewModel: AddVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    vaultUiState: VaultUiState = viewModel.vaultUiState
+    vaultUiState: AddVaultUiState = viewModel.vaultUiState
 ) {
     val coroutineScope = rememberCoroutineScope()
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
+            val context = navController.context
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
-            val activity = LocalContext.current as? Activity
             Scaffold(topBar = {
                 TopAppBar(colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -111,7 +97,7 @@ fun AddVaultScreen(
                         ) {
                             coroutineScope.launch {
                                 viewModel.saveVault()
-                                activity?.finish()
+                                navController.popBackStack()
                             }
                         }
                     }) {
@@ -119,7 +105,7 @@ fun AddVaultScreen(
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
-                        activity?.finish()
+                        navController.popBackStack()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
                     }
@@ -132,7 +118,8 @@ fun AddVaultScreen(
                         .padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    OutlinedTextField(value = vaultUiState.vaultDetails.name,
+                    OutlinedTextField(
+                        value = vaultUiState.vaultDetails.name,
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(name = it))
                         },
@@ -140,7 +127,8 @@ fun AddVaultScreen(
                         label = { Text("名稱") },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    OutlinedTextField(value = vaultUiState.vaultDetails.username,
+                    OutlinedTextField(
+                        value = vaultUiState.vaultDetails.username,
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(username = it))
                         },
@@ -149,7 +137,8 @@ fun AddVaultScreen(
                         leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    OutlinedTextField(value = vaultUiState.vaultDetails.password,
+                    OutlinedTextField(
+                        value = vaultUiState.vaultDetails.password,
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(password = it))
                         },
@@ -259,7 +248,8 @@ fun PasswordGeneratorDialog(
                     )
                     Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                     Text(text = length.toInt().toString(), fontSize = 20.sp)
-                    Slider(value = length,
+                    Slider(
+                        value = length,
                         onValueChange = { onLengthChange(it) },
                         onValueChangeFinished = {
                             onPasswordChange(

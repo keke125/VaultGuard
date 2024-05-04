@@ -8,11 +8,11 @@ import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.data.VaultsRepository
 
 class AddVaultViewModel(private val vaultsRepository: VaultsRepository) : ViewModel() {
-    var vaultUiState by mutableStateOf(VaultUiState())
+    var vaultUiState by mutableStateOf(AddVaultUiState())
         private set
 
     fun updateUiState(vaultDetails: VaultDetails) {
-        vaultUiState = VaultUiState(vaultDetails = vaultDetails)
+        vaultUiState = AddVaultUiState(vaultDetails = vaultDetails)
     }
 
     suspend fun saveVault() {
@@ -20,7 +20,7 @@ class AddVaultViewModel(private val vaultsRepository: VaultsRepository) : ViewMo
     }
 }
 
-data class VaultUiState(
+data class AddVaultUiState(
     val vaultDetails: VaultDetails = VaultDetails(),
 )
 
@@ -35,7 +35,7 @@ fun VaultDetails.toItem(): Vault = Vault(
     uid = uid, name = name, username = username, password = password
 )
 
-fun Vault.toVaultUiState(): VaultUiState = VaultUiState(
+fun Vault.toAddVaultUiState(): AddVaultUiState = AddVaultUiState(
     vaultDetails = this.toVaultDetails(),
 )
 
