@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.screen
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -90,7 +91,6 @@ fun EditVaultScreen(
                     Text("編輯密碼")
                 }, actions = {
                     TextButton(onClick = {
-                        /*TODO*/
                         if (checkPassword(
                                 viewModel.vaultUiState.vaultDetails.name,
                                 viewModel.vaultUiState.vaultDetails.username,
@@ -100,11 +100,12 @@ fun EditVaultScreen(
                         ) {
                             coroutineScope.launch {
                                 viewModel.updateVault()
-                                navController.popBackStack()
                             }
+                            navController.popBackStack()
+                            Toast.makeText(context, "更新成功", Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Text("儲存")
+                        Text("更新")
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
@@ -391,10 +392,7 @@ fun PasswordGeneratorDialogConfirm(
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Row {
                     TextButton(onClick = {
-                        //onRealPasswordChange(password)
-                        onVaultDetailsChange(vaultDetails.copy(password = password))
                         onConfirmChange(true)
-                        //onDismissRequest()
                     }) {
                         Text(text = "選擇", fontSize = 20.sp)
                     }
@@ -409,12 +407,10 @@ fun PasswordGeneratorDialogConfirm(
     }
     when {
         confirm -> {
-            UpdatePasswordConfirm(
-                onConfirmDismissRequest = { onConfirmChange(false) },
+            UpdatePasswordConfirm(onConfirmDismissRequest = { onConfirmChange(false) },
                 onPasswordGeneratorDialogDismissRequest = { onDismissRequest() },
                 password,
-                onPasswordChange
-            )
+                { onVaultDetailsChange(vaultDetails.copy(password = password)) })
         }
     }
 }

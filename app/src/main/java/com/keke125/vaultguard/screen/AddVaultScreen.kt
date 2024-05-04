@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.screen
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -97,8 +98,9 @@ fun AddVaultScreen(
                         ) {
                             coroutineScope.launch {
                                 viewModel.saveVault()
-                                navController.popBackStack()
                             }
+                            navController.popBackStack()
+                            Toast.makeText(context, "儲存成功", Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Text("儲存")

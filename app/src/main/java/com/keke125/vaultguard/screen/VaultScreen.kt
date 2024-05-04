@@ -56,6 +56,7 @@ import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 fun VaultScreen(
     navController: NavController,
     navigateToViewVault: (Int) -> Unit,
+    navigateToEditVault: (Int) -> Unit,
     viewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
@@ -68,7 +69,6 @@ fun VaultScreen(
             Scaffold(floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        /*TODO*/
                         navController.navigate(AddVaultDestination.route)
                     },
                 ) {
@@ -115,7 +115,6 @@ fun VaultScreen(
                                         }
                                     },
                                     modifier = Modifier.clickable {
-                                        /*TODO*/
                                         navigateToViewVault(vault.uid)
                                     })
                                 HorizontalDivider()
@@ -125,10 +124,13 @@ fun VaultScreen(
                                     vault,
                                     clipboard,
                                     context,
-                                    navigateToViewVault
+                                    navigateToViewVault,
+                                    navigateToEditVault
                                 )
                             }
                         }
+                    } else {
+                        Text("No Vault")
                     }
                 }
             }
@@ -167,7 +169,8 @@ fun VaultDialog(
     vault: Vault,
     clipboardManager: ClipboardManager,
     context: Context,
-    navigateToViewVault: (Int) -> Unit
+    navigateToViewVault: (Int) -> Unit,
+    navigateToEditVault: (Int) -> Unit
 ) {
     when {
         expanded -> {
@@ -179,7 +182,6 @@ fun VaultDialog(
                             Icons.Outlined.Visibility, contentDescription = ""
                         )
                     }, modifier = Modifier.clickable {
-                        /*TODO*/
                         navigateToViewVault(vault.uid)
                         onExpandedChange(false)
                     })
@@ -188,7 +190,7 @@ fun VaultDialog(
                             Icons.Outlined.Edit, contentDescription = ""
                         )
                     }, modifier = Modifier.clickable {
-                        /*TODO*/
+                        navigateToEditVault(vault.uid)
                         onExpandedChange(false)
                     })
                     ListItem(headlineContent = { Text("Copy Username") }, leadingContent = {

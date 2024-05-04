@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,7 +19,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.keke125.vaultguard.BottomNavigationItem
 import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
@@ -47,7 +47,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                         .forEachIndexed { _, navigationItem ->
                             NavigationBarItem(selected = navigationItem.route == currentDestination.route,
                                 label = {
-                                    Text(navigationItem.label)
+                                    Text(navigationItem.label, textAlign = TextAlign.Center)
                                 },
                                 icon = {
                                     Icon(
@@ -76,7 +76,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
         ) {
             composable(Screen.Vault.route) {
                 VaultScreen(navController = navController,
-                    navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") })
+                    navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
+                    navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") })
             }
             composable(Screen.PasswordGenerator.route) {
                 PasswordGeneratorScreen(navController = navController)

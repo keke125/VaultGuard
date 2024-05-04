@@ -2,6 +2,8 @@ package com.keke125.vaultguard.screen
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,18 +14,26 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -38,11 +48,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultDetailsViewModel
+import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import kotlinx.coroutines.launch
 
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
@@ -70,6 +81,12 @@ fun VaultDetailsScreen(
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val (isPasswordDeleteRequired, onPasswordDeleteRequiredChange) = remember {
+                mutableStateOf(false)
+            }
+            val (isMoreOptionsExpanded, onMoreOptionsExpandedChange) = remember {
+                mutableStateOf(false)
+            }
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -77,7 +94,9 @@ fun VaultDetailsScreen(
                 ), title = {
                     Text("檢視密碼")
                 }, actions = {
-                    /*TODO*/
+                    IconButton(onClick = { onMoreOptionsExpandedChange(true) }) {
+                        Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "")
+                    }
                 }, navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
@@ -156,36 +175,85 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    MoreOptionsDialog(
+                        expanded = isMoreOptionsExpanded,
+                        onExpandedChange = onMoreOptionsExpandedChange,
+                        onPasswordDeleteRequired = onPasswordDeleteRequiredChange
+                    )
+                    when {
+                        isPasswordDeleteRequired -> {
+                            DeletePasswordConfirm(
+                                onPasswordDeleteRequiredChange,
+                                onDeleted = {
+                                    coroutineScope.launch {
+                                        viewModel.deleteItem()
+                                    }
+                                    navController.popBackStack()
+                                    Toast.makeText(context, "密碼已被刪除", Toast.LENGTH_SHORT).show()
+                                })
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-/*
-fun copyUsername(clipboardManager: ClipboardManager, username: String, context: Context) {
-    // When setting the clipboard text.
-    clipboardManager.setPrimaryClip(ClipData.newPlainText("username", username))
-    // Only show a toast for Android 12 and lower.
-    //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
-    Toast.makeText(
-        context, "Copied", Toast.LENGTH_SHORT
-    ).show()
+@Composable
+fun DeletePasswordConfirm(
+    onPasswordDeleteRequiredChange: (Boolean) -> Unit,
+    onDeleted: () -> Unit,
+) {
+    AlertDialog(icon = {
+        Icon(Icons.Default.Warning, "")
+    }, title = {
+        Text(text = "是否要刪除密碼?")
+    }, text = {
+        Text(text = "當前密碼將被刪除")
+    }, onDismissRequest = {
+        onPasswordDeleteRequiredChange(false)
+    }, confirmButton = {
+        TextButton(onClick = {
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text("取消")
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDeleted()
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text("確定")
+        }
+    })
 }
 
-fun copyPassword(clipboardManager: ClipboardManager, password: String, context: Context) {
-    val clipData = ClipData.newPlainText("password", password)
-    clipData.apply {
-        description.extras = PersistableBundle().apply {
-            putBoolean("android.content.extra.IS_SENSITIVE", true)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MoreOptionsDialog(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onPasswordDeleteRequired: (Boolean) -> Unit,
+) {
+    when {
+        expanded -> {
+            BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
+                Column {
+                    ListItem(headlineContent = { Text("刪除密碼") }, leadingContent = {
+                        Icon(
+                            Icons.Outlined.Delete, contentDescription = ""
+                        )
+                    }, modifier = Modifier.clickable {
+                        onExpandedChange(false)
+                        onPasswordDeleteRequired(true)
+                    })
+                    ListItem(headlineContent = { }, trailingContent = {
+                        TextButton(onClick = { onExpandedChange(false) }) {
+                            Text("Cancel", color = ListItemDefaults.colors().headlineColor)
+                        }
+                    })
+                }
+            }
         }
     }
-    // When setting the clipboard text.
-    clipboardManager.setPrimaryClip(clipData)
-    // Only show a toast for Android 12 and lower.
-    // if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
-    Toast.makeText(
-        context, "Copied", Toast.LENGTH_SHORT
-    ).show()
 }
-*/

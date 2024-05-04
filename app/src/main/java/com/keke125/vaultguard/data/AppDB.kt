@@ -16,9 +16,7 @@ abstract class AppDB : RoomDatabase() {
         fun getDatabase(context: Context): AppDB {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, AppDB::class.java, "app_db")
-                    .allowMainThreadQueries()
-                    .build()
+                Room.databaseBuilder(context, AppDB::class.java, "app_db").build()
                     .also { Instance = it }
             }
         }
