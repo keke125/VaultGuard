@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
-    alias(libs.plugins.googleGmsGoogleServices)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)

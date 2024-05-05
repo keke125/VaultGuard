@@ -27,6 +27,7 @@ import com.keke125.vaultguard.screen.EditVaultScreen
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SettingScreen
+import com.keke125.vaultguard.screen.SignupScreen
 import com.keke125.vaultguard.screen.VaultDetailsDestination
 import com.keke125.vaultguard.screen.VaultDetailsScreen
 import com.keke125.vaultguard.screen.VaultScreen
@@ -108,6 +109,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 })
             ) {
                 EditVaultScreen(navController = navController)
+            }
+            composable(Screen.Signup.route) {
+                SignupScreen(navController = navController)
             }
         }
     }

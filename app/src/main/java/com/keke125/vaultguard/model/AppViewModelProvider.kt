@@ -28,6 +28,10 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(), vaultGuardApplication().container.vaultsRepository
             )
         }
+
+        initializer {
+            SignupViewModel(vaultGuardApplication().authService)
+        }
     }
 }
 
