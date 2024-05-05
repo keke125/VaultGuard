@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.keke125.vaultguard" />
+                  <option name="mobileSdkAppId" value="1:396157305906:android:064cb58e055601fa1ca82b" />
+                  <option name="projectId" value="vaultguard-keke125" />
+                  <option name="projectNumber" value="396157305906" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
