@@ -19,18 +19,14 @@ class SignupViewModel(
     var signupUiState by mutableStateOf(SignupUiState())
         private set
 
-    init {
-        viewModelScope.launch {
-
-        }
-    }
-
     private val email
         get() = signupUiState.email
     private val password
         get() = signupUiState.password
 
-    fun onSignUpClick(/*openAndPopUp: (String, String) -> Unit*/context: Context, activity: Activity) {
+    fun onSignUpClick(
+        context: Context, activity: Activity, openAndPopUp: () -> Unit
+    ) {
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
@@ -38,7 +34,8 @@ class SignupViewModel(
         }
 
         if (password.length < 6) {
-            Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -48,9 +45,7 @@ class SignupViewModel(
         }
 
         viewModelScope.launch {
-            authService.signupWithEmailAndPassword(email, password, context, activity)
-            /*TODO*/
-            //openAndPopUp(SETTINGS_SCREEN, SIGN_UP_SCREEN)
+            authService.signupWithEmailAndPassword(email, password, context, activity, openAndPopUp)
         }
     }
 
@@ -69,9 +64,7 @@ class SignupViewModel(
 }
 
 data class SignupUiState(
-    val email: String = "",
-    val password: String = "",
-    val repeatPassword: String = ""
+    val email: String = "", val password: String = "", val repeatPassword: String = ""
 )
 
 fun String.isValidEmail(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()

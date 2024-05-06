@@ -27,8 +27,28 @@ class AuthServiceImpl(
             awaitClose { auth.removeAuthStateListener(listener) }
         }
 
-    override suspend fun authenticate(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).await()
+    override suspend fun authenticateWithEmailAndPassword(
+        email: String,
+        password: String,
+        activity: Activity,
+        context: Context,
+        openAndPopUp: () -> Unit
+    ) {
+        auth.signInWithEmailAndPassword(email, password).addOnFailureListener(activity) { task ->
+            Toast.makeText(
+                context, task.localizedMessage, Toast.LENGTH_LONG
+            ).show()
+        }.addOnCompleteListener(activity) { task ->
+            if (task.isSuccessful) {
+                val user = auth.currentUser
+                if (user != null) {
+                    Toast.makeText(
+                        context, "Welcome ${user.email}!", Toast.LENGTH_LONG
+                    ).show()
+                    openAndPopUp()
+                }
+            }
+        }
     }
 
     override suspend fun sendRecoveryEmail(email: String) {
@@ -47,7 +67,11 @@ class AuthServiceImpl(
     }
 
     override suspend fun signupWithEmailAndPassword(
-        email: String, password: String, context: Context, activity: Activity
+        email: String,
+        password: String,
+        context: Context,
+        activity: Activity,
+        openAndPopUp: () -> Unit
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnFailureListener(activity) { task ->
@@ -64,6 +88,7 @@ class AuthServiceImpl(
                             Toast.LENGTH_LONG
                         ).show()
                     }
+                    openAndPopUp()
                 }
             }
     }

@@ -32,6 +32,10 @@ object AppViewModelProvider {
         initializer {
             SignupViewModel(vaultGuardApplication().authService)
         }
+
+        initializer {
+            LoginViewModel(vaultGuardApplication().authService)
+        }
     }
 }
 

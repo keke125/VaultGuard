@@ -1,5 +1,7 @@
 package com.keke125.vaultguard.screen
 
+import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,22 +27,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.keke125.vaultguard.Screen
+import com.keke125.vaultguard.model.AppViewModelProvider
+import com.keke125.vaultguard.model.LoginViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
-            val (username, onUsernameChange) = remember {
-                mutableStateOf("")
-            }
-            val (password, onPasswordChange) = remember {
-                mutableStateOf("")
-            }
+            val activity = navController.context as Activity
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -49,8 +54,8 @@ fun LoginScreen(navController: NavController) {
             ) {
                 Text(text = "Login", fontSize = 36.sp)
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { onUsernameChange(it) },
+                    value = viewModel.loginUiState.email,
+                    onValueChange = { viewModel.updateEmail(it) },
                     label = {
                         Text(
                             text = "Username"
@@ -65,8 +70,8 @@ fun LoginScreen(navController: NavController) {
                     placeholder = { Text(text = "Please enter username") },
                 )
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { onPasswordChange(it) },
+                    value = viewModel.loginUiState.password,
+                    onValueChange = { viewModel.updatePassword(it) },
                     label = {
                         Text(
                             text = "Password"
@@ -97,6 +102,21 @@ fun LoginScreen(navController: NavController) {
                         PasswordVisualTransformation()
                     }
                 )
+
+                Button(onClick = {
+                    if (viewModel.loginUiState.email.isNotEmpty() && viewModel.loginUiState.password.isNotEmpty()) viewModel.onLoginClick(
+                        context, activity
+                    ) {
+                        navigateAndPopUp(
+                            navController, Screen.Vault.route, Screen.Login.route
+                        )
+                    }
+                    else Toast.makeText(
+                        context, "Please fill all fields!", Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                    Text(text = "Log in")
+                }
             }
         }
     }

@@ -11,11 +11,22 @@ interface AuthService {
 
     val currentUser: Flow<User>
 
-    suspend fun authenticate(email: String, password: String)
+    suspend fun authenticateWithEmailAndPassword(
+        email: String,
+        password: String,
+        activity: Activity,
+        context: Context,
+        openAndPopUp: () -> Unit
+    )
+
     suspend fun sendRecoveryEmail(email: String)
     suspend fun deleteAccount()
     suspend fun signOut()
     suspend fun signupWithEmailAndPassword(
-        email: String, password: String, context: Context, activity: Activity
+        email: String,
+        password: String,
+        context: Context,
+        activity: Activity,
+        openAndPopUp: () -> Unit
     )
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.SignupViewModel
 import com.keke125.vaultguard.model.isValidEmail
@@ -161,7 +162,11 @@ fun SignupScreen(
                         )
                     ) viewModel.onSignUpClick(
                         context, activity
-                    )
+                    ) {
+                        navigateAndPopUp(
+                            navController, Screen.Login.route, Screen.Signup.route
+                        )
+                    }
                     else Toast.makeText(
                         context, "Please fill all fields with valid data", Toast.LENGTH_SHORT
                     ).show()
@@ -170,5 +175,12 @@ fun SignupScreen(
                 }
             }
         }
+    }
+}
+
+fun navigateAndPopUp(navController: NavController, route: String, popUp: String) {
+    navController.navigate(route) {
+        launchSingleTop = true
+        popUpTo(popUp) { inclusive = true }
     }
 }
