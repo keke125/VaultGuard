@@ -1,6 +1,5 @@
 package com.keke125.vaultguard.screen
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -54,7 +53,6 @@ import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
 @Composable
 fun VaultScreen(
     navController: NavController,

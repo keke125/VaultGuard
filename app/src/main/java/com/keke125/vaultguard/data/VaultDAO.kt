@@ -13,11 +13,17 @@ interface VaultDAO {
     @Query("SELECT * FROM vault")
     fun getAll(): Flow<List<Vault>>
 
+    @Query("SELECT * FROM vault WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(username) LIKE '%' || LOWER(:keyword) || '%' ")
+    fun getAllFiltered(keyword: String): Flow<List<Vault>>
+
     @Query("SELECT * FROM vault WHERE uid IN (:vaultIds)")
     fun loadAllByIds(vaultIds: IntArray): Flow<List<Vault>>
 
     @Query("SELECT * FROM vault WHERE uid = :uid")
     fun findById(uid: Int): Flow<Vault>
+
+    @Query("SELECT * FROM vault WHERE name LIKE '%' || :name || '%'")
+    fun findByName(name: String): Flow<List<Vault>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)

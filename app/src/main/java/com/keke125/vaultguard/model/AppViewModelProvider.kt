@@ -36,6 +36,10 @@ object AppViewModelProvider {
         initializer {
             LoginViewModel(vaultGuardApplication().authService)
         }
+
+        initializer {
+            SearchVaultViewModel(vaultGuardApplication().container.vaultsRepository)
+        }
     }
 }
 

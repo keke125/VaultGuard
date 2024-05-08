@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 interface VaultsRepository {
     fun getAllVaults(): Flow<List<Vault>>
 
+    fun getAllVaultsFiltered(keyword :String): Flow<List<Vault>>
+
     fun getVaultByUid(uid: Int): Flow<Vault?>
 
     suspend fun insertVault(vault: Vault)
