@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Visibility
@@ -58,6 +59,7 @@ fun VaultScreen(
     navController: NavController,
     navigateToViewVault: (Int) -> Unit,
     navigateToEditVault: (Int) -> Unit,
+    navigateToSearchVault: () -> Unit,
     viewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
@@ -82,6 +84,10 @@ fun VaultScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
                     Text(stringResource(R.string.app_vault_screen_title))
+                }, actions = {
+                    IconButton(onClick = { navigateToSearchVault() }) {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "")
+                    }
                 })
             }) { innerPadding ->
                 Column(

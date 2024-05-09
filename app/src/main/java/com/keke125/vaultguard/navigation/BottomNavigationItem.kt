@@ -1,11 +1,9 @@
 package com.keke125.vaultguard.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.keke125.vaultguard.Screen
 
@@ -21,11 +19,7 @@ data class BottomNavigationItem(
                 icon = Icons.Default.Refresh,
                 route = Screen.PasswordGenerator.route
             ), BottomNavigationItem(
-                label = "Setting", icon = Icons.Default.Settings, route = Screen.Setting.route
-            ), BottomNavigationItem(
-                label = "Login", icon = Icons.Default.AccountBox, route = Screen.Login.route
-            ), BottomNavigationItem(
-                label = "Sign up", icon = Icons.Default.AccountCircle, route = Screen.Signup.route
+                label = "Search", icon = Icons.Default.Search, route = Screen.SearchVault.route
             )
         )
     }

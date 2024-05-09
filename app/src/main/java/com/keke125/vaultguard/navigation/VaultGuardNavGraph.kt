@@ -26,6 +26,7 @@ import com.keke125.vaultguard.screen.EditVaultDestination
 import com.keke125.vaultguard.screen.EditVaultScreen
 import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
+import com.keke125.vaultguard.screen.SearchVaultScreen
 import com.keke125.vaultguard.screen.SettingScreen
 import com.keke125.vaultguard.screen.SignupScreen
 import com.keke125.vaultguard.screen.VaultDetailsDestination
@@ -77,6 +78,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
         ) {
             composable(Screen.Vault.route) {
                 VaultScreen(navController = navController,
+                    navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
+                    navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
+                    navigateToSearchVault = { navController.navigate(Screen.SearchVault.route) })
+            }
+            composable(Screen.SearchVault.route) {
+                SearchVaultScreen(navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") })
             }
