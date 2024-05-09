@@ -28,7 +28,7 @@ abstract class AppDB : RoomDatabase() {
                 if (sharedPref != null) {
                     if (sharedPref.contains("DB_PASSWORD")) {
                         val encryptedPassword = sharedPref.getString("DB_PASSWORD", "")
-                        dbPassword = encryptedPassword?.let { keyService.decrypt(it) }
+                        dbPassword = encryptedPassword?.let { keyService.decrypt(it, context) }
                     } else {
                         val charset = mutableListOf<Char>()
                         charset.addAll('1'..'9')
@@ -37,7 +37,7 @@ abstract class AppDB : RoomDatabase() {
                         dbPassword = (1..32).joinToString(separator = "") {
                             charset[SecureRandom().nextInt(charset.size)].toString()
                         }
-                        val encryptedPassword = keyService.encrypt(dbPassword)
+                        val encryptedPassword = keyService.encrypt(dbPassword, context)
                         with(sharedPref.edit()) {
                             putString("DB_PASSWORD", encryptedPassword)
                             apply()
