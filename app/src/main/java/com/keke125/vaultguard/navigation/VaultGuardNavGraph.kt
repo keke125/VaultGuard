@@ -98,7 +98,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(
                 route = VaultDetailsDestination.routeWithArgs,
-                arguments = listOf(navArgument(VaultDetailsDestination.vaultIdArg) {
+                arguments = listOf(navArgument(VaultDetailsDestination.VAULTED) {
                     type = NavType.IntType
                 })
             ) {

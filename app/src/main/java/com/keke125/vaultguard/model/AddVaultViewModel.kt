@@ -29,16 +29,13 @@ data class VaultDetails(
     val name: String = "",
     val username: String = "",
     val password: String = "",
+    val urlList: List<String> = emptyList(),
 )
 
 fun VaultDetails.toVault(): Vault = Vault(
-    uid = uid, name = name, username = username, password = password
-)
-
-fun Vault.toAddVaultUiState(): AddVaultUiState = AddVaultUiState(
-    vaultDetails = this.toVaultDetails(),
+    uid = uid, name = name, username = username, password = password, urlList = urlList
 )
 
 fun Vault.toVaultDetails(): VaultDetails = VaultDetails(
-    uid = uid, name = name, username = username, password = password
+    uid = uid, name = name, username = username, password = password, urlList = urlList
 )

@@ -1,19 +1,27 @@
 package com.keke125.vaultguard.screen
 
+import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Visibility
@@ -47,6 +55,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
@@ -59,8 +69,8 @@ import kotlinx.coroutines.launch
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
     override val titleRes = R.string.app_vault_details_title
-    const val vaultIdArg = "vaultId"
-    val routeWithArgs = "$route/{$vaultIdArg}"
+    const val VAULTED = "vaultId"
+    val routeWithArgs = "$route/{$VAULTED}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,9 +128,14 @@ fun VaultDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(innerPadding)
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 8.dp)
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(
+                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
                         value = uiState.value.vaultDetails.name,
                         onValueChange = {},
@@ -176,6 +191,18 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                    if (uiState.value.vaultDetails.urlList.isNotEmpty()) {
+                        Text(
+                            text = "網址 (URL)",
+                            modifier = Modifier.fillMaxWidth(0.8f),
+                            fontSize = 20.sp
+                        )
+                        Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                        uiState.value.vaultDetails.urlList.forEachIndexed { index, url ->
+                            Url(url = url, context = context)
+                        }
+                    }
                     MoreOptionsDialog(
                         expanded = isMoreOptionsExpanded,
                         onExpandedChange = onMoreOptionsExpandedChange,
@@ -183,15 +210,13 @@ fun VaultDetailsScreen(
                     )
                     when {
                         isPasswordDeleteRequired -> {
-                            DeletePasswordConfirm(
-                                onPasswordDeleteRequiredChange,
-                                onDeleted = {
-                                    coroutineScope.launch {
-                                        viewModel.deleteItem()
-                                    }
-                                    navController.popBackStack()
-                                    Toast.makeText(context, "密碼已被刪除", Toast.LENGTH_SHORT).show()
-                                })
+                            DeletePasswordConfirm(onPasswordDeleteRequiredChange, onDeleted = {
+                                coroutineScope.launch {
+                                    viewModel.deleteItem()
+                                }
+                                navController.popBackStack()
+                                Toast.makeText(context, "密碼已被刪除", Toast.LENGTH_SHORT).show()
+                            })
                         }
                     }
                 }
@@ -257,4 +282,34 @@ fun MoreOptionsDialog(
             }
         }
     }
+}
+
+@Composable
+fun Url(url: String, context: Context) {
+    OutlinedTextField(
+        value = url,
+        onValueChange = {},
+        readOnly = true,
+        singleLine = true,
+        label = { Text("網址") },
+        leadingIcon = { Icon(Icons.Default.Link, "") },
+        trailingIcon = {
+            IconButton(onClick = {
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                        val uri = Uri.parse(url)
+                        setData(uri)
+                }
+
+                try {
+                    startActivity(context, sendIntent, null)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                Icon(Icons.AutoMirrored.Filled.OpenInNew, "")
+            }
+        },
+        modifier = Modifier.fillMaxWidth(0.8f)
+    )
 }

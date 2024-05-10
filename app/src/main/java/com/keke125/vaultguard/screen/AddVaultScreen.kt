@@ -9,15 +9,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,10 +38,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -82,6 +90,7 @@ fun AddVaultScreen(
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val urlList = remember { mutableStateListOf("") }
             Scaffold(topBar = {
                 TopAppBar(colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -98,6 +107,11 @@ fun AddVaultScreen(
                             )
                         ) {
                             coroutineScope.launch {
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        urlList = urlList
+                                    )
+                                )
                                 viewModel.saveVault()
                             }
                             navController.popBackStack()
@@ -118,9 +132,16 @@ fun AddVaultScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(innerPadding)
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 8.dp)
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(
+                        text = "基本資訊",
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
                         value = vaultUiState.vaultDetails.name,
                         onValueChange = {
@@ -166,16 +187,38 @@ fun AddVaultScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                }
-                when {
-                    isPasswordGeneratorVisible -> {
-                        PasswordGeneratorDialog(
-                            onDismissRequest = { onPasswordGeneratorVisibleChange(false) },
-                            context,
-                            { viewModel.updateUiState(it) },
-                            vaultUiState.vaultDetails
-                        )
+                    Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                    Text(
+                        text = "網址 (URL)",
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    if (urlList.isNotEmpty()) {
+                        urlList.forEachIndexed { index, url ->
+                            Url(url = url, onUrlChange = { newUrl ->
+                                urlList[index] = newUrl
+                            }, onDelete = {
+                                urlList.removeAt(index)
+                            })
+                        }
                     }
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    Button(onClick = {
+                        urlList.add("")
+                    }) {
+                        Text("新增網址")
+                    }
+                }
+            }
+            when {
+                isPasswordGeneratorVisible -> {
+                    PasswordGeneratorDialog(onDismissRequest = {
+                        onPasswordGeneratorVisibleChange(
+                            false
+                        )
+                    }, context, { viewModel.updateUiState(it) }, vaultUiState.vaultDetails
+                    )
                 }
             }
         }
@@ -380,7 +423,6 @@ fun PasswordGeneratorDialog(
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Row {
                     TextButton(onClick = {
-                        //onRealPasswordChange(password)
                         onRealPasswordChange(vaultDetails.copy(password = password))
                         onDismissRequest()
                     }) {
@@ -395,4 +437,25 @@ fun PasswordGeneratorDialog(
             }
         }
     }
+}
+
+@Composable
+fun Url(url: String, onUrlChange: (url: String) -> Unit, onDelete: () -> Unit) {
+    var text by remember(url) { mutableStateOf(url) }
+    OutlinedTextField(
+        value = text,
+        onValueChange = {
+            text = it
+            onUrlChange(text)
+        },
+        singleLine = true,
+        label = { Text("網址") },
+        leadingIcon = { Icon(Icons.Default.Link, "") },
+        trailingIcon = {
+            IconButton(onClick = { onDelete() }) {
+                Icon(Icons.Default.Delete, "")
+            }
+        },
+        modifier = Modifier.fillMaxWidth(0.8f)
+    )
 }
