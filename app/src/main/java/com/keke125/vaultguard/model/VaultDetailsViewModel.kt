@@ -16,7 +16,7 @@ class VaultDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val vaultsRepository: VaultsRepository,
 ) : ViewModel() {
-    private val vaultId: Int = checkNotNull(savedStateHandle[VaultDetailsDestination.VAULTED])
+    private val vaultId: Int = checkNotNull(savedStateHandle[VaultDetailsDestination.VAULTID])
 
     val uiState: StateFlow<VaultDetailsUiState> =
         vaultsRepository.getVaultByUid(vaultId).filterNotNull().map {
@@ -37,7 +37,7 @@ class VaultDetailsViewModel(
 }
 
 data class VaultDetailsUiState(
-    val vaultDetails: VaultDetails = VaultDetails()
+    var vaultDetails: VaultDetails = VaultDetails()
 )
 
 fun Vault.toVaultDetailsUiState(): VaultDetailsUiState = VaultDetailsUiState(

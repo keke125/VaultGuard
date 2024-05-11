@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,8 +65,8 @@ import kotlinx.coroutines.launch
 object EditVaultDestination : NavigationDestination {
     override val route = "edit_vault"
     override val titleRes = R.string.app_edit_vault_title
-    const val vaultIdArg = "vaultId"
-    val routeWithArgs = "$route/{$vaultIdArg}"
+    const val VAULTID = "vaultId"
+    val routeWithArgs = "$route/{$VAULTID}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,9 +123,16 @@ fun EditVaultScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(innerPadding)
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 8.dp)
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(
+                        text = "基本資訊",
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
                         value = viewModel.vaultUiState.vaultDetails.name,
                         onValueChange = {
@@ -176,6 +186,46 @@ fun EditVaultScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                    Text(
+                        text = "網址 (URL)",
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    if (viewModel.vaultUiState.vaultDetails.urlList.isNotEmpty()) {
+                        viewModel.vaultUiState.vaultDetails.urlList.forEachIndexed { index, url ->
+                            UpdateUrl(url = url, onUrlChange = { newUrl ->
+                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                newUrlList[index] = newUrl
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        urlList = newUrlList
+                                    )
+                                )
+                            }, onDelete = {
+                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                newUrlList.removeAt(index)
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        urlList = newUrlList
+                                    )
+                                )
+                            })
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    Button(onClick = {
+                        val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                        newUrlList.add("")
+                        viewModel.updateUiState(
+                            viewModel.vaultUiState.vaultDetails.copy(
+                                urlList = newUrlList
+                            )
+                        )
+                    }) {
+                        Text("新增網址")
+                    }
                 }
                 when {
                     isPasswordGeneratorVisible -> {

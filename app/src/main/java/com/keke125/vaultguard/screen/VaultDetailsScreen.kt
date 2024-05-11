@@ -69,8 +69,8 @@ import kotlinx.coroutines.launch
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
     override val titleRes = R.string.app_vault_details_title
-    const val VAULTED = "vaultId"
-    val routeWithArgs = "$route/{$VAULTED}"
+    const val VAULTID = "vaultId"
+    val routeWithArgs = "$route/{$VAULTID}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -191,16 +191,16 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    Spacer(modifier = Modifier.padding(vertical = 16.dp))
                     if (uiState.value.vaultDetails.urlList.isNotEmpty()) {
+                        Spacer(modifier = Modifier.padding(vertical = 16.dp))
                         Text(
                             text = "網址 (URL)",
                             modifier = Modifier.fillMaxWidth(0.8f),
                             fontSize = 20.sp
                         )
                         Spacer(modifier = Modifier.padding(vertical = 4.dp))
-                        uiState.value.vaultDetails.urlList.forEachIndexed { index, url ->
-                            Url(url = url, context = context)
+                        uiState.value.vaultDetails.urlList.forEachIndexed { _, url ->
+                            ViewUrl(url = url, context = context)
                         }
                     }
                     MoreOptionsDialog(
@@ -285,7 +285,7 @@ fun MoreOptionsDialog(
 }
 
 @Composable
-fun Url(url: String, context: Context) {
+fun ViewUrl(url: String, context: Context) {
     OutlinedTextField(
         value = url,
         onValueChange = {},

@@ -98,7 +98,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(
                 route = VaultDetailsDestination.routeWithArgs,
-                arguments = listOf(navArgument(VaultDetailsDestination.VAULTED) {
+                arguments = listOf(navArgument(VaultDetailsDestination.VAULTID) {
                     type = NavType.IntType
                 })
             ) {
@@ -111,7 +111,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(
                 route = EditVaultDestination.routeWithArgs,
-                arguments = listOf(navArgument(EditVaultDestination.vaultIdArg) {
+                arguments = listOf(navArgument(EditVaultDestination.VAULTID) {
                     type = NavType.IntType
                 })
             ) {

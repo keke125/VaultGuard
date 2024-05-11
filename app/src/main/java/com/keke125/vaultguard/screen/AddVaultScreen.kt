@@ -196,7 +196,7 @@ fun AddVaultScreen(
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     if (urlList.isNotEmpty()) {
                         urlList.forEachIndexed { index, url ->
-                            Url(url = url, onUrlChange = { newUrl ->
+                            UpdateUrl(url = url, onUrlChange = { newUrl ->
                                 urlList[index] = newUrl
                             }, onDelete = {
                                 urlList.removeAt(index)
@@ -440,7 +440,7 @@ fun PasswordGeneratorDialog(
 }
 
 @Composable
-fun Url(url: String, onUrlChange: (url: String) -> Unit, onDelete: () -> Unit) {
+fun UpdateUrl(url: String, onUrlChange: (url: String) -> Unit, onDelete: () -> Unit) {
     var text by remember(url) { mutableStateOf(url) }
     OutlinedTextField(
         value = text,

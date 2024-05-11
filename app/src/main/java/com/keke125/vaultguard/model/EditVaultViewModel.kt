@@ -19,7 +19,7 @@ class EditVaultViewModel(
     var vaultUiState by mutableStateOf(VaultDetailsUiState())
         private set
 
-    private val itemId: Int = checkNotNull(savedStateHandle[EditVaultDestination.vaultIdArg])
+    private val itemId: Int = checkNotNull(savedStateHandle[EditVaultDestination.VAULTID])
 
     init {
         viewModelScope.launch {
