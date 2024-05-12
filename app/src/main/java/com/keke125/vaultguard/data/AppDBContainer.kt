@@ -11,10 +11,10 @@ interface AppDBContainer {
     val auth: FirebaseAuth
 }
 
-class AppDBDataContainer(private val context: Context, private val keyService: KeyService) :
+class AppDBContainerImpl(private val context: Context, private val keyService: KeyService) :
     AppDBContainer {
     override val vaultsRepository: VaultsRepository by lazy {
-        OfflineVaultsRepository(AppDB.getDatabase(context, keyService).vaultDAO())
+        VaultsRepositoryImpl(AppDB.getDatabase(context, keyService).vaultDAO())
     }
     override val auth: FirebaseAuth = Firebase.auth
 

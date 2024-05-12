@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.keke125.vaultguard.Screen
 
@@ -20,6 +21,8 @@ data class BottomNavigationItem(
                 route = Screen.PasswordGenerator.route
             ), BottomNavigationItem(
                 label = "Search", icon = Icons.Default.Search, route = Screen.SearchVault.route
+            ), BottomNavigationItem(
+                label = "Settings", icon = Icons.Default.Settings, route = Screen.Setting.route
             )
         )
     }

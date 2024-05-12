@@ -32,6 +32,7 @@ import com.keke125.vaultguard.screen.SignupScreen
 import com.keke125.vaultguard.screen.VaultDetailsDestination
 import com.keke125.vaultguard.screen.VaultDetailsScreen
 import com.keke125.vaultguard.screen.VaultScreen
+import com.keke125.vaultguard.screen.VaultsRepositoryScreen
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -119,6 +120,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(Screen.Signup.route) {
                 SignupScreen(navController = navController)
+            }
+            composable(Screen.VaultRepository.route) {
+                VaultsRepositoryScreen(navController = navController)
             }
         }
     }
