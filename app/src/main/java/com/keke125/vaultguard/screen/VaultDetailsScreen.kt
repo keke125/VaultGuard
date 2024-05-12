@@ -303,7 +303,7 @@ fun MoreOptionsDialog(
                     })
                     ListItem(headlineContent = { }, trailingContent = {
                         TextButton(onClick = { onExpandedChange(false) }) {
-                            Text("Cancel", color = ListItemDefaults.colors().headlineColor)
+                            Text("取消", color = ListItemDefaults.colors().headlineColor)
                         }
                     })
                 }

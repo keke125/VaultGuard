@@ -75,7 +75,7 @@ fun SearchVaultScreen(
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
                     }
-                }, title = { Text("Search Vault") })
+                }, title = { Text("搜尋密碼") })
             }) { innerPadding ->
                 SearchBar(query = keyword, onQueryChange = {
                     onKeywordChange(it)
@@ -100,7 +100,7 @@ fun SearchVaultScreen(
                     }
                 }, active = isSearchActive, onActiveChange = {
                     onSearchActiveChange(it)
-                }, placeholder = { Text("Search") }, content = {
+                }, placeholder = { Text("搜尋") }, content = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -145,7 +145,7 @@ fun SearchVaultScreen(
                                 }
                             }
                         } else if (keyword.isNotEmpty()) {
-                            Text("No Vault")
+                            Text("找不到相符的密碼")
                         }
                     }
                 }, modifier = Modifier

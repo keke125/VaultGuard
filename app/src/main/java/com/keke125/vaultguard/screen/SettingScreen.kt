@@ -36,7 +36,7 @@ fun SettingScreen(navController: NavController) {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                ), title = { Text("Settings Vault") })
+                ), title = { Text("設定") })
             }) { innerPadding ->
                 Column(
                     modifier = Modifier

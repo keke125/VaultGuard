@@ -137,7 +137,7 @@ fun VaultScreen(
                             }
                         }
                     } else {
-                        Text("No Vault")
+                        Text("尚未儲存密碼")
                     }
                 }
             }
@@ -189,7 +189,7 @@ fun VaultDialog(
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
                     ListItem(headlineContent = { Text(vault.name) })
-                    ListItem(headlineContent = { Text("View") }, leadingContent = {
+                    ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
                         Icon(
                             Icons.Outlined.Visibility, contentDescription = ""
                         )
@@ -197,7 +197,7 @@ fun VaultDialog(
                         navigateToViewVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("Edit") }, leadingContent = {
+                    ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
                         Icon(
                             Icons.Outlined.Edit, contentDescription = ""
                         )
@@ -205,7 +205,7 @@ fun VaultDialog(
                         navigateToEditVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("Copy Username") }, leadingContent = {
+                    ListItem(headlineContent = { Text("複製帳號") }, leadingContent = {
                         Icon(
                             Icons.Outlined.ContentCopy, contentDescription = ""
                         )
@@ -215,7 +215,7 @@ fun VaultDialog(
                         )
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("Copy Password") }, leadingContent = {
+                    ListItem(headlineContent = { Text("複製密碼") }, leadingContent = {
                         Icon(
                             Icons.Outlined.ContentCopy, contentDescription = ""
                         )
@@ -227,7 +227,7 @@ fun VaultDialog(
                     })
                     ListItem(headlineContent = { }, trailingContent = {
                         TextButton(onClick = { onExpandedChange(false) }) {
-                            Text("Cancel", color = ListItemDefaults.colors().headlineColor)
+                            Text("取消", color = ListItemDefaults.colors().headlineColor)
                         }
                     })
                 }
@@ -242,7 +242,7 @@ fun copyText(clipboardManager: ClipboardManager, username: String, context: Cont
     // Only show a toast for Android 12 and lower.
     //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "Copied", Toast.LENGTH_SHORT
+        context, "已成功複製!", Toast.LENGTH_SHORT
     ).show()
 }
 
@@ -258,6 +258,6 @@ fun copyPassword(clipboardManager: ClipboardManager, password: String, context: 
     // Only show a toast for Android 12 and lower.
     // if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "Copied", Toast.LENGTH_SHORT
+        context, "已成功複製!", Toast.LENGTH_SHORT
     ).show()
 }
