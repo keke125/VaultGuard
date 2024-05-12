@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
@@ -40,7 +41,6 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,7 +90,6 @@ fun AddVaultScreen(
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
-            val urlList = remember { mutableStateListOf("") }
             Scaffold(topBar = {
                 TopAppBar(colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -99,19 +98,15 @@ fun AddVaultScreen(
                     Text(stringResource(AddVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
-                        if (checkPassword(
+                        if (checkVault(
                                 vaultUiState.vaultDetails.name,
                                 vaultUiState.vaultDetails.username,
                                 vaultUiState.vaultDetails.password,
+                                vaultUiState.vaultDetails.urlList,
                                 context
                             )
                         ) {
                             coroutineScope.launch {
-                                viewModel.updateUiState(
-                                    viewModel.vaultUiState.vaultDetails.copy(
-                                        urlList = urlList
-                                    )
-                                )
                                 viewModel.saveVault()
                             }
                             navController.popBackStack()
@@ -149,6 +144,7 @@ fun AddVaultScreen(
                         },
                         singleLine = true,
                         label = { Text("名稱") },
+                        leadingIcon = { Icon(Icons.Default.Lock, "") },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -187,6 +183,15 @@ fun AddVaultScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    OutlinedTextField(
+                        value = vaultUiState.vaultDetails.notes,
+                        onValueChange = {
+                            viewModel.updateUiState(vaultUiState.vaultDetails.copy(notes = it))
+                        },
+                        label = { Text("備註") },
+                        minLines = 3,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))
                     Text(
                         text = "網址 (URL)",
@@ -194,18 +199,36 @@ fun AddVaultScreen(
                         fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
-                    if (urlList.isNotEmpty()) {
-                        urlList.forEachIndexed { index, url ->
-                            UpdateUrl(url = url, onUrlChange = { newUrl ->
-                                urlList[index] = newUrl
+                    if (viewModel.vaultUiState.vaultDetails.urlList.isNotEmpty()) {
+                        viewModel.vaultUiState.vaultDetails.urlList.forEachIndexed { index, url ->
+                            UpdateUrl(url = url, onUrlChange = {  newUrl ->
+                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                newUrlList[index] = newUrl
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        urlList = newUrlList
+                                    )
+                                )
                             }, onDelete = {
-                                urlList.removeAt(index)
+                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                newUrlList.removeAt(index)
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        urlList = newUrlList
+                                    )
+                                )
                             })
                         }
                     }
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     Button(onClick = {
-                        urlList.add("")
+                        val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                        newUrlList.add("")
+                        viewModel.updateUiState(
+                            viewModel.vaultUiState.vaultDetails.copy(
+                                urlList = newUrlList
+                            )
+                        )
                     }) {
                         Text("新增網址")
                     }

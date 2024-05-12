@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
@@ -95,10 +96,11 @@ fun EditVaultScreen(
                     Text(stringResource(EditVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
-                        if (checkPassword(
+                        if (checkVault(
                                 viewModel.vaultUiState.vaultDetails.name,
                                 viewModel.vaultUiState.vaultDetails.username,
                                 viewModel.vaultUiState.vaultDetails.password,
+                                viewModel.vaultUiState.vaultDetails.urlList,
                                 context
                             )
                         ) {
@@ -140,6 +142,7 @@ fun EditVaultScreen(
                         },
                         singleLine = true,
                         label = { Text("名稱") },
+                        leadingIcon = { Icon(Icons.Default.Lock, "") },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -184,6 +187,15 @@ fun EditVaultScreen(
                             }
                         },
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = viewModel.vaultUiState.vaultDetails.notes,
+                        onValueChange = {
+                            viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(notes = it))
+                        },
+                        label = { Text("備註") },
+                        minLines = 3,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))

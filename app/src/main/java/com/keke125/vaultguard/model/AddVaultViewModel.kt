@@ -30,12 +30,13 @@ data class VaultDetails(
     val username: String = "",
     val password: String = "",
     val urlList: List<String> = emptyList(),
+    val notes: String = "",
 )
 
 fun VaultDetails.toVault(): Vault = Vault(
-    uid = uid, name = name, username = username, password = password, urlList = urlList
+    uid = uid, name = name, username = username, password = password, urlList = urlList, notes = notes
 )
 
 fun Vault.toVaultDetails(): VaultDetails = VaultDetails(
-    uid = uid, name = name, username = username, password = password, urlList = urlList
+    uid = uid, name = name, username = username, password = password, urlList = urlList, notes = notes
 )

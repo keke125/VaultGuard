@@ -15,5 +15,6 @@ data class Vault(
     val name: String,
     val username: String,
     val password: String,
-    val urlList: List<String>
+    val urlList: List<String>,
+    val notes: String
 ) : Parcelable

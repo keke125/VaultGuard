@@ -145,8 +145,8 @@ fun VaultScreen(
     }
 }
 
-fun checkPassword(
-    name: String, username: String, password: String, context: Context
+fun checkVault(
+    name: String, username: String, password: String,urlList:List<String>, context: Context
 ): Boolean {
     if (name.isEmpty() || name.isBlank()) {
         Toast.makeText(
@@ -161,6 +161,11 @@ fun checkPassword(
     } else if (password.isEmpty() || password.isBlank()) {
         Toast.makeText(
             context, "請輸入密碼!", Toast.LENGTH_LONG
+        ).show()
+        return false
+    }else if(urlList.contains("")){
+        Toast.makeText(
+            context, "請輸入網址!", Toast.LENGTH_LONG
         ).show()
         return false
     } else {
@@ -205,7 +210,7 @@ fun VaultDialog(
                             Icons.Outlined.ContentCopy, contentDescription = ""
                         )
                     }, modifier = Modifier.clickable {
-                        copyUsername(
+                        copyText(
                             clipboardManager, vault.username, context
                         )
                         onExpandedChange(false)
@@ -231,7 +236,7 @@ fun VaultDialog(
     }
 }
 
-fun copyUsername(clipboardManager: ClipboardManager, username: String, context: Context) {
+fun copyText(clipboardManager: ClipboardManager, username: String, context: Context) {
     // When setting the clipboard text.
     clipboardManager.setPrimaryClip(ClipData.newPlainText("username", username))
     // Only show a toast for Android 12 and lower.

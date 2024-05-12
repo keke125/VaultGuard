@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Visibility
@@ -142,6 +143,16 @@ fun VaultDetailsScreen(
                         singleLine = true,
                         readOnly = true,
                         label = { Text("名稱") },
+                        leadingIcon = { Icon(Icons.Default.Lock, "") },
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                copyText(
+                                    clipboardManager, uiState.value.vaultDetails.name, context
+                                )
+                            }) {
+                                Icon(Icons.Default.ContentCopy, "")
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -153,7 +164,7 @@ fun VaultDetailsScreen(
                         leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
                         trailingIcon = {
                             IconButton(onClick = {
-                                copyUsername(
+                                copyText(
                                     clipboardManager, uiState.value.vaultDetails.username, context
                                 )
                             }) {
@@ -191,6 +202,23 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    OutlinedTextField(
+                        value = uiState.value.vaultDetails.notes,
+                        onValueChange = {},
+                        label = { Text("備註") },
+                        minLines = 3,
+                        readOnly = true,
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                copyText(
+                                    clipboardManager, uiState.value.vaultDetails.notes, context
+                                )
+                            }) {
+                                Icon(Icons.Default.ContentCopy, "")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
                     if (uiState.value.vaultDetails.urlList.isNotEmpty()) {
                         Spacer(modifier = Modifier.padding(vertical = 16.dp))
                         Text(
@@ -200,7 +228,7 @@ fun VaultDetailsScreen(
                         )
                         Spacer(modifier = Modifier.padding(vertical = 4.dp))
                         uiState.value.vaultDetails.urlList.forEachIndexed { _, url ->
-                            ViewUrl(url = url, context = context)
+                            ViewUrl(url = url, context = context, clipboardManager = clipboardManager)
                         }
                     }
                     MoreOptionsDialog(
@@ -285,7 +313,7 @@ fun MoreOptionsDialog(
 }
 
 @Composable
-fun ViewUrl(url: String, context: Context) {
+fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
     OutlinedTextField(
         value = url,
         onValueChange = {},
@@ -294,20 +322,29 @@ fun ViewUrl(url: String, context: Context) {
         label = { Text("網址") },
         leadingIcon = { Icon(Icons.Default.Link, "") },
         trailingIcon = {
-            IconButton(onClick = {
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_VIEW
+            Row {
+                IconButton(onClick = {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_VIEW
                         val uri = Uri.parse(url)
                         setData(uri)
-                }
+                    }
 
-                try {
-                    startActivity(context, sendIntent, null)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                    try {
+                        startActivity(context, sendIntent, null)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                    }
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.OpenInNew, "")
                 }
-            }) {
-                Icon(Icons.AutoMirrored.Filled.OpenInNew, "")
+                    IconButton(onClick = {
+                        copyText(
+                            clipboardManager, url, context
+                        )
+                    }) {
+                        Icon(Icons.Default.ContentCopy, "")
+                    }
             }
         },
         modifier = Modifier.fillMaxWidth(0.8f)
