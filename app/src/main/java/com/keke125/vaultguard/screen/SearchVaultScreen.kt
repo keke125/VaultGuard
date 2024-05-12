@@ -88,15 +88,9 @@ fun SearchVaultScreen(
                         viewModel.updateKeyword(it)
                     }
                 }, leadingIcon = {
-                    if (isSearchActive) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
-                        }
-                    } else {
-                        Icon(
-                            Icons.Default.Search, contentDescription = ""
-                        )
-                    }
+                    Icon(
+                        Icons.Default.Search, contentDescription = ""
+                    )
                 }, trailingIcon = {
                     IconButton(onClick = {
                         onKeywordChange("")
@@ -154,18 +148,7 @@ fun SearchVaultScreen(
                             Text("No Vault")
                         }
                     }
-                }, modifier = if (isSearchActive) {
-                    Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester)
-                        .onGloballyPositioned {
-                            if (!textFieldLoaded) {
-                                focusRequester.requestFocus()
-                                textFieldLoaded = true
-                            }
-                        }
-                } else {
-                    Modifier
+                }, modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
                         .onGloballyPositioned {
@@ -175,7 +158,7 @@ fun SearchVaultScreen(
                             }
                         }
                         .padding(innerPadding)
-                })
+                )
             }
         }
     }
