@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.ImportVaultActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.ExportVaultActivity"
             android:exported="true" />
     </application>

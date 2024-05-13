@@ -11,6 +11,8 @@ interface VaultsRepository {
 
     suspend fun insertVault(vault: Vault)
 
+    suspend fun insertVaults(vaults: List<Vault>)
+
     suspend fun deleteVault(vault: Vault)
 
     suspend fun updateVault(vault: Vault)

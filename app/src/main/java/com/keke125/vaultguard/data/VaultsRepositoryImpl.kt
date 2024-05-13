@@ -12,6 +12,8 @@ class VaultsRepositoryImpl(private val vaultDAO: VaultDAO) : VaultsRepository {
 
     override suspend fun insertVault(vault: Vault) = vaultDAO.insert(vault)
 
+    override suspend fun insertVaults(vaults: List<Vault>) = vaultDAO.insertList(vaults)
+
     override suspend fun deleteVault(vault: Vault) = vaultDAO.delete(vault)
 
     override suspend fun updateVault(vault: Vault) = vaultDAO.update(vault)

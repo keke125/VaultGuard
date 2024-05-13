@@ -3,7 +3,6 @@ package com.keke125.vaultguard.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -27,26 +26,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.ExportVaultViewModel
+import com.keke125.vaultguard.model.ImportVaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
-class ExportVaultActivity : ComponentActivity() {
+class ImportVaultActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +49,7 @@ class ExportVaultActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    ExportVaultScreen(context = this)
+                    ImportVaultScreen(context = this)
                 }
             }
         }
@@ -65,51 +58,56 @@ class ExportVaultActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExportVaultScreen(
-    viewModel: ExportVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
+fun ImportVaultScreen(
+    viewModel: ImportVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
     context: Context
 ) {
-    val vaultUiState by viewModel.vaultUiState.collectAsState()
     val activity = LocalContext.current as? Activity
-    val jsonString = viewModel.exportVault(vaultUiState.vaultList)
     val contentResolver = context.contentResolver
-    val createFileResultLauncher =
+    val coroutineScope = rememberCoroutineScope()
+    val openFileResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val url = result.data
-                if (url != null && jsonString != null) {
+                if (url != null) {
                     if (url.data != null) {
                         try {
-                            contentResolver.openFileDescriptor(url.data!!, "w")?.use { it ->
-                                FileOutputStream(it.fileDescriptor).use {
-                                    it.write(
-                                        (jsonString).toByteArray()
-                                    )
+                            contentResolver.openInputStream(url.data!!)?.use {
+                                val vaults = viewModel.importVaultFromGooglePasswordManager(it)
+                                if (vaults != null) {
+                                    coroutineScope.launch {
+                                        viewModel.saveVaults(vaults)
+                                    }
+                                    Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                            Toast.makeText(context, "匯出成功", Toast.LENGTH_SHORT).show()
                         } catch (e: FileNotFoundException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
                         } catch (e: IOException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
             }
         }
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("匯出密碼") }, navigationIcon = {
+        ), title = { Text("匯入密碼") }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -125,22 +123,13 @@ fun ExportVaultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = {
-                val timeStamp: String
-                if (Build.VERSION.SDK_INT >= 26) {
-                    val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-                    timeStamp = LocalDateTime.now().format(formatter).toString()
-                } else {
-                    val simpleDateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
-                    timeStamp = simpleDateFormat.format(Date())
-                }
-                val createFileIntent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                val openFileIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/json"
-                    putExtra(Intent.EXTRA_TITLE, "vaultguard-$timeStamp-export.json")
+                    type = "text/comma-separated-values"
                 }
-                createFileResultLauncher.launch(createFileIntent)
+                openFileResultLauncher.launch(openFileIntent)
             }) {
-                Text("匯出密碼")
+                Text("匯入密碼")
             }
         }
     }

@@ -28,6 +28,9 @@ interface VaultDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertList(vaults: List<Vault>)
+
     @Insert
     suspend fun insert(vault: Vault)
 

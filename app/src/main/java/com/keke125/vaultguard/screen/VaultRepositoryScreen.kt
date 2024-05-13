@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.keke125.vaultguard.activity.ExportVaultActivity
+import com.keke125.vaultguard.activity.ImportVaultActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +56,9 @@ fun VaultsRepositoryScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ListItem(headlineContent = { Text("匯入密碼") },
-                        modifier = Modifier.clickable {})
+                        modifier = Modifier.clickable {
+                            context.startActivity(Intent(context, ImportVaultActivity::class.java))
+                        })
                     HorizontalDivider()
                     ListItem(headlineContent = { Text("匯出密碼") }, modifier = Modifier.clickable {
                         context.startActivity(Intent(context, ExportVaultActivity::class.java))
