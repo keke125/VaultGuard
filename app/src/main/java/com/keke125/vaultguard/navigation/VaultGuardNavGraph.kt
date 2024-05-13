@@ -24,11 +24,9 @@ import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
 import com.keke125.vaultguard.screen.EditVaultDestination
 import com.keke125.vaultguard.screen.EditVaultScreen
-import com.keke125.vaultguard.screen.LoginScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SearchVaultScreen
 import com.keke125.vaultguard.screen.SettingScreen
-import com.keke125.vaultguard.screen.SignupScreen
 import com.keke125.vaultguard.screen.VaultDetailsDestination
 import com.keke125.vaultguard.screen.VaultDetailsScreen
 import com.keke125.vaultguard.screen.VaultScreen
@@ -94,9 +92,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             composable(Screen.Setting.route) {
                 SettingScreen(navController = navController)
             }
-            composable(Screen.Login.route) {
-                LoginScreen(navController = navController)
-            }
             composable(
                 route = VaultDetailsDestination.routeWithArgs,
                 arguments = listOf(navArgument(VaultDetailsDestination.VAULTID) {
@@ -117,9 +112,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 })
             ) {
                 EditVaultScreen(navController = navController)
-            }
-            composable(Screen.Signup.route) {
-                SignupScreen(navController = navController)
             }
             composable(Screen.VaultRepository.route) {
                 VaultsRepositoryScreen(navController = navController)

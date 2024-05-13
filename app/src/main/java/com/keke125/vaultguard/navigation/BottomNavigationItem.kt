@@ -14,15 +14,15 @@ data class BottomNavigationItem(
     fun bottomNavigationItems(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(
-                label = "Vault", icon = Icons.Default.Lock, route = Screen.Vault.route
+                label = "密碼庫", icon = Icons.Default.Lock, route = Screen.Vault.route
             ), BottomNavigationItem(
-                label = "Password Generator",
+                label = "密碼產生器",
                 icon = Icons.Default.Refresh,
                 route = Screen.PasswordGenerator.route
             ), BottomNavigationItem(
-                label = "Search", icon = Icons.Default.Search, route = Screen.SearchVault.route
+                label = "搜尋密碼", icon = Icons.Default.Search, route = Screen.SearchVault.route
             ), BottomNavigationItem(
-                label = "Settings", icon = Icons.Default.Settings, route = Screen.Setting.route
+                label = "設定", icon = Icons.Default.Settings, route = Screen.Setting.route
             )
         )
     }

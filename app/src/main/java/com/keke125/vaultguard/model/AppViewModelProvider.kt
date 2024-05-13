@@ -30,14 +30,6 @@ object AppViewModelProvider {
         }
 
         initializer {
-            SignupViewModel(vaultGuardApplication().authService)
-        }
-
-        initializer {
-            LoginViewModel(vaultGuardApplication().authService)
-        }
-
-        initializer {
             SearchVaultViewModel(vaultGuardApplication().container.vaultsRepository)
         }
 
