@@ -65,7 +65,7 @@ fun ImportVaultScreen(
     val activity = LocalContext.current as? Activity
     val contentResolver = context.contentResolver
     val coroutineScope = rememberCoroutineScope()
-    val openFileResultLauncher =
+    val openGPMResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val url = result.data
@@ -73,7 +73,45 @@ fun ImportVaultScreen(
                     if (url.data != null) {
                         try {
                             contentResolver.openInputStream(url.data!!)?.use {
-                                val vaults = viewModel.importVaultFromGooglePasswordManager(it)
+                                val vaults = viewModel.importVaultFromGPM(it)
+                                if (vaults != null) {
+                                    coroutineScope.launch {
+                                        viewModel.saveVaults(vaults)
+                                    }
+                                    Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } catch (e: FileNotFoundException) {
+                            e.printStackTrace()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+            }
+        }
+    val openVGResultLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val url = result.data
+                if (url != null) {
+                    if (url.data != null) {
+                        try {
+                            contentResolver.openInputStream(url.data!!)?.use {
+                                val vaults = viewModel.importVaultFromVG(it)
                                 if (vaults != null) {
                                     coroutineScope.launch {
                                         viewModel.saveVaults(vaults)
@@ -122,14 +160,25 @@ fun ImportVaultScreen(
                 .padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {
-                val openFileIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "text/comma-separated-values"
+            Column {
+                Button(onClick = {
+                    val openGPMIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "text/comma-separated-values"
+                    }
+                    openGPMResultLauncher.launch(openGPMIntent)
+                }) {
+                    Text("匯入密碼(Google Password Manager)")
                 }
-                openFileResultLauncher.launch(openFileIntent)
-            }) {
-                Text("匯入密碼")
+                Button(onClick = {
+                    val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "application/json"
+                    }
+                    openVGResultLauncher.launch(openVGIntent)
+                }) {
+                    Text("匯入密碼(VaultGuard)")
+                }
             }
         }
     }

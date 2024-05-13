@@ -1,6 +1,9 @@
 package com.keke125.vaultguard.service
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import com.keke125.vaultguard.data.Vault
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
@@ -15,7 +18,7 @@ class FileService {
         return json
     }
 
-    fun readCsvFromGooglePasswordManager(inputStream: InputStream): List<Vault>? {
+    fun readCsvFromGPM(inputStream: InputStream): List<Vault>? {
         try {
             val csvParser = CSVParser.parse(
                 inputStream, StandardCharsets.UTF_8, CSVFormat.DEFAULT.withFirstRecordAsHeader()
@@ -38,6 +41,39 @@ class FileService {
                 vaults.add(vault)
             }
             return vaults
+        }catch (e: Exception){
+            return null
+        }
+    }
+
+    fun readJsonFromVG(inputStream: InputStream): List<Vault>? {
+        try {
+            val gson = Gson()
+            val reader = JsonReader(inputStream.reader())
+            val vaultListType = object : TypeToken<List<Vault>?>() {}
+            val vaultsFromJson = gson.fromJson(reader,vaultListType)
+            val vaults = mutableListOf<Vault>()
+            if (vaultsFromJson != null) {
+                for (vault in vaultsFromJson) {
+                    val name = vault.name
+                    val username = vault.username
+                    val password = vault.password
+                    val notes = vault.notes
+                    val urlList = vault.urlList
+                    val newVault = Vault(
+                        name = name,
+                        username = username,
+                        password = password,
+                        notes = notes,
+                        urlList = urlList
+                    )
+                    vaults.add(newVault)
+                }
+                return vaults
+            }
+            else{
+                return null
+            }
         }catch (e: Exception){
             return null
         }

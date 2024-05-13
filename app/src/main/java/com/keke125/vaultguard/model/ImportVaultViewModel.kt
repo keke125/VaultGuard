@@ -9,8 +9,12 @@ import java.io.InputStream
 class ImportVaultViewModel(
     private val vaultsRepository: VaultsRepository, private val fileService: FileService
 ) : ViewModel() {
-    fun importVaultFromGooglePasswordManager(inputStream: InputStream): List<Vault>? {
-        return fileService.readCsvFromGooglePasswordManager(inputStream)
+    fun importVaultFromGPM(inputStream: InputStream): List<Vault>? {
+        return fileService.readCsvFromGPM(inputStream)
+    }
+
+    fun importVaultFromVG(inputStream: InputStream): List<Vault>? {
+        return fileService.readJsonFromVG(inputStream)
     }
 
     suspend fun saveVaults(vaults: List<Vault>) {
