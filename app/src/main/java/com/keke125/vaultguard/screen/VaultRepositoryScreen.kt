@@ -43,7 +43,7 @@ fun VaultsRepositoryScreen(navController: NavController) {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 })
             }) { innerPadding ->

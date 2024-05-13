@@ -73,7 +73,7 @@ fun SearchVaultScreen(
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 }, title = { Text("搜尋密碼") })
             }) { innerPadding ->
@@ -89,14 +89,14 @@ fun SearchVaultScreen(
                     }
                 }, leadingIcon = {
                     Icon(
-                        Icons.Default.Search, contentDescription = ""
+                        Icons.Default.Search, contentDescription = null
                     )
                 }, trailingIcon = {
                     IconButton(onClick = {
                         onKeywordChange("")
                         viewModel.updateKeyword("")
                     }) {
-                        Icon(Icons.Rounded.Cancel, contentDescription = "")
+                        Icon(Icons.Rounded.Cancel, contentDescription = "清除關鍵字")
                     }
                 }, active = isSearchActive, onActiveChange = {
                     onSearchActiveChange(it)
@@ -118,14 +118,14 @@ fun SearchVaultScreen(
                                         leadingContent = {
                                             Icon(
                                                 Icons.Default.AccountCircle,
-                                                contentDescription = "",
+                                                contentDescription = null,
                                             )
                                         },
                                         trailingContent = {
                                             IconButton(onClick = { onExpandedChange(true) }) {
                                                 Icon(
                                                     imageVector = Icons.Default.MoreVert,
-                                                    contentDescription = ""
+                                                    contentDescription = "更多內容"
                                                 )
                                             }
                                         },

@@ -124,7 +124,7 @@ fun PasswordGenerator(
                 navController.navigate(AddVaultDestination.route)
             },
         ) {
-            Icon(Icons.Filled.Add, "")
+            Icon(Icons.Filled.Add, "新增密碼")
         }
 
     }, topBar = {

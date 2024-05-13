@@ -107,13 +107,13 @@ fun VaultDetailsScreen(
                     Text(stringResource(VaultDetailsDestination.titleRes))
                 }, actions = {
                     IconButton(onClick = { onMoreOptionsExpandedChange(true) }) {
-                        Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "")
+                        Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "更多內容")
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 })
             }, floatingActionButton = {
@@ -122,7 +122,7 @@ fun VaultDetailsScreen(
                         navController.navigate("${EditVaultDestination.route}/${uiState.value.vaultDetails.uid}")
                     },
                 ) {
-                    Icon(Icons.Filled.Edit, "")
+                    Icon(Icons.Filled.Edit, "編輯密碼")
                 }
             }) { innerPadding ->
                 Column(
@@ -143,14 +143,14 @@ fun VaultDetailsScreen(
                         singleLine = true,
                         readOnly = true,
                         label = { Text("名稱") },
-                        leadingIcon = { Icon(Icons.Default.Lock, "") },
+                        leadingIcon = { Icon(Icons.Default.Lock, null) },
                         trailingIcon = {
                             IconButton(onClick = {
                                 copyText(
                                     clipboardManager, uiState.value.vaultDetails.name, context
                                 )
                             }) {
-                                Icon(Icons.Default.ContentCopy, "")
+                                Icon(Icons.Default.ContentCopy, "複製名稱")
                             }
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -168,7 +168,7 @@ fun VaultDetailsScreen(
                                     clipboardManager, uiState.value.vaultDetails.username, context
                                 )
                             }) {
-                                Icon(Icons.Default.ContentCopy, "")
+                                Icon(Icons.Default.ContentCopy, "複製帳號")
                             }
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -183,9 +183,9 @@ fun VaultDetailsScreen(
                             Row {
                                 IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                                     if (isPasswordVisible) {
-                                        Icon(Icons.Default.VisibilityOff, "")
+                                        Icon(Icons.Default.VisibilityOff, "隱藏密碼")
                                     } else {
-                                        Icon(Icons.Default.Visibility, "")
+                                        Icon(Icons.Default.Visibility, "顯示密碼")
                                     }
                                 }
                                 IconButton(onClick = {
@@ -195,7 +195,7 @@ fun VaultDetailsScreen(
                                         context
                                     )
                                 }) {
-                                    Icon(Icons.Default.ContentCopy, "")
+                                    Icon(Icons.Default.ContentCopy, "產生密碼")
                                 }
                             }
                         },
@@ -214,7 +214,7 @@ fun VaultDetailsScreen(
                                     clipboardManager, uiState.value.vaultDetails.notes, context
                                 )
                             }) {
-                                Icon(Icons.Default.ContentCopy, "")
+                                Icon(Icons.Default.ContentCopy, "複製備註")
                             }
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -259,7 +259,7 @@ fun DeletePasswordConfirm(
     onDeleted: () -> Unit,
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Warning, "")
+        Icon(Icons.Default.Warning, "警告")
     }, title = {
         Text(text = "是否要刪除密碼?")
     }, text = {
@@ -295,7 +295,7 @@ fun MoreOptionsDialog(
                 Column {
                     ListItem(headlineContent = { Text("刪除密碼") }, leadingContent = {
                         Icon(
-                            Icons.Outlined.Delete, contentDescription = ""
+                            Icons.Outlined.Delete, contentDescription = null
                         )
                     }, modifier = Modifier.clickable {
                         onExpandedChange(false)
@@ -320,7 +320,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
         readOnly = true,
         singleLine = true,
         label = { Text("網址") },
-        leadingIcon = { Icon(Icons.Default.Link, "") },
+        leadingIcon = { Icon(Icons.Default.Link, null) },
         trailingIcon = {
             Row {
                 IconButton(onClick = {
@@ -336,14 +336,14 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                         Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
                     }
                 }) {
-                    Icon(Icons.AutoMirrored.Filled.OpenInNew, "")
+                    Icon(Icons.AutoMirrored.Filled.OpenInNew, "以瀏覽器開啟網址")
                 }
                     IconButton(onClick = {
                         copyText(
                             clipboardManager, url, context
                         )
                     }) {
-                        Icon(Icons.Default.ContentCopy, "")
+                        Icon(Icons.Default.ContentCopy, "複製網址")
                     }
             }
         },

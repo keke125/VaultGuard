@@ -119,7 +119,7 @@ fun AddVaultScreen(
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 })
             }) { innerPadding ->
@@ -144,7 +144,7 @@ fun AddVaultScreen(
                         },
                         singleLine = true,
                         label = { Text("名稱") },
-                        leadingIcon = { Icon(Icons.Default.Lock, "") },
+                        leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -154,7 +154,7 @@ fun AddVaultScreen(
                         },
                         singleLine = true,
                         label = { Text("帳號") },
-                        leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
+                        leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -163,20 +163,20 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(password = it))
                         },
                         label = { Text("密碼") },
-                        leadingIcon = { Icon(Icons.Default.Password, "") },
+                        leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {
                                 IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                                     if (isPasswordVisible) {
-                                        Icon(Icons.Default.VisibilityOff, "")
+                                        Icon(Icons.Default.VisibilityOff, "隱藏密碼")
                                     } else {
-                                        Icon(Icons.Default.Visibility, "")
+                                        Icon(Icons.Default.Visibility, "顯示密碼")
                                     }
                                 }
                                 IconButton(onClick = {
                                     onPasswordGeneratorVisibleChange(true)
                                 }) {
-                                    Icon(Icons.Default.Refresh, "")
+                                    Icon(Icons.Default.Refresh, "產生密碼")
                                 }
                             }
                         },
@@ -303,7 +303,7 @@ fun PasswordGeneratorDialog(
                             )
                         )
                     }) {
-                        Icon(Icons.Default.Refresh, "")
+                        Icon(Icons.Default.Refresh, "重新產生密碼")
                     }
                 }
                 Row(
@@ -473,10 +473,10 @@ fun UpdateUrl(url: String, onUrlChange: (url: String) -> Unit, onDelete: () -> U
         },
         singleLine = true,
         label = { Text("網址") },
-        leadingIcon = { Icon(Icons.Default.Link, "") },
+        leadingIcon = { Icon(Icons.Default.Link, null) },
         trailingIcon = {
             IconButton(onClick = { onDelete() }) {
-                Icon(Icons.Default.Delete, "")
+                Icon(Icons.Default.Delete, "刪除網址")
             }
         },
         modifier = Modifier.fillMaxWidth(0.8f)

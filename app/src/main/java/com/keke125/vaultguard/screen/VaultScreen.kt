@@ -75,7 +75,7 @@ fun VaultScreen(
                         navController.navigate(AddVaultDestination.route)
                     },
                 ) {
-                    Icon(Icons.Filled.Add, "")
+                    Icon(Icons.Filled.Add, "新增密碼")
                 }
 
             }, topBar = {
@@ -86,7 +86,7 @@ fun VaultScreen(
                     Text(stringResource(R.string.app_vault_screen_title))
                 }, actions = {
                     IconButton(onClick = { navigateToSearchVault() }) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "")
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "搜尋密碼")
                     }
                 })
             }) { innerPadding ->
@@ -117,7 +117,7 @@ fun VaultScreen(
                                         IconButton(onClick = { onExpandedChange(true) }) {
                                             Icon(
                                                 imageVector = Icons.Default.MoreVert,
-                                                contentDescription = ""
+                                                contentDescription = "更多內容"
                                             )
                                         }
                                     },
@@ -191,15 +191,15 @@ fun VaultDialog(
                     ListItem(headlineContent = { Text(vault.name) })
                     ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
                         Icon(
-                            Icons.Outlined.Visibility, contentDescription = ""
+                            Icons.Outlined.Visibility, contentDescription = null
                         )
                     }, modifier = Modifier.clickable {
                         navigateToViewVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text("編輯密碼") }, leadingContent = {
                         Icon(
-                            Icons.Outlined.Edit, contentDescription = ""
+                            Icons.Outlined.Edit, contentDescription = null
                         )
                     }, modifier = Modifier.clickable {
                         navigateToEditVault(vault.uid)
@@ -207,7 +207,7 @@ fun VaultDialog(
                     })
                     ListItem(headlineContent = { Text("複製帳號") }, leadingContent = {
                         Icon(
-                            Icons.Outlined.ContentCopy, contentDescription = ""
+                            Icons.Outlined.ContentCopy, contentDescription = null
                         )
                     }, modifier = Modifier.clickable {
                         copyText(
@@ -217,7 +217,7 @@ fun VaultDialog(
                     })
                     ListItem(headlineContent = { Text("複製密碼") }, leadingContent = {
                         Icon(
-                            Icons.Outlined.ContentCopy, contentDescription = ""
+                            Icons.Outlined.ContentCopy, contentDescription = null
                         )
                     }, modifier = Modifier.clickable {
                         copyPassword(

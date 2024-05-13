@@ -117,7 +117,7 @@ fun EditVaultScreen(
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 })
             }) { innerPadding ->
@@ -142,7 +142,7 @@ fun EditVaultScreen(
                         },
                         singleLine = true,
                         label = { Text("名稱") },
-                        leadingIcon = { Icon(Icons.Default.Lock, "") },
+                        leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -174,15 +174,15 @@ fun EditVaultScreen(
                             Row {
                                 IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                                     if (isPasswordVisible) {
-                                        Icon(Icons.Default.VisibilityOff, "")
+                                        Icon(Icons.Default.VisibilityOff, "隱藏密碼")
                                     } else {
-                                        Icon(Icons.Default.Visibility, "")
+                                        Icon(Icons.Default.Visibility, "顯示密碼")
                                     }
                                 }
                                 IconButton(onClick = {
                                     onPasswordGeneratorVisibleChange(true)
                                 }) {
-                                    Icon(Icons.Default.Refresh, "")
+                                    Icon(Icons.Default.Refresh, "產生密碼")
                                 }
                             }
                         },
@@ -312,7 +312,7 @@ fun PasswordGeneratorDialogConfirm(
                             )
                         )
                     }) {
-                        Icon(Icons.Default.Refresh, "")
+                        Icon(Icons.Default.Refresh, "重新產生密碼")
                     }
                 }
                 Row(
@@ -486,7 +486,7 @@ fun UpdatePasswordConfirm(
     onRealPasswordChange: (String) -> Unit
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Warning, "")
+        Icon(Icons.Default.Warning, "警告")
     }, title = {
         Text(text = "是否要更新密碼?")
     }, text = {

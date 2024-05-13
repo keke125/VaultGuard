@@ -48,7 +48,7 @@ fun SettingScreen(navController: NavController) {
                     ListItem(headlineContent = { Text("密碼庫") }, leadingContent = {
                         Icon(
                             Icons.Default.Storage,
-                            contentDescription = "",
+                            contentDescription = null,
                         )
                     }, modifier = Modifier.clickable {
                         navController.navigate(Screen.VaultRepository.route)
