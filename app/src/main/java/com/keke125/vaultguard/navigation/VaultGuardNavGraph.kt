@@ -22,6 +22,7 @@ import androidx.navigation.navArgument
 import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
+import com.keke125.vaultguard.screen.BiometricAuthScreen
 import com.keke125.vaultguard.screen.EditVaultDestination
 import com.keke125.vaultguard.screen.EditVaultScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
@@ -72,7 +73,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Vault.route,
+            startDestination = Screen.BiometricAuth.route,
             modifier = modifier.padding(innerPadding)
         ) {
             composable(Screen.Vault.route) {
@@ -115,6 +116,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(Screen.VaultRepository.route) {
                 VaultsRepositoryScreen(navController = navController)
+            }
+            composable(Screen.BiometricAuth.route) {
+                BiometricAuthScreen(navController = navController)
             }
         }
     }

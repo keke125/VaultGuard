@@ -89,6 +89,8 @@ dependencies {
     implementation(libs.androidx.sqlite)
     implementation(libs.gson)
     implementation(libs.apache.commons.csv)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.biometric.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
