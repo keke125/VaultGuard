@@ -35,6 +35,10 @@
         <activity
             android:name=".activity.ExportVaultActivity"
             android:exported="true" />
+        <activity
+            android:name=".activity.BiometricAuthActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat"/>
     </application>
 
 </manifest>
