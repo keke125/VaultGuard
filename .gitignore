@@ -13,6 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/google-services.json
-/app/release/
 /.idea
+/release
