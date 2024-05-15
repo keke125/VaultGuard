@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.apache.commons.csv)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.biometric.ktx)
+    implementation(libs.androidx.activity.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

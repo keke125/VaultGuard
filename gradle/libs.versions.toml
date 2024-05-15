@@ -9,12 +9,12 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 navigationCompose = "2.7.7"
 datastorePreferences = "1.1.1"
-materialIconsExtended = "1.7.0-alpha08"
+materialIconsExtended = "1.7.0-beta01"
 roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
 roomCompiler = "2.6.1"
@@ -26,6 +26,7 @@ sqlcipherAndroidVersion = "4.5.7"
 sqlite = "2.4.0"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometricVersion" }
 androidx-biometric-ktx = { module = "androidx.biometric:biometric-ktx", version.ref = "biometricKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

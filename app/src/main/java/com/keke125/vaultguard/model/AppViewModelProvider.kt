@@ -40,6 +40,10 @@ object AppViewModelProvider {
         initializer {
             ImportVaultViewModel(vaultGuardApplication().container.vaultsRepository,vaultGuardApplication().fileService)
         }
+
+        initializer {
+            BiometricAuthViewModel(vaultGuardApplication().userPreferencesRepository)
+        }
     }
 }
 
