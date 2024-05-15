@@ -3,7 +3,6 @@ package com.keke125.vaultguard.screen
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -48,9 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.activity.BiometricAuthActivity
-import com.keke125.vaultguard.activity.ExportVaultActivity
-import com.keke125.vaultguard.activity.ImportVaultActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultViewModel
@@ -94,7 +90,6 @@ fun VaultScreen(
                     }
                 })
             }) { innerPadding ->
-                /*
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -144,19 +139,6 @@ fun VaultScreen(
                     } else {
                         Text("尚未儲存密碼")
                     }
-                }*/
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ListItem(headlineContent = { Text("匯入密碼") },
-                        modifier = Modifier.clickable {
-                            context.startActivity(Intent(context, BiometricAuthActivity::class.java))
-                        })
-                    HorizontalDivider()
                 }
             }
         }

@@ -1,11 +1,13 @@
 package com.keke125.vaultguard.screen
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.keke125.vaultguard.Screen
+import com.keke125.vaultguard.activity.BiometricAuthActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +35,7 @@ fun SettingScreen(navController: NavController) {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
+            val context = navController.context
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -52,6 +56,15 @@ fun SettingScreen(navController: NavController) {
                         )
                     }, modifier = Modifier.clickable {
                         navController.navigate(Screen.VaultRepository.route)
+                    })
+                    HorizontalDivider()
+                    ListItem(headlineContent = { Text("安全性") }, leadingContent = {
+                        Icon(
+                            Icons.Default.Security,
+                            contentDescription = null,
+                        )
+                    }, modifier = Modifier.clickable {
+                        context.startActivity(Intent(context, BiometricAuthActivity::class.java))
                     })
                     HorizontalDivider()
                 }

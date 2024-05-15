@@ -1,13 +1,10 @@
 package com.keke125.vaultguard.data
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "vault")
-@Parcelize
 @TypeConverters(Converters::class)
 data class Vault(
     @PrimaryKey(autoGenerate = true)
@@ -17,4 +14,4 @@ data class Vault(
     val password: String,
     val urlList: List<String>,
     val notes: String
-) : Parcelable
+)

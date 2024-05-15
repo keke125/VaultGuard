@@ -38,7 +38,7 @@
         <activity
             android:name=".activity.BiometricAuthActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
 </manifest>
