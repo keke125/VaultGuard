@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.PersistableBundle
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -143,6 +144,7 @@ fun VaultScreen(
             }
         }
     }
+    BackHandler(enabled = true) {}
 }
 
 fun checkVault(

@@ -7,26 +7,38 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.keke125.vaultguard.data.AppDBContainer
 import com.keke125.vaultguard.data.AppDBContainerImpl
+import com.keke125.vaultguard.data.AuthPreferencesRepository
 import com.keke125.vaultguard.data.UserPreferencesRepository
 import com.keke125.vaultguard.service.FileService
 import com.keke125.vaultguard.service.KeyService
+import com.keke125.vaultguard.service.PasswordService.Companion.getPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 
 private const val USER_PREFERENCE_NAME = "user_preferences"
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+private const val AUTH_PREFERENCE_NAME = "auth_preferences"
+private val Context.userPreferenceDataStore: DataStore<Preferences> by preferencesDataStore(
     name = USER_PREFERENCE_NAME
+)
+
+private val Context.authPreferenceDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = AUTH_PREFERENCE_NAME
 )
 
 class VaultGuardApplication : Application() {
     lateinit var container: AppDBContainer
-    lateinit var keyService: KeyService
+    private lateinit var keyService: KeyService
     lateinit var fileService: FileService
     lateinit var userPreferencesRepository: UserPreferencesRepository
+    lateinit var authPreferencesRepository: AuthPreferencesRepository
+    lateinit var passwordEncoder: PasswordEncoder
 
     override fun onCreate() {
         super.onCreate()
         keyService = KeyService()
         container = AppDBContainerImpl(this,keyService)
         fileService = FileService()
-        userPreferencesRepository = UserPreferencesRepository(dataStore)
+        userPreferencesRepository = UserPreferencesRepository(userPreferenceDataStore)
+        authPreferencesRepository = AuthPreferencesRepository(authPreferenceDataStore)
+        passwordEncoder = getPasswordEncoder()
     }
 }
