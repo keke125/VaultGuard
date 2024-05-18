@@ -11,8 +11,7 @@ import com.keke125.vaultguard.data.AuthPreferencesRepository
 import com.keke125.vaultguard.data.UserPreferencesRepository
 import com.keke125.vaultguard.service.FileService
 import com.keke125.vaultguard.service.KeyService
-import com.keke125.vaultguard.service.PasswordService.Companion.getPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
+import com.keke125.vaultguard.service.PasswordService
 
 private const val USER_PREFERENCE_NAME = "user_preferences"
 private const val AUTH_PREFERENCE_NAME = "auth_preferences"
@@ -28,9 +27,9 @@ class VaultGuardApplication : Application() {
     lateinit var container: AppDBContainer
     private lateinit var keyService: KeyService
     lateinit var fileService: FileService
+    lateinit var passwordService: PasswordService
     lateinit var userPreferencesRepository: UserPreferencesRepository
     lateinit var authPreferencesRepository: AuthPreferencesRepository
-    lateinit var passwordEncoder: PasswordEncoder
 
     override fun onCreate() {
         super.onCreate()
@@ -39,6 +38,6 @@ class VaultGuardApplication : Application() {
         fileService = FileService()
         userPreferencesRepository = UserPreferencesRepository(userPreferenceDataStore)
         authPreferencesRepository = AuthPreferencesRepository(authPreferenceDataStore)
-        passwordEncoder = getPasswordEncoder()
+        passwordService = PasswordService()
     }
 }

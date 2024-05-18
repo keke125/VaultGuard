@@ -3,15 +3,15 @@ package com.keke125.vaultguard.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keke125.vaultguard.data.AuthPreferencesRepository
+import com.keke125.vaultguard.service.PasswordService
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.springframework.security.crypto.password.PasswordEncoder
 
 class LoginViewModel(
     authPreferencesRepository: AuthPreferencesRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordService: PasswordService
 ) : ViewModel() {
 
     val loginUiState: StateFlow<LoginUiState> =
@@ -24,7 +24,7 @@ class LoginViewModel(
         )
 
     fun checkLoginPassword(loginPassword: String, loginPasswordHashed: String): Boolean {
-        return passwordEncoder.matches(loginPassword, loginPasswordHashed)
+        return passwordService.validatePassword(loginPassword, loginPasswordHashed)
     }
 
     companion object {

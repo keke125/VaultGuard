@@ -124,6 +124,9 @@ fun login(
             context, "請輸入主密碼!", Toast.LENGTH_SHORT
         ).show()
     } else if (viewModel.checkLoginPassword(loginPassword, uiState.value.loginPasswordHashed)) {
+        Toast.makeText(
+            context, "登入成功", Toast.LENGTH_SHORT
+        ).show()
         navController.navigate(Screen.Vault.route)
     } else {
         Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()

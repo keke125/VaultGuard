@@ -46,11 +46,11 @@ object AppViewModelProvider {
         }
 
         initializer {
-            LoginViewModel(vaultGuardApplication().authPreferencesRepository,vaultGuardApplication().passwordEncoder)
+            LoginViewModel(vaultGuardApplication().authPreferencesRepository,vaultGuardApplication().passwordService)
         }
 
         initializer {
-            SignupViewModel(vaultGuardApplication().authPreferencesRepository,vaultGuardApplication().passwordEncoder)
+            SignupViewModel(vaultGuardApplication().authPreferencesRepository,vaultGuardApplication().passwordService)
         }
     }
 }

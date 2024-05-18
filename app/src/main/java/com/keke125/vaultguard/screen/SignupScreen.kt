@@ -125,6 +125,9 @@ fun signup(
                 context, "請輸入主密碼!", Toast.LENGTH_SHORT
             ).show()
         } else {
+            Toast.makeText(
+                context, "設定成功", Toast.LENGTH_SHORT
+            ).show()
             viewModel.savePassword(signupPassword)
             navController.navigate(Screen.Login.route)
         }
