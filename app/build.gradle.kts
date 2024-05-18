@@ -91,7 +91,7 @@ dependencies {
     implementation(libs.androidx.biometric.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.spring.security.crypto)
-    implementation(libs.commons.logging.commons.logging.api)
+    implementation(libs.commons.logging)
     implementation(libs.bcprov.jdk18on)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
