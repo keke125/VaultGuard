@@ -1,6 +1,5 @@
 package com.keke125.vaultguard.screen
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,8 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,21 +37,20 @@ import androidx.navigation.NavController
 import com.keke125.vaultguard.R
 import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.LoginUiState
-import com.keke125.vaultguard.model.LoginViewModel
+import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
-            val uiState = viewModel.loginUiState.collectAsState()
+            val mainPasswordHashed = viewModel.mainPasswordHashedLiveData.observeAsState()
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -103,32 +100,29 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Button(onClick = {
-                    login(loginPassword, viewModel, uiState, context, navController)
+                    if (mainPasswordHashed.value != null) {
+                        if (loginPassword.isEmpty() || loginPassword.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                            ).show()
+                        } else if (viewModel.checkMainPassword(
+                                loginPassword, mainPasswordHashed.value!!
+                            )
+                        ) {
+                            Toast.makeText(
+                                context, "登入成功", Toast.LENGTH_SHORT
+                            ).show()
+                            navController.navigate(Screen.Vault.route)
+                        } else {
+                            Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "請先設定主密碼!!", Toast.LENGTH_SHORT).show()
+                    }
                 }) {
                     Text("登入")
                 }
             }
         }
-    }
-}
-
-fun login(
-    loginPassword: String,
-    viewModel: LoginViewModel,
-    uiState: State<LoginUiState>,
-    context: Context,
-    navController: NavController
-) {
-    if (loginPassword.isEmpty() || loginPassword.isBlank()) {
-        Toast.makeText(
-            context, "請輸入主密碼!", Toast.LENGTH_SHORT
-        ).show()
-    } else if (viewModel.checkLoginPassword(loginPassword, uiState.value.loginPasswordHashed)) {
-        Toast.makeText(
-            context, "登入成功", Toast.LENGTH_SHORT
-        ).show()
-        navController.navigate(Screen.Vault.route)
-    } else {
-        Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
     }
 }

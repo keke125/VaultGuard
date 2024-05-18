@@ -12,22 +12,22 @@ import java.io.IOException
 
 class AuthPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     private companion object {
-        val LOGIN_PASSWORD_HASHED = stringPreferencesKey("login_password_hashed")
+        val MAIN_PASSWORD_HASHED = stringPreferencesKey("main_password_hashed")
     }
 
-    val loginPasswordHashed: Flow<String> = dataStore.data.catch {
+    val mainPasswordHashed: Flow<String> = dataStore.data.catch {
         if (it is IOException) {
             emit(emptyPreferences())
         } else {
             throw it
         }
     }.map { preferences ->
-        preferences[LOGIN_PASSWORD_HASHED] ?: ""
+        preferences[MAIN_PASSWORD_HASHED] ?: ""
     }
 
-    suspend fun saveAuthPreference(loginPasswordHashed: String) {
+    suspend fun saveAuthPreference(mainPasswordHashed: String) {
         dataStore.edit { preferences ->
-            preferences[LOGIN_PASSWORD_HASHED] = loginPasswordHashed
+            preferences[MAIN_PASSWORD_HASHED] = mainPasswordHashed
         }
     }
 }
