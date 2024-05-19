@@ -1,5 +1,7 @@
 package com.keke125.vaultguard.service
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Base64
 import java.security.SecureRandom
@@ -7,9 +9,29 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
 
-class PasswordService {
+class PasswordService(context: Context) {
 
-    fun generatePasswordHash(password: String): String {
+    private val sharedPref: SharedPreferences =context.getSharedPreferences(
+        "Auth", Context.MODE_PRIVATE
+    )
+
+    fun isSignup(): Boolean {
+        return sharedPref.contains("PASSWORD_HASHED")
+    }
+
+    fun isAuthenticated(): Boolean {
+        return sharedPref.getBoolean("IS_AUTHENTICATED", false)
+    }
+
+    fun updatePassword(password: String) {
+        val passwordHashed = generatePasswordHash(password)
+        with(sharedPref.edit()) {
+            putString("PASSWORD_HASHED", passwordHashed)
+            apply()
+        }
+    }
+
+    private fun generatePasswordHash(password: String): String {
         val iterations = 10000
         val chars = password.toCharArray()
         val salt = getSalt()
@@ -38,7 +60,11 @@ class PasswordService {
         return salt
     }
 
-    fun validatePassword(password: String, hashedPassword: String): Boolean {
+    fun validatePassword(password: String): Boolean {
+        val hashedPassword = sharedPref.getString("PASSWORD_HASHED", "")!!
+        if (hashedPassword.isEmpty()) {
+            return false
+        }
         val hashedPasswordList: List<String> = hashedPassword.split(":")
         val hashAlg = hashedPasswordList[0]
         val iterations = hashedPasswordList[1].toInt()
@@ -55,6 +81,12 @@ class PasswordService {
         while (i < hash.size && i < testHash.size) {
             diff = diff or (hash[i].toInt() xor testHash[i].toInt())
             i++
+        }
+        if(diff == 0){
+            with(sharedPref.edit()) {
+                putBoolean("IS_AUTHENTICATED", true)
+                apply()
+            }
         }
         return diff == 0
     }

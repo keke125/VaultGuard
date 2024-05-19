@@ -48,8 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
+import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
+import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.model.VaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
@@ -61,86 +63,98 @@ fun VaultScreen(
     navigateToViewVault: (Int) -> Unit,
     navigateToEditVault: (Int) -> Unit,
     navigateToSearchVault: () -> Unit,
-    viewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    vaultViewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
-            val vaultUiState by viewModel.vaultUiState.collectAsState()
+            val vaultUiState by vaultViewModel.vaultUiState.collectAsState()
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            Scaffold(floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate(AddVaultDestination.route)
-                    },
-                ) {
-                    Icon(Icons.Filled.Add, "新增密碼")
-                }
-
-            }, topBar = {
-                TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ), title = {
-                    Text(stringResource(R.string.app_vault_screen_title))
-                }, actions = {
-                    IconButton(onClick = { navigateToSearchVault() }) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "搜尋密碼")
-                    }
-                })
-            }) { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (vaultUiState.vaultList.isNotEmpty()) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
+            if (authViewModel.isSignup()) {
+                if (authViewModel.isAuthenticated()) {
+                    Scaffold(floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = {
+                                navController.navigate(AddVaultDestination.route)
+                            },
                         ) {
-                            items(vaultUiState.vaultList) { vault ->
-                                val (expanded, onExpandedChange) = remember {
-                                    mutableStateOf(false)
-                                }
-                                ListItem(headlineContent = { Text(vault.name) },
-                                    supportingContent = { Text(vault.username) },
-                                    leadingContent = {
-                                        Icon(
-                                            Icons.Default.AccountCircle,
-                                            contentDescription = "",
-                                        )
-                                    },
-                                    trailingContent = {
-                                        IconButton(onClick = { onExpandedChange(true) }) {
-                                            Icon(
-                                                imageVector = Icons.Default.MoreVert,
-                                                contentDescription = "更多內容"
-                                            )
-                                        }
-                                    },
-                                    modifier = Modifier.clickable {
-                                        navigateToViewVault(vault.uid)
-                                    })
-                                HorizontalDivider()
-                                VaultDialog(
-                                    expanded,
-                                    onExpandedChange,
-                                    vault,
-                                    clipboard,
-                                    context,
-                                    navigateToViewVault,
-                                    navigateToEditVault
+                            Icon(Icons.Filled.Add, "新增密碼")
+                        }
+
+                    }, topBar = {
+                        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            titleContentColor = MaterialTheme.colorScheme.primary,
+                        ), title = {
+                            Text(stringResource(R.string.app_vault_screen_title))
+                        }, actions = {
+                            IconButton(onClick = { navigateToSearchVault() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "搜尋密碼"
                                 )
                             }
+                        })
+                    }) { innerPadding ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(innerPadding)
+                                .padding(vertical = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (vaultUiState.vaultList.isNotEmpty()) {
+                                LazyColumn(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    items(vaultUiState.vaultList) { vault ->
+                                        val (expanded, onExpandedChange) = remember {
+                                            mutableStateOf(false)
+                                        }
+                                        ListItem(headlineContent = { Text(vault.name) },
+                                            supportingContent = { Text(vault.username) },
+                                            leadingContent = {
+                                                Icon(
+                                                    Icons.Default.AccountCircle,
+                                                    contentDescription = "",
+                                                )
+                                            },
+                                            trailingContent = {
+                                                IconButton(onClick = { onExpandedChange(true) }) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.MoreVert,
+                                                        contentDescription = "更多內容"
+                                                    )
+                                                }
+                                            },
+                                            modifier = Modifier.clickable {
+                                                navigateToViewVault(vault.uid)
+                                            })
+                                        HorizontalDivider()
+                                        VaultDialog(
+                                            expanded,
+                                            onExpandedChange,
+                                            vault,
+                                            clipboard,
+                                            context,
+                                            navigateToViewVault,
+                                            navigateToEditVault
+                                        )
+                                    }
+                                }
+                            } else {
+                                Text("尚未儲存密碼")
+                            }
                         }
-                    } else {
-                        Text("尚未儲存密碼")
                     }
+                } else {
+                    navController.navigate(Screen.Login.route)
                 }
+            } else {
+                navController.navigate(Screen.Signup.route)
             }
         }
     }
@@ -148,7 +162,7 @@ fun VaultScreen(
 }
 
 fun checkVault(
-    name: String, username: String, password: String,urlList:List<String>, context: Context
+    name: String, username: String, password: String, urlList: List<String>, context: Context
 ): Boolean {
     if (name.isEmpty() || name.isBlank()) {
         Toast.makeText(
@@ -165,7 +179,7 @@ fun checkVault(
             context, "請輸入密碼!", Toast.LENGTH_LONG
         ).show()
         return false
-    }else if(urlList.contains("")){
+    } else if (urlList.contains("")) {
         Toast.makeText(
             context, "請輸入網址!", Toast.LENGTH_LONG
         ).show()

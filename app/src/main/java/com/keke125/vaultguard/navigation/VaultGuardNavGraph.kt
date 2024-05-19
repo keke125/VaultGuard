@@ -74,7 +74,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Signup.route,
+            startDestination = Screen.Vault.route,
             modifier = modifier.padding(innerPadding)
         ) {
             composable(Screen.Vault.route) {

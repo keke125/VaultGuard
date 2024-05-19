@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.screen
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,7 +50,6 @@ fun SignupScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
-            val mainPasswordHashed = viewModel.mainPasswordHashed.collectAsState()
             val (signupPassword, onSignupPasswordChange) = remember { mutableStateOf("") }
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
@@ -82,9 +81,9 @@ fun SignupScreen(
                         IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                             Icon(
                                 imageVector = if (isPasswordVisible) {
-                                    Icons.Default.Visibility
-                                } else {
                                     Icons.Default.VisibilityOff
+                                } else {
+                                    Icons.Default.Visibility
                                 }, contentDescription = ""
                             )
                         }
@@ -100,21 +99,15 @@ fun SignupScreen(
                 )
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Button(onClick = {
-                    if (mainPasswordHashed.value.isEmpty()) {
-                        if (signupPassword.isEmpty() || signupPassword.isBlank()) {
-                            Toast.makeText(
-                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                context, "設定成功", Toast.LENGTH_SHORT
-                            ).show()
-                            viewModel.savePassword(signupPassword)
-                            navController.navigate(Screen.Login.route)
-                        }
+                    if (signupPassword.isEmpty() || signupPassword.isBlank()) {
+                        Toast.makeText(
+                            context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(context, "您已設定過主密碼，請直接登入!", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(
+                            context, "設定成功", Toast.LENGTH_SHORT
+                        ).show()
+                        viewModel.updateMainPassword(signupPassword)
                         navController.navigate(Screen.Login.route)
                     }
                 }) {
@@ -123,4 +116,5 @@ fun SignupScreen(
             }
         }
     }
+    BackHandler(enabled = true) {}
 }

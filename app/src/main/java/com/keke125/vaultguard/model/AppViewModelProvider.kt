@@ -46,7 +46,7 @@ object AppViewModelProvider {
         }
 
         initializer {
-            AuthViewModel(vaultGuardApplication().authPreferencesRepository,vaultGuardApplication().passwordService)
+            AuthViewModel(vaultGuardApplication().passwordService)
         }
     }
 }

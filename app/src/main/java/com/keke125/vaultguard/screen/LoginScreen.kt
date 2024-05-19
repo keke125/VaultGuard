@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.screen
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,7 +50,6 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
-            val mainPasswordHashed = viewModel.mainPasswordHashedLiveData.observeAsState()
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -82,9 +81,9 @@ fun LoginScreen(
                         IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                             Icon(
                                 imageVector = if (isPasswordVisible) {
-                                    Icons.Default.Visibility
-                                } else {
                                     Icons.Default.VisibilityOff
+                                } else {
+                                    Icons.Default.Visibility
                                 }, contentDescription = ""
                             )
                         }
@@ -100,24 +99,20 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Button(onClick = {
-                    if (mainPasswordHashed.value != null) {
-                        if (loginPassword.isEmpty() || loginPassword.isBlank()) {
-                            Toast.makeText(
-                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
-                            ).show()
-                        } else if (viewModel.checkMainPassword(
-                                loginPassword, mainPasswordHashed.value!!
-                            )
-                        ) {
-                            Toast.makeText(
-                                context, "登入成功", Toast.LENGTH_SHORT
-                            ).show()
-                            navController.navigate(Screen.Vault.route)
-                        } else {
-                            Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
-                        }
+                    if (loginPassword.isEmpty() || loginPassword.isBlank()) {
+                        Toast.makeText(
+                            context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (viewModel.checkMainPassword(
+                            loginPassword
+                        )
+                    ) {
+                        Toast.makeText(
+                            context, "登入成功", Toast.LENGTH_SHORT
+                        ).show()
+                        navController.navigate(Screen.Vault.route)
                     } else {
-                        Toast.makeText(context, "請先設定主密碼!!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
                     }
                 }) {
                     Text("登入")
@@ -125,4 +120,5 @@ fun LoginScreen(
             }
         }
     }
+    BackHandler(enabled = true) {}
 }
