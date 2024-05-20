@@ -108,7 +108,7 @@ fun SignupScreen(
                             context, "設定成功", Toast.LENGTH_SHORT
                         ).show()
                         viewModel.updateMainPassword(signupPassword)
-                        navController.navigate(Screen.Login.route)
+                        navController.navigate(Screen.Vault.route)
                     }
                 }) {
                     Text("設定")

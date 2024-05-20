@@ -42,7 +42,7 @@ object AppViewModelProvider {
         }
 
         initializer {
-            BiometricAuthViewModel(vaultGuardApplication().userPreferencesRepository)
+            BiometricAuthSettingViewModel(vaultGuardApplication().userPreferencesRepository)
         }
 
         initializer {

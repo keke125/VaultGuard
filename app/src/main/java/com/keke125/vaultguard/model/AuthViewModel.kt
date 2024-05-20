@@ -1,11 +1,15 @@
 package com.keke125.vaultguard.model
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.keke125.vaultguard.service.PasswordService
 
 class AuthViewModel(
     private val passwordService: PasswordService
 ) : ViewModel() {
+
+    private val authUiState by mutableStateOf(AuthUiState())
 
     fun updateMainPassword(mainPassword: String) {
         passwordService.updatePassword(mainPassword)
@@ -24,4 +28,17 @@ class AuthViewModel(
         return passwordService.isAuthenticated()
     }
 
+    fun logout(){
+        passwordService.logout()
+    }
+
+    fun authWithBiometric(isAuthenticatedSuccess: Boolean){
+        passwordService.authenticateWithBiometric(isAuthenticatedSuccess)
+        authUiState.isAuthenticated = isAuthenticatedSuccess
+    }
+
 }
+
+data class AuthUiState(
+    var isAuthenticated: Boolean = false
+)

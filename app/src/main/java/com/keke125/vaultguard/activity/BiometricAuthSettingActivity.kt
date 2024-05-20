@@ -50,12 +50,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.FragmentActivity
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.BiometricAuthViewModel
+import com.keke125.vaultguard.model.BiometricAuthSettingViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
-class BiometricAuthActivity : AppCompatActivity() {
+class BiometricAuthSettingActivity : AppCompatActivity() {
 
-    private val biometricAuthViewModel: BiometricAuthViewModel by viewModels(factoryProducer = { AppViewModelProvider.Factory })
+    private val biometricAuthSettingViewModel: BiometricAuthSettingViewModel by viewModels(
+        factoryProducer = { AppViewModelProvider.Factory })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +65,7 @@ class BiometricAuthActivity : AppCompatActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    BiometricAuthScreen(this, biometricAuthViewModel)
+                    BiometricAuthSettingScreen(this, biometricAuthSettingViewModel)
                 }
             }
         }
@@ -80,10 +81,10 @@ class BiometricAuthActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100) {
             val biometricManager = BiometricManager.from(this)
-            biometricAuthViewModel.updateCanAuthenticateWithBiometrics(
+            biometricAuthSettingViewModel.updateCanAuthenticateWithBiometrics(
                 when (biometricManager.canAuthenticate(BIOMETRIC_STRONG or BIOMETRIC_WEAK or DEVICE_CREDENTIAL)) {
                     BiometricManager.BIOMETRIC_SUCCESS -> {
-                        biometricAuthViewModel.updateBiometricEnabled(true)
+                        biometricAuthSettingViewModel.updateBiometricEnabled(true)
                         true
                     }
 
@@ -112,7 +113,7 @@ class BiometricAuthActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BiometricAuthScreen(context: Context, viewModel: BiometricAuthViewModel) {
+fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSettingViewModel) {
     val activity = context as? Activity
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
@@ -175,6 +176,7 @@ fun BiometricAuthScreen(context: Context, viewModel: BiometricAuthViewModel) {
                                         Toast.makeText(
                                             context, "您的裝置不支援生物辨識!", Toast.LENGTH_LONG
                                         ).show()
+                                        viewModel.updateBiometricEnabled(false)
                                         false
                                     }
 
@@ -186,6 +188,7 @@ fun BiometricAuthScreen(context: Context, viewModel: BiometricAuthViewModel) {
                                         Toast.makeText(
                                             context, "生物辨識功能暫時無法使用!", Toast.LENGTH_LONG
                                         ).show()
+                                        viewModel.updateBiometricEnabled(false)
                                         false
                                     }
 
@@ -222,60 +225,7 @@ fun BiometricAuthScreen(context: Context, viewModel: BiometricAuthViewModel) {
                         )
                     }, context = context)
                 }
-            }/*
-            if (uiState.value.canAuthenticateWithBiometrics) {
-                val executor =
-                    ContextCompat.getMainExecutor(context)
-                val biometricPrompt =
-                    BiometricPrompt(context as FragmentActivity,
-                        executor,
-                        object : BiometricPrompt.AuthenticationCallback() {
-                            override fun onAuthenticationError(
-                                errorCode: Int, errString: CharSequence
-                            ) {
-                                super.onAuthenticationError(errorCode, errString)
-                                Toast.makeText(
-                                    context,
-                                    "Authentication error: $errString",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onAuthenticationSucceeded(
-                                result: BiometricPrompt.AuthenticationResult
-                            ) {
-                                super.onAuthenticationSucceeded(result)
-                                Toast.makeText(
-                                    context,
-                                    "Authentication succeeded!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onAuthenticationFailed() {
-                                super.onAuthenticationFailed()
-                                Toast.makeText(
-                                    context,
-                                    "Authentication failed",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-
-                val promptInfo =
-                    BiometricPrompt.PromptInfo.Builder().setTitle("登入Vault Guard")
-                        .setSubtitle("使用生物辨識登入Vault Guard")
-                        .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
-                        .build()
-
-                Button(onClick = { biometricPrompt.authenticate(promptInfo) }) {
-                    Text(text = "生物辨識")
-                }
-            } else {
-                Text(text = "您的裝置不支援生物辨識或您尚未註冊生物辨識")
             }
-            */
-
         }
     }
 }

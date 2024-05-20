@@ -11,7 +11,7 @@ import javax.crypto.spec.PBEKeySpec
 
 class PasswordService(context: Context) {
 
-    private val sharedPref: SharedPreferences =context.getSharedPreferences(
+    private val sharedPref: SharedPreferences = context.getSharedPreferences(
         "Auth", Context.MODE_PRIVATE
     )
 
@@ -89,6 +89,20 @@ class PasswordService(context: Context) {
             }
         }
         return diff == 0
+    }
+
+    fun logout(){
+        with(sharedPref.edit()) {
+            putBoolean("IS_AUTHENTICATED", false)
+            apply()
+        }
+    }
+
+    fun authenticateWithBiometric(isAuthenticationSuccessful: Boolean){
+        with(sharedPref.edit()) {
+            putBoolean("IS_AUTHENTICATED", isAuthenticationSuccessful)
+            apply()
+        }
     }
 
 }

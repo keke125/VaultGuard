@@ -3,11 +3,13 @@ package com.keke125.vaultguard.screen
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
 import com.keke125.vaultguard.Screen
+import com.keke125.vaultguard.activity.LoginActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
@@ -73,8 +77,14 @@ fun VaultScreen(
             val context = navController.context
             val vaultUiState by vaultViewModel.vaultUiState.collectAsState()
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val (vaultRepositoryExpanded, onVaultRepositoryExpandedChange) = remember {
+                mutableStateOf(false)
+            }
+            val (tryAuth, onTryAuthChange) = remember {
+                mutableStateOf(false)
+            }
             if (authViewModel.isSignup()) {
-                if (authViewModel.isAuthenticated()) {
+                if (authViewModel.isAuthenticated() || tryAuth) {
                     Scaffold(floatingActionButton = {
                         FloatingActionButton(
                             onClick = {
@@ -91,11 +101,19 @@ fun VaultScreen(
                         ), title = {
                             Text(stringResource(R.string.app_vault_screen_title))
                         }, actions = {
-                            IconButton(onClick = { navigateToSearchVault() }) {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "搜尋密碼"
-                                )
+                            Row {
+                                IconButton(onClick = { navigateToSearchVault() }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "搜尋密碼"
+                                    )
+                                }
+                                IconButton(onClick = { onVaultRepositoryExpandedChange(true) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.MoreVert,
+                                        contentDescription = "更多內容"
+                                    )
+                                }
                             }
                         })
                     }) { innerPadding ->
@@ -111,7 +129,7 @@ fun VaultScreen(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     items(vaultUiState.vaultList) { vault ->
-                                        val (expanded, onExpandedChange) = remember {
+                                        val (vaultExpanded, onVaultExpandedChange) = remember {
                                             mutableStateOf(false)
                                         }
                                         ListItem(headlineContent = { Text(vault.name) },
@@ -123,7 +141,7 @@ fun VaultScreen(
                                                 )
                                             },
                                             trailingContent = {
-                                                IconButton(onClick = { onExpandedChange(true) }) {
+                                                IconButton(onClick = { onVaultExpandedChange(true) }) {
                                                     Icon(
                                                         imageVector = Icons.Default.MoreVert,
                                                         contentDescription = "更多內容"
@@ -135,8 +153,8 @@ fun VaultScreen(
                                             })
                                         HorizontalDivider()
                                         VaultDialog(
-                                            expanded,
-                                            onExpandedChange,
+                                            vaultExpanded,
+                                            onVaultExpandedChange,
                                             vault,
                                             clipboard,
                                             context,
@@ -149,9 +167,14 @@ fun VaultScreen(
                                 Text("尚未儲存密碼")
                             }
                         }
+                        VaultRepositoryDialog(
+                            vaultRepositoryExpanded, onVaultRepositoryExpandedChange,
+                            onTryAuthChange,
+                        ) { authViewModel.logout() }
                     }
                 } else {
-                    navController.navigate(Screen.Login.route)
+                    context.startActivity(Intent(context, LoginActivity::class.java))
+                    onTryAuthChange(true)
                 }
             } else {
                 navController.navigate(Screen.Signup.route)
@@ -245,6 +268,34 @@ fun VaultDialog(
                         TextButton(onClick = { onExpandedChange(false) }) {
                             Text("取消", color = ListItemDefaults.colors().headlineColor)
                         }
+                    })
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VaultRepositoryDialog(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onTryAuthChange: (Boolean) -> Unit,
+    lockVaultRepository: () -> Unit
+) {
+    when {
+        expanded -> {
+            BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
+                Column {
+                    ListItem(headlineContent = { Text("密碼庫") })
+                    ListItem(headlineContent = { Text("鎖定密碼庫") }, leadingContent = {
+                        Icon(
+                            Icons.Outlined.Lock, contentDescription = null
+                        )
+                    }, modifier = Modifier.clickable {
+                        lockVaultRepository()
+                        onTryAuthChange(false)
+                        onExpandedChange(false)
                     })
                 }
             }

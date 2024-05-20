@@ -36,7 +36,11 @@
             android:name=".activity.ExportVaultActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.BiometricAuthActivity"
+            android:name=".activity.BiometricAuthSettingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".activity.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
