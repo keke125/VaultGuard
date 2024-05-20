@@ -12,8 +12,8 @@ android {
         applicationId = "com.keke125.vaultguard"
         minSdk = 24
         targetSdk = 34
-        versionCode = 8
-        versionName = "1.1.6"
+        versionCode = 11
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -89,7 +89,6 @@ dependencies {
     implementation(libs.apache.commons.csv)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.biometric.ktx)
-    implementation(libs.androidx.activity.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
