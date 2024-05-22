@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MoreHoriz
@@ -31,6 +33,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -47,6 +50,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,7 +69,13 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.VaultDetailsViewModel
 import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import dev.turingcomplete.kotlinonetimepassword.GoogleAuthenticator
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.Calendar
+import java.util.Date
+import java.util.Timer
+import java.util.TimerTask
 
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
@@ -99,6 +109,12 @@ fun VaultDetailsScreen(
             val (isMoreOptionsExpanded, onMoreOptionsExpandedChange) = remember {
                 mutableStateOf(false)
             }
+            val (totp, onTotpChange) = remember {
+                mutableStateOf("")
+            }
+            val (time, onTimeChange) = remember {
+                mutableIntStateOf(0)
+            }
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -107,7 +123,10 @@ fun VaultDetailsScreen(
                     Text(stringResource(VaultDetailsDestination.titleRes))
                 }, actions = {
                     IconButton(onClick = { onMoreOptionsExpandedChange(true) }) {
-                        Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "更多內容")
+                        Icon(
+                            imageVector = Icons.Filled.MoreHoriz,
+                            contentDescription = "更多內容"
+                        )
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
@@ -202,6 +221,21 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    if (uiState.value.vaultDetails.totp.isNotEmpty()) {
+                        generateTotp(uiState.value.vaultDetails.totp, onTotpChange, onTimeChange)
+                        OutlinedTextField(
+                            value = totp,
+                            onValueChange = {},
+                            singleLine = true,
+                            readOnly = true,
+                            label = { Text("TOTP驗證碼") },
+                            leadingIcon = { Icon(Icons.Default.Key, null) },
+                            trailingIcon = { 
+                                Text(text = time.toString())
+                                CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() })           },
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        )
+                    }
                     OutlinedTextField(
                         value = uiState.value.vaultDetails.notes,
                         onValueChange = {},
@@ -228,7 +262,9 @@ fun VaultDetailsScreen(
                         )
                         Spacer(modifier = Modifier.padding(vertical = 4.dp))
                         uiState.value.vaultDetails.urlList.forEachIndexed { _, url ->
-                            ViewUrl(url = url, context = context, clipboardManager = clipboardManager)
+                            ViewUrl(
+                                url = url, context = context, clipboardManager = clipboardManager
+                            )
                         }
                     }
                     MoreOptionsDialog(
@@ -338,15 +374,34 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                 }) {
                     Icon(Icons.AutoMirrored.Filled.OpenInNew, "以瀏覽器開啟網址")
                 }
-                    IconButton(onClick = {
-                        copyText(
-                            clipboardManager, url, context
-                        )
-                    }) {
-                        Icon(Icons.Default.ContentCopy, "複製網址")
-                    }
+                IconButton(onClick = {
+                    copyText(
+                        clipboardManager, url, context
+                    )
+                }) {
+                    Icon(Icons.Default.ContentCopy, "複製網址")
+                }
             }
         },
         modifier = Modifier.fillMaxWidth(0.8f)
     )
+}
+
+fun generateTotp(
+    base32EncodedSecret: String, updateTotp: (String) -> Unit, updateTime: (Int) -> Unit
+) {
+    Timer().schedule(object : TimerTask() {
+        override fun run() {
+            val timestamp = Date(System.currentTimeMillis())
+            val code =
+                GoogleAuthenticator(base32EncodedSecret.encodeToByteArray()).generate(timestamp)
+            val second: Int = if (Build.VERSION.SDK_INT >= 26) {
+                30 - (LocalDateTime.now().second) % 30
+            } else {
+                30 - Calendar.getInstance().get(Calendar.SECOND) % 30
+            }
+            updateTime(second)
+            updateTotp(code)
+        }
+    }, 0, 1000)
 }

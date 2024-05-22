@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
@@ -143,7 +144,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text("名稱") },
+                        label = { Text("名稱(必填)") },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -153,7 +154,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(username = it))
                         },
                         singleLine = true,
-                        label = { Text("帳號") },
+                        label = { Text("帳號(必填)") },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -162,7 +163,7 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(password = it))
                         },
-                        label = { Text("密碼") },
+                        label = { Text("密碼(必填)") },
                         leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {
@@ -181,6 +182,16 @@ fun AddVaultScreen(
                             }
                         },
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = vaultUiState.vaultDetails.totp,
+                        onValueChange = {
+                            viewModel.updateUiState(vaultUiState.vaultDetails.copy(totp = it))
+                        },
+                        singleLine = true,
+                        label = { Text("TOTP驗證碼") },
+                        leadingIcon = { Icon(Icons.Default.Key, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(

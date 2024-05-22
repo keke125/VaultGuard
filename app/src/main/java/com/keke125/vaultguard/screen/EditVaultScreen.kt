@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Refresh
@@ -187,6 +188,16 @@ fun EditVaultScreen(
                             }
                         },
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = viewModel.vaultUiState.vaultDetails.totp,
+                        onValueChange = {
+                            viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(totp = it))
+                        },
+                        singleLine = true,
+                        label = { Text("TOTP驗證碼") },
+                        leadingIcon = { Icon(Icons.Default.Key, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(

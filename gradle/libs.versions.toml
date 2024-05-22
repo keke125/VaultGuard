@@ -9,6 +9,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
+kotlinOnetimepassword = "2.4.1"
 lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
@@ -56,6 +57,7 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-onetimepassword = { module = "dev.turingcomplete:kotlin-onetimepassword", version.ref = "kotlinOnetimepassword" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 zetetic-sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipherAndroidVersion" }

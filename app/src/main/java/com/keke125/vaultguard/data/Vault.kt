@@ -13,5 +13,6 @@ data class Vault(
     val username: String,
     val password: String,
     val urlList: List<String>,
-    val notes: String
+    val notes: String,
+    val totp: String
 )

@@ -36,7 +36,8 @@ class FileService {
                     username = username,
                     password = password,
                     notes = notes,
-                    urlList = urlList
+                    urlList = urlList,
+                    totp = ""
                 )
                 vaults.add(vault)
             }
@@ -60,12 +61,14 @@ class FileService {
                     val password = vault.password
                     val notes = vault.notes
                     val urlList = vault.urlList
+                    val totp = vault.totp
                     val newVault = Vault(
                         name = name,
                         username = username,
                         password = password,
                         notes = notes,
-                        urlList = urlList
+                        urlList = urlList,
+                        totp = totp
                     )
                     vaults.add(newVault)
                 }
