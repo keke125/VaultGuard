@@ -1,9 +1,10 @@
 package com.keke125.vaultguard.service
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.util.Base64
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -11,8 +12,21 @@ import javax.crypto.spec.PBEKeySpec
 
 class PasswordService(context: Context) {
 
+    /*
     private val sharedPref: SharedPreferences = context.getSharedPreferences(
         "Auth", Context.MODE_PRIVATE
+    )*/
+
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
+
+    private val sharedPref = EncryptedSharedPreferences.create(
+        context,
+        "Auth",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
     fun isSignup(): Boolean {
