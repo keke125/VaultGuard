@@ -1,9 +1,9 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.1"
 apacheCommonsCsv = "1.5"
 biometricKtx = "1.2.0-alpha05"
 biometricVersion = "1.1.0"
-gson = "2.10.1"
+gson = "2.11.0"
 kotlin = "1.9.23"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -26,7 +26,6 @@ sqlcipherAndroidVersion = "4.5.7"
 sqlite = "2.4.0"
 
 [libraries]
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometricVersion" }
 androidx-biometric-ktx = { module = "androidx.biometric:biometric-ktx", version.ref = "biometricKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
