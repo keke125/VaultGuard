@@ -104,6 +104,7 @@ fun AddVaultScreen(
                                 vaultUiState.vaultDetails.username,
                                 vaultUiState.vaultDetails.password,
                                 vaultUiState.vaultDetails.urlList,
+                                vaultUiState.vaultDetails.totp,
                                 context
                             )
                         ) {

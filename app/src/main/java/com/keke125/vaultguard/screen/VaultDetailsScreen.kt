@@ -221,7 +221,7 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    if (uiState.value.vaultDetails.totp.isNotEmpty()) {
+                    if (uiState.value.vaultDetails.totp.isNotBlank()) {
                         generateTotp(uiState.value.vaultDetails.totp, onTotpChange, onTimeChange)
                         OutlinedTextField(
                             value = totp,
