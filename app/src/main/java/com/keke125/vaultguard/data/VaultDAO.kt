@@ -13,7 +13,7 @@ interface VaultDAO {
     @Query("SELECT * FROM vault")
     fun getAll(): Flow<List<Vault>>
 
-    @Query("SELECT * FROM vault WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(username) LIKE '%' || LOWER(:keyword) || '%' ")
+    @Query("SELECT * FROM vault WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(username) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(urlList) LIKE '%' || LOWER(:keyword) || '%' ")
     fun getAllFiltered(keyword: String): Flow<List<Vault>>
 
     @Query("SELECT * FROM vault WHERE uid IN (:vaultIds)")

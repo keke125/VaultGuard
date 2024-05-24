@@ -100,7 +100,7 @@ fun SearchVaultScreen(
                     }
                 }, active = isSearchActive, onActiveChange = {
                     onSearchActiveChange(it)
-                }, placeholder = { Text("搜尋") }, content = {
+                }, placeholder = { Text("透過名稱、帳號、網址搜尋") }, content = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
