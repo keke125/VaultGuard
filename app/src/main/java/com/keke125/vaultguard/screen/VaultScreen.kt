@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
@@ -84,96 +85,101 @@ fun VaultScreen(
                 mutableStateOf(false)
             }
             if (authViewModel.isSignup()) {
-                if (authViewModel.isAuthenticated() || tryAuth) {
-                    Scaffold(floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {
-                                navController.navigate(AddVaultDestination.route)
-                            },
-                        ) {
-                            Icon(Icons.Filled.Add, "新增密碼")
-                        }
-
-                    }, topBar = {
-                        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            titleContentColor = MaterialTheme.colorScheme.primary,
-                        ), title = {
-                            Text(stringResource(R.string.app_vault_screen_title))
-                        }, actions = {
-                            Row {
-                                IconButton(onClick = { navigateToSearchVault() }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = "搜尋密碼"
-                                    )
-                                }
-                                IconButton(onClick = { onVaultRepositoryExpandedChange(true) }) {
-                                    Icon(
-                                        imageVector = Icons.Default.MoreVert,
-                                        contentDescription = "更多內容"
-                                    )
-                                }
+                if(authViewModel.isNotTimeout()){
+                    if (authViewModel.isAuthenticated() || tryAuth) {
+                        Scaffold(floatingActionButton = {
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate(AddVaultDestination.route)
+                                },
+                            ) {
+                                Icon(Icons.Filled.Add, "新增密碼")
                             }
-                        })
-                    }) { innerPadding ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(innerPadding)
-                                .padding(vertical = 8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            if (vaultUiState.vaultList.isNotEmpty()) {
-                                LazyColumn(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    items(vaultUiState.vaultList) { vault ->
-                                        val (vaultExpanded, onVaultExpandedChange) = remember {
-                                            mutableStateOf(false)
-                                        }
-                                        ListItem(headlineContent = { Text(vault.name) },
-                                            supportingContent = { Text(vault.username) },
-                                            leadingContent = {
-                                                Icon(
-                                                    Icons.Default.AccountCircle,
-                                                    contentDescription = "",
-                                                )
-                                            },
-                                            trailingContent = {
-                                                IconButton(onClick = { onVaultExpandedChange(true) }) {
-                                                    Icon(
-                                                        imageVector = Icons.Default.MoreVert,
-                                                        contentDescription = "更多內容"
-                                                    )
-                                                }
-                                            },
-                                            modifier = Modifier.clickable {
-                                                navigateToViewVault(vault.uid)
-                                            })
-                                        HorizontalDivider()
-                                        VaultDialog(
-                                            vaultExpanded,
-                                            onVaultExpandedChange,
-                                            vault,
-                                            clipboard,
-                                            context,
-                                            navigateToViewVault,
-                                            navigateToEditVault
+
+                        }, topBar = {
+                            TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                titleContentColor = MaterialTheme.colorScheme.primary,
+                            ), title = {
+                                Text(stringResource(R.string.app_vault_screen_title))
+                            }, actions = {
+                                Row {
+                                    IconButton(onClick = { navigateToSearchVault() }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Search,
+                                            contentDescription = "搜尋密碼"
+                                        )
+                                    }
+                                    IconButton(onClick = { onVaultRepositoryExpandedChange(true) }) {
+                                        Icon(
+                                            imageVector = Icons.Default.MoreVert,
+                                            contentDescription = "更多內容"
                                         )
                                     }
                                 }
-                            } else {
-                                Text("尚未儲存密碼")
+                            })
+                        }) { innerPadding ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(innerPadding)
+                                    .padding(vertical = 8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                if (vaultUiState.vaultList.isNotEmpty()) {
+                                    LazyColumn(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        items(vaultUiState.vaultList) { vault ->
+                                            val (vaultExpanded, onVaultExpandedChange) = remember {
+                                                mutableStateOf(false)
+                                            }
+                                            ListItem(headlineContent = { Text(vault.name) },
+                                                supportingContent = { Text(vault.username) },
+                                                leadingContent = {
+                                                    Icon(
+                                                        Icons.Default.AccountCircle,
+                                                        contentDescription = "",
+                                                    )
+                                                },
+                                                trailingContent = {
+                                                    IconButton(onClick = { onVaultExpandedChange(true) }) {
+                                                        Icon(
+                                                            imageVector = Icons.Default.MoreVert,
+                                                            contentDescription = "更多內容"
+                                                        )
+                                                    }
+                                                },
+                                                modifier = Modifier.clickable {
+                                                    navigateToViewVault(vault.uid)
+                                                })
+                                            HorizontalDivider()
+                                            VaultDialog(
+                                                vaultExpanded,
+                                                onVaultExpandedChange,
+                                                vault,
+                                                clipboard,
+                                                context,
+                                                navigateToViewVault,
+                                                navigateToEditVault
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    Text("尚未儲存密碼")
+                                }
                             }
+                            VaultRepositoryDialog(
+                                vaultRepositoryExpanded, onVaultRepositoryExpandedChange,
+                                onTryAuthChange,
+                            ) { authViewModel.logout() }
                         }
-                        VaultRepositoryDialog(
-                            vaultRepositoryExpanded, onVaultRepositoryExpandedChange,
-                            onTryAuthChange,
-                        ) { authViewModel.logout() }
+                    } else {
+                        startActivity(context, Intent(context, LoginActivity::class.java), null)
+                        onTryAuthChange(true)
                     }
-                } else {
-                    context.startActivity(Intent(context, LoginActivity::class.java))
+                }else{
+                    startActivity(context, Intent(context, LoginActivity::class.java), null)
                     onTryAuthChange(true)
                 }
             } else {

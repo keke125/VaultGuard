@@ -37,6 +37,10 @@ class AuthViewModel(
         authUiState.isAuthenticated = isAuthenticatedSuccess
     }
 
+    fun isNotTimeout(): Boolean {
+        return passwordService.isNotTimeout()
+    }
+
 }
 
 data class AuthUiState(

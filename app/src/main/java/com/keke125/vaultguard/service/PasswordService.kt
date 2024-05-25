@@ -6,6 +6,10 @@ import android.util.Base64
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import java.security.SecureRandom
+import java.time.Duration
+import java.time.Instant
+import java.util.Calendar
+import java.util.Date
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
@@ -17,9 +21,8 @@ class PasswordService(context: Context) {
         "Auth", Context.MODE_PRIVATE
     )*/
 
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
+    private val masterKey =
+        MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
     private val sharedPref = EncryptedSharedPreferences.create(
         context,
@@ -96,27 +99,68 @@ class PasswordService(context: Context) {
             diff = diff or (hash[i].toInt() xor testHash[i].toInt())
             i++
         }
-        if(diff == 0){
-            with(sharedPref.edit()) {
-                putBoolean("IS_AUTHENTICATED", true)
-                apply()
+        if (diff == 0) {
+            if (Build.VERSION.SDK_INT >= 26) {
+                val currentTime = Instant.now()
+                with(sharedPref.edit()) {
+                    putBoolean("IS_AUTHENTICATED", true)
+                    putString("LOGIN_TIME", currentTime.toString())
+                    apply()
+                }
+            } else {
+                val currentTime = System.currentTimeMillis()
+                with(sharedPref.edit()) {
+                    putBoolean("IS_AUTHENTICATED", true)
+                    putString("LOGIN_TIME", currentTime.toString())
+                    apply()
+                }
             }
         }
         return diff == 0
     }
 
-    fun logout(){
+    fun logout() {
         with(sharedPref.edit()) {
             putBoolean("IS_AUTHENTICATED", false)
             apply()
         }
     }
 
-    fun authenticateWithBiometric(isAuthenticationSuccessful: Boolean){
+    fun authenticateWithBiometric(isAuthenticationSuccessful: Boolean) {
         with(sharedPref.edit()) {
             putBoolean("IS_AUTHENTICATED", isAuthenticationSuccessful)
             apply()
         }
     }
 
+    fun isNotTimeout(): Boolean {
+        val loginTimeString = sharedPref.getString("LOGIN_TIME", "")
+        if (Build.VERSION.SDK_INT >= 26) {
+            val timeoutDuration = Duration.ofHours(1)
+            val currentTime = Instant.now()
+            if (loginTimeString.isNullOrEmpty()) {
+                return false
+            } else {
+                val loginTime = Instant.parse(loginTimeString)
+                return (Duration.between(
+                    loginTime + timeoutDuration, currentTime
+                ).isNegative)
+            }
+        } else {
+            val currentTime = Date()
+            val currentTimeCalendar = Calendar.getInstance()
+            currentTimeCalendar.setTime(currentTime)
+            if (loginTimeString.isNullOrEmpty()) {
+                return false
+            } else {
+                val loginTime = Date()
+                loginTime.time = loginTimeString.toLong()
+                val loginTimeCalendar = Calendar.getInstance()
+                loginTimeCalendar.setTime(loginTime)
+                // login time + timeout (1hour)
+                loginTimeCalendar.add(Calendar.HOUR, 1)
+                return currentTimeCalendar < loginTimeCalendar
+            }
+        }
+    }
 }

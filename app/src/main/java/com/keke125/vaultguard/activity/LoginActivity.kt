@@ -88,7 +88,7 @@ fun LoginScreen(
             val biometricAuthUiState by biometricAuthSettingViewModel.uiState.asLiveData()
                 .observeAsState()
             val biometricManager = BiometricManager.from(context)
-            if (authViewModel.isAuthenticated()) {
+            if (authViewModel.isAuthenticated() && authViewModel.isNotTimeout()) {
                 activity.finish()
             } else {
                 if (biometricAuthUiState != null) {
