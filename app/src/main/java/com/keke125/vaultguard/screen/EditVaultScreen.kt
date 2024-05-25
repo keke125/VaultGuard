@@ -1,5 +1,6 @@
 package com.keke125.vaultguard.screen
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
@@ -89,6 +91,8 @@ fun EditVaultScreen(
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val clipboardManager =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -199,6 +203,16 @@ fun EditVaultScreen(
                         singleLine = true,
                         label = { Text("TOTP驗證碼") },
                         leadingIcon = { Icon(Icons.Default.Key, null) },
+                        trailingIcon = {
+                            IconButton(onClick = {
+                            copyText(
+                                clipboardManager,
+                                viewModel.vaultUiState.vaultDetails.totp,
+                                context
+                            )
+                        }) {
+                            Icon(Icons.Default.ContentCopy, "產生密碼")
+                        }},
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(

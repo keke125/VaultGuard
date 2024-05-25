@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -230,9 +233,22 @@ fun VaultDetailsScreen(
                             readOnly = true,
                             label = { Text("TOTP驗證碼") },
                             leadingIcon = { Icon(Icons.Default.Key, null) },
-                            trailingIcon = { 
-                                Text(text = time.toString())
-                                CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() })           },
+                            trailingIcon = {
+                                Row {
+                                    Text(
+                                        text = time.toString(),
+                                        modifier = Modifier.offset(x = 30.dp, y = 8.dp)
+                                    )
+                                    CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() })
+                                    IconButton(onClick = {
+                                        copyText(
+                                            clipboardManager, totp, context
+                                        )
+                                    }) {
+                                        Icon(Icons.Default.ContentCopy, "產生密碼")
+                                    }
+                                }
+                            },
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
                     }
@@ -351,7 +367,10 @@ fun MoreOptionsDialog(
 @Composable
 fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
     OutlinedTextField(
-        value = url,
+        value = if (url.startsWith("https://")) url.removePrefix("https://") else if (url.startsWith(
+                "http://"
+            )
+        ) url.removePrefix("http://") else if (url.startsWith("androidapp://")) url.removePrefix("androidapp://") else url,
         onValueChange = {},
         readOnly = true,
         singleLine = true,
@@ -360,19 +379,85 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
         trailingIcon = {
             Row {
                 IconButton(onClick = {
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_VIEW
-                        val uri = Uri.parse(url)
-                        setData(uri)
-                    }
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (url.startsWith("androidapp://")) {
+                            try {
+                                val packageManager: PackageManager = context.packageManager
+                                val intentSender: IntentSender =
+                                    packageManager.getLaunchIntentSenderForPackage(
+                                        url.removePrefix("androidapp://")
+                                    )
+                                intentSender.sendIntent(context, intentSender.creatorUid, null, null, null)
+                            } catch (e: IntentSender.SendIntentException) {
+                                Toast.makeText(
+                                    context, "沒有可開啟連結的應用程式!", Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else if (url.startsWith("https://") or url.startsWith("http://")) {
+                            val sendIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_VIEW
+                                val uri = Uri.parse(url)
+                                setData(uri)
+                            }
 
-                    try {
-                        startActivity(context, sendIntent, null)
-                    } catch (e: ActivityNotFoundException) {
-                        Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                            try {
+                                Toast.makeText(context, "開啟連結中...", Toast.LENGTH_SHORT).show()
+                                startActivity(context, sendIntent, null)
+                            } catch (e: ActivityNotFoundException) {
+                                Toast.makeText(
+                                    context,
+                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        if (url.startsWith("androidapp://")) {
+                            val packageManager: PackageManager = context.packageManager
+                            val it =
+                                packageManager.getLaunchIntentForPackage(url.removePrefix("androidapp://"))
+                            if (it != null) {
+                                startActivity(context, it, null)
+                            } else {
+                                Toast.makeText(
+                                    context, "沒有可開啟連結的應用程式!", Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else if (url.startsWith("https://") or url.startsWith("http://")) {
+                            val sendIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_VIEW
+                                val uri = Uri.parse(url)
+                                setData(uri)
+                            }
+
+                            try {
+                                Toast.makeText(context, "開啟連結中...", Toast.LENGTH_SHORT).show()
+                                startActivity(context, sendIntent, null)
+                            } catch (e: ActivityNotFoundException) {
+                                Toast.makeText(
+                                    context,
+                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }) {
-                    Icon(Icons.AutoMirrored.Filled.OpenInNew, "以瀏覽器開啟網址")
+                    Icon(Icons.AutoMirrored.Filled.OpenInNew, "開啟網址")
                 }
                 IconButton(onClick = {
                     copyText(
