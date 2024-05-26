@@ -127,6 +127,23 @@ class PasswordService(context: Context) {
     }
 
     fun authenticateWithBiometric(isAuthenticationSuccessful: Boolean) {
+        if(isAuthenticationSuccessful){
+            if (Build.VERSION.SDK_INT >= 26) {
+                val currentTime = Instant.now()
+                with(sharedPref.edit()) {
+                    putBoolean("IS_AUTHENTICATED", true)
+                    putString("LOGIN_TIME", currentTime.toString())
+                    apply()
+                }
+            } else {
+                val currentTime = System.currentTimeMillis()
+                with(sharedPref.edit()) {
+                    putBoolean("IS_AUTHENTICATED", true)
+                    putString("LOGIN_TIME", currentTime.toString())
+                    apply()
+                }
+            }
+        }
         with(sharedPref.edit()) {
             putBoolean("IS_AUTHENTICATED", isAuthenticationSuccessful)
             apply()

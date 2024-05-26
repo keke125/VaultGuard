@@ -81,12 +81,14 @@ fun VaultScreen(
             val (vaultRepositoryExpanded, onVaultRepositoryExpandedChange) = remember {
                 mutableStateOf(false)
             }
-            val (tryAuth, onTryAuthChange) = remember {
+            val (tryLoginAuth, onTryLoginAuthChange) = remember {
+                mutableStateOf(false)
+            }
+            val (tryTimeout, onTryTimeoutChange) = remember {
                 mutableStateOf(false)
             }
             if (authViewModel.isSignup()) {
-                if(authViewModel.isNotTimeout()){
-                    if (authViewModel.isAuthenticated() || tryAuth) {
+                    if ((authViewModel.isAuthenticated() && authViewModel.isNotTimeout()) || (tryLoginAuth && tryTimeout)) {
                         Scaffold(floatingActionButton = {
                             FloatingActionButton(
                                 onClick = {
@@ -171,17 +173,14 @@ fun VaultScreen(
                             }
                             VaultRepositoryDialog(
                                 vaultRepositoryExpanded, onVaultRepositoryExpandedChange,
-                                onTryAuthChange,
+                                onTryLoginAuthChange,
                             ) { authViewModel.logout() }
                         }
                     } else {
                         startActivity(context, Intent(context, LoginActivity::class.java), null)
-                        onTryAuthChange(true)
+                        onTryLoginAuthChange(true)
+                        onTryTimeoutChange(true)
                     }
-                }else{
-                    startActivity(context, Intent(context, LoginActivity::class.java), null)
-                    onTryAuthChange(true)
-                }
             } else {
                 navController.navigate(Screen.Signup.route)
             }
