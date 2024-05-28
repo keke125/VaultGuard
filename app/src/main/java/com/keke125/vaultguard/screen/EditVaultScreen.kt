@@ -42,6 +42,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,6 +87,7 @@ fun EditVaultScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
+            val deleteVaultsUiState by viewModel.deleteVaultsUiState.collectAsState()
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -101,20 +104,46 @@ fun EditVaultScreen(
                     Text(stringResource(EditVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
-                        if (checkVault(
-                                viewModel.vaultUiState.vaultDetails.name,
-                                viewModel.vaultUiState.vaultDetails.username,
-                                viewModel.vaultUiState.vaultDetails.password,
-                                viewModel.vaultUiState.vaultDetails.urlList,
-                                viewModel.vaultUiState.vaultDetails.totp,
-                                context
-                            )
-                        ) {
-                            coroutineScope.launch {
-                                viewModel.updateVault()
+                        viewModel.updateNameAndUsername(
+                            viewModel.vaultUiState.vaultDetails.name,
+                            viewModel.vaultUiState.vaultDetails.username
+                        )
+                        // check fields is not empty
+                        if (viewModel.vaultUiState.vaultDetails.name.isEmpty() || viewModel.vaultUiState.vaultDetails.name.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入名稱!", Toast.LENGTH_LONG
+                            ).show()
+                        } else if (viewModel.vaultUiState.vaultDetails.username.isEmpty() || viewModel.vaultUiState.vaultDetails.username.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入帳號!", Toast.LENGTH_LONG
+                            ).show()
+                        } else if (viewModel.vaultUiState.vaultDetails.password.isEmpty() || viewModel.vaultUiState.vaultDetails.password.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入密碼!", Toast.LENGTH_LONG
+                            ).show()
+                        } else if (viewModel.vaultUiState.vaultDetails.urlList.contains("")) {
+                            Toast.makeText(
+                                context, "請輸入網址!", Toast.LENGTH_LONG
+                            ).show()
+                        } else if (viewModel.vaultUiState.vaultDetails.totp.isNotEmpty()) {
+                            if (viewModel.vaultUiState.vaultDetails.totp.isBlank()) {
+                                Toast.makeText(
+                                    context, "TOTP驗證碼格式錯誤!", Toast.LENGTH_LONG
+                                ).show()
                             }
-                            navController.popBackStack()
-                            Toast.makeText(context, "更新成功", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // check if vault already exists
+                            if (deleteVaultsUiState.vault != null) {
+                                Toast.makeText(
+                                    context, "此密碼已儲存於密碼庫!", Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                coroutineScope.launch {
+                                    viewModel.updateVault()
+                                }
+                                navController.popBackStack()
+                                Toast.makeText(context, "更新成功", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }) {
                         Text("更新")
@@ -136,9 +165,7 @@ fun EditVaultScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊",
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        fontSize = 20.sp
+                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -205,14 +232,15 @@ fun EditVaultScreen(
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
                             IconButton(onClick = {
-                            copyText(
-                                clipboardManager,
-                                viewModel.vaultUiState.vaultDetails.totp,
-                                context
-                            )
-                        }) {
-                            Icon(Icons.Default.ContentCopy, "產生密碼")
-                        }},
+                                copyText(
+                                    clipboardManager,
+                                    viewModel.vaultUiState.vaultDetails.totp,
+                                    context
+                                )
+                            }) {
+                                Icon(Icons.Default.ContentCopy, "產生密碼")
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -234,7 +262,8 @@ fun EditVaultScreen(
                     if (viewModel.vaultUiState.vaultDetails.urlList.isNotEmpty()) {
                         viewModel.vaultUiState.vaultDetails.urlList.forEachIndexed { index, url ->
                             UpdateUrl(url = url, onUrlChange = { newUrl ->
-                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                val newUrlList =
+                                    viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
                                 newUrlList[index] = newUrl
                                 viewModel.updateUiState(
                                     viewModel.vaultUiState.vaultDetails.copy(
@@ -242,7 +271,8 @@ fun EditVaultScreen(
                                     )
                                 )
                             }, onDelete = {
-                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                val newUrlList =
+                                    viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
                                 newUrlList.removeAt(index)
                                 viewModel.updateUiState(
                                     viewModel.vaultUiState.vaultDetails.copy(

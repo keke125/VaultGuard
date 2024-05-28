@@ -9,6 +9,8 @@ interface VaultsRepository {
 
     fun getVaultByUid(uid: Int): Flow<Vault?>
 
+    fun getVaultByNameAndUsername(name: String, username: String): Flow<Vault?>
+
     suspend fun insertVault(vault: Vault)
 
     suspend fun insertVaults(vaults: List<Vault>)
