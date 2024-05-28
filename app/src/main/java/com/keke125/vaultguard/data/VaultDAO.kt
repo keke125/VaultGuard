@@ -39,4 +39,7 @@ interface VaultDAO {
 
     @Update
     suspend fun update(vault: Vault)
+
+    @Delete
+    suspend fun deleteList(vaults: List<Vault>)
 }

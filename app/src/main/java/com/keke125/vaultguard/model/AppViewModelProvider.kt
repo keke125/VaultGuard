@@ -48,6 +48,10 @@ object AppViewModelProvider {
         initializer {
             AuthViewModel(vaultGuardApplication().passwordService)
         }
+
+        initializer {
+            DeleteVaultsViewModel(vaultGuardApplication().container.vaultsRepository)
+        }
     }
 }
 
