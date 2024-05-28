@@ -40,7 +40,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +91,6 @@ fun AddVaultScreen(
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
-            val deleteVaultsUiState by viewModel.deleteVaultsUiState.collectAsState()
             Scaffold(topBar = {
                 TopAppBar(colors = topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -101,44 +99,20 @@ fun AddVaultScreen(
                     Text(stringResource(AddVaultDestination.titleRes))
                 }, actions = {
                     TextButton(onClick = {
-                        viewModel.updateNameAndUsername(vaultUiState.vaultDetails.name, vaultUiState.vaultDetails.username)
-                        // check fields is not empty
-                        if (vaultUiState.vaultDetails.name.isEmpty() || vaultUiState.vaultDetails.name.isBlank()) {
-                            Toast.makeText(
-                                context, "請輸入名稱!", Toast.LENGTH_LONG
-                            ).show()
-                        } else if (vaultUiState.vaultDetails.username.isEmpty() || vaultUiState.vaultDetails.username.isBlank()) {
-                            Toast.makeText(
-                                context, "請輸入帳號!", Toast.LENGTH_LONG
-                            ).show()
-                        } else if (vaultUiState.vaultDetails.password.isEmpty() || vaultUiState.vaultDetails.password.isBlank()) {
-                            Toast.makeText(
-                                context, "請輸入密碼!", Toast.LENGTH_LONG
-                            ).show()
-                        } else if (vaultUiState.vaultDetails.urlList.contains("")) {
-                            Toast.makeText(
-                                context, "請輸入網址!", Toast.LENGTH_LONG
-                            ).show()
-                        }else if(vaultUiState.vaultDetails.totp.isNotEmpty()){
-                            if(vaultUiState.vaultDetails.totp.isBlank()){
-                                Toast.makeText(
-                                    context, "TOTP驗證碼格式錯誤!", Toast.LENGTH_LONG
-                                ).show()
+                        if (checkVault(
+                                vaultUiState.vaultDetails.name,
+                                vaultUiState.vaultDetails.username,
+                                vaultUiState.vaultDetails.password,
+                                vaultUiState.vaultDetails.urlList,
+                                vaultUiState.vaultDetails.totp,
+                                context
+                            )
+                        ) {
+                            coroutineScope.launch {
+                                viewModel.saveVault()
                             }
-                        }else{
-                            // check if vault already exists
-                            if(deleteVaultsUiState.vault != null){
-                                Toast.makeText(
-                                    context, "此密碼已儲存於密碼庫!", Toast.LENGTH_LONG
-                                ).show()
-                            }
-                            else{
-                                coroutineScope.launch {
-                                    viewModel.saveVault()
-                                }
-                                navController.popBackStack()
-                                Toast.makeText(context, "儲存成功", Toast.LENGTH_SHORT).show()
-                            }
+                            navController.popBackStack()
+                            Toast.makeText(context, "儲存成功", Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Text("儲存")

@@ -10,8 +10,6 @@ class VaultsRepositoryImpl(private val vaultDAO: VaultDAO) : VaultsRepository {
 
     override fun getVaultByUid(uid: Int): Flow<Vault?> = vaultDAO.findById(uid)
 
-    override fun getVaultByNameAndUsername(name: String, username: String): Flow<Vault?> = vaultDAO.findByNameAndUsername(name, username)
-
     override suspend fun insertVault(vault: Vault) = vaultDAO.insert(vault)
 
     override suspend fun insertVaults(vaults: List<Vault>) = vaultDAO.insertList(vaults)

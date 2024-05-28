@@ -25,9 +25,6 @@ interface VaultDAO {
     @Query("SELECT * FROM vault WHERE name LIKE '%' || :name || '%'")
     fun findByName(name: String): Flow<List<Vault>>
 
-    @Query("SELECT * FROM vault WHERE name = :name and username = :username")
-    fun findByNameAndUsername(name: String, username: String): Flow<Vault?>
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)
 

@@ -189,6 +189,43 @@ fun VaultScreen(
     BackHandler(enabled = true) {}
 }
 
+fun checkVault(
+    name: String, username: String, password: String, urlList: List<String>, totp: String, context: Context
+): Boolean {
+    if (name.isEmpty() || name.isBlank()) {
+        Toast.makeText(
+            context, "請輸入名稱!", Toast.LENGTH_LONG
+        ).show()
+        return false
+    } else if (username.isEmpty() || username.isBlank()) {
+        Toast.makeText(
+            context, "請輸入帳號!", Toast.LENGTH_LONG
+        ).show()
+        return false
+    } else if (password.isEmpty() || password.isBlank()) {
+        Toast.makeText(
+            context, "請輸入密碼!", Toast.LENGTH_LONG
+        ).show()
+        return false
+    } else if (urlList.contains("")) {
+        Toast.makeText(
+            context, "請輸入網址!", Toast.LENGTH_LONG
+        ).show()
+        return false
+    }else if(totp.isNotEmpty()){
+        if(totp.isBlank()){
+            Toast.makeText(
+                context, "TOTP驗證碼格式錯誤!", Toast.LENGTH_LONG
+            ).show()
+            return false
+        }else{
+            return true
+        }
+    } else {
+        return true
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VaultDialog(
