@@ -1,5 +1,6 @@
 package com.keke125.vaultguard.screen
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -120,5 +121,8 @@ fun SignupScreen(
             }
         }
     }
-    BackHandler(enabled = true) {}
+    BackHandler(enabled = true) {
+        val activity = navController.context as Activity
+        activity.moveTaskToBack(true)
+    }
 }

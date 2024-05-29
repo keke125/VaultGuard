@@ -325,7 +325,10 @@ fun LoginScreen(
             }
         }
     }
-    BackHandler(enabled = true) {}
+    BackHandler(enabled = true) {
+        val activity = context as Activity
+        activity.moveTaskToBack(true)
+    }
 }
 
 @Composable
