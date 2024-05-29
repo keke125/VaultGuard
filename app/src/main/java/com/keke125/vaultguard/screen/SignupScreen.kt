@@ -54,65 +54,69 @@ fun SignupScreen(
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    ImageVector.vectorResource(R.drawable.ic_launcher),
-                    contentDescription = "",
-                    modifier = Modifier.size(128.dp)
-                )
-                Text(text = "設定主密碼", fontSize = 24.sp)
-                OutlinedTextField(
-                    value = signupPassword,
-                    onValueChange = { onSignupPasswordChange(it) },
-                    label = {
-                        Text(
-                            text = "主密碼"
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Lock, contentDescription = ""
-                        )
-                    },
-                    trailingIcon = {
-                        IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
-                            Icon(
-                                imageVector = if (isPasswordVisible) {
-                                    Icons.Default.VisibilityOff
-                                } else {
-                                    Icons.Default.Visibility
-                                }, contentDescription = ""
+            if (!viewModel.isSignup()) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.ic_launcher),
+                        contentDescription = "",
+                        modifier = Modifier.size(128.dp)
+                    )
+                    Text(text = "設定主密碼", fontSize = 24.sp)
+                    OutlinedTextField(
+                        value = signupPassword,
+                        onValueChange = { onSignupPasswordChange(it) },
+                        label = {
+                            Text(
+                                text = "主密碼"
                             )
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Lock, contentDescription = ""
+                            )
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
+                                Icon(
+                                    imageVector = if (isPasswordVisible) {
+                                        Icons.Default.VisibilityOff
+                                    } else {
+                                        Icons.Default.Visibility
+                                    }, contentDescription = ""
+                                )
+                            }
+                        },
+                        singleLine = true,
+                        placeholder = { Text(text = "請輸入密碼") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        visualTransformation = if (isPasswordVisible) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
                         }
-                    },
-                    singleLine = true,
-                    placeholder = { Text(text = "請輸入密碼") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (isPasswordVisible) {
-                        VisualTransformation.None
-                    } else {
-                        PasswordVisualTransformation()
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    Button(onClick = {
+                        if (signupPassword.isEmpty() || signupPassword.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context, "設定成功", Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.updateMainPassword(signupPassword)
+                            navController.navigate(Screen.Vault.route)
+                        }
+                    }) {
+                        Text("設定")
                     }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                Button(onClick = {
-                    if (signupPassword.isEmpty() || signupPassword.isBlank()) {
-                        Toast.makeText(
-                            context, "請輸入主密碼!", Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context, "設定成功", Toast.LENGTH_SHORT
-                        ).show()
-                        viewModel.updateMainPassword(signupPassword)
-                        navController.navigate(Screen.Vault.route)
-                    }
-                }) {
-                    Text("設定")
                 }
+            }else{
+                navController.navigate(Screen.Vault.route)
             }
         }
     }

@@ -186,7 +186,7 @@ fun VaultScreen(
             }
         }
     }
-    BackHandler(enabled = true) {}
+    //BackHandler(enabled = true) {}
 }
 
 fun checkVault(
