@@ -13,12 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VaultGuard"
         tools:targetApi="31">
-        <!--
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
-        -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -47,14 +41,14 @@
         <service
             android:name=".service.VaultGuardAutofillService"
             android:exported="true"
-            android:label="Vault Guard Autofill Service"
+            android:label="Vault Guard 自動填入服務"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
             <meta-data
                 android:name="android.autofill"
-                android:resource="@xml/service_configuration" />
+                android:resource="@xml/autofill_service" />
         </service>
         -->
     </application>
