@@ -24,8 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.keke125.vaultguard.Screen
-import com.keke125.vaultguard.activity.BiometricAuthSettingActivity
+import com.keke125.vaultguard.navigation.Screen
+import com.keke125.vaultguard.activity.AuthSettingActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +64,7 @@ fun SettingScreen(navController: NavController) {
                             contentDescription = null,
                         )
                     }, modifier = Modifier.clickable {
-                        context.startActivity(Intent(context, BiometricAuthSettingActivity::class.java))
+                        context.startActivity(Intent(context, AuthSettingActivity::class.java))
                     })
                     HorizontalDivider()
                 }

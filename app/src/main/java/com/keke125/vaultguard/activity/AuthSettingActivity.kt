@@ -15,6 +15,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,7 +54,7 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.BiometricAuthSettingViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
-class BiometricAuthSettingActivity : AppCompatActivity() {
+class AuthSettingActivity : AppCompatActivity() {
 
     private val biometricAuthSettingViewModel: BiometricAuthSettingViewModel by viewModels(
         factoryProducer = { AppViewModelProvider.Factory })
@@ -119,7 +120,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("安全性") }, navigationIcon = {
+        ), title = { Text("安全性設定") }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -154,6 +155,12 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                     Intent(Settings.ACTION_SECURITY_SETTINGS)
                 }
             }
+            ListItem(headlineContent = { Text("變更主密碼") },
+                modifier = Modifier.clickable {
+                    context.startActivity(Intent(context, ChangeMainPasswordActivity::class.java))
+                }
+            )
+            HorizontalDivider()
             ListItem(headlineContent = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Switch(checked = uiState.value.isBiometricEnabled, onCheckedChange = {
@@ -209,7 +216,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                         }
                     })
                     Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                    Text(text = "生物辨識")
+                    Text(text = "使用生物辨識")
                 }
             })
             HorizontalDivider()

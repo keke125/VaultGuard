@@ -19,7 +19,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.keke125.vaultguard.Screen
 import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
 import com.keke125.vaultguard.screen.EditVaultDestination

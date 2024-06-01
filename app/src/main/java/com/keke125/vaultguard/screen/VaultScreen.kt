@@ -53,7 +53,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.Screen
+import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.activity.LoginActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider

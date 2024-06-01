@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.Screen
+import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme

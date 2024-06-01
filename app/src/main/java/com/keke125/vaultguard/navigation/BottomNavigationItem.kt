@@ -6,7 +6,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.keke125.vaultguard.Screen
 
 data class BottomNavigationItem(
     val label: String = "", val icon: ImageVector = Icons.Default.Lock, val route: String = ""

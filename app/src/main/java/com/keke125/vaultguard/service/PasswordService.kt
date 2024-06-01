@@ -16,11 +16,6 @@ import javax.crypto.spec.PBEKeySpec
 
 class PasswordService(context: Context) {
 
-    /*
-    private val sharedPref: SharedPreferences = context.getSharedPreferences(
-        "Auth", Context.MODE_PRIVATE
-    )*/
-
     private val masterKey =
         MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
@@ -178,6 +173,15 @@ class PasswordService(context: Context) {
                 loginTimeCalendar.add(Calendar.HOUR, 1)
                 return currentTimeCalendar < loginTimeCalendar
             }
+        }
+    }
+
+    fun changeMainPassword(oldPassword: String, newPassword: String): Boolean {
+        if(validatePassword(oldPassword)){
+            updatePassword(newPassword)
+            return true
+        }else{
+            return false
         }
     }
 }
