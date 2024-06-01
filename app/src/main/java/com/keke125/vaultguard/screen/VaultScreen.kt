@@ -60,6 +60,8 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.model.VaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -217,7 +219,9 @@ fun checkVault(
         ).show()
         return false
     }else if(totp.isNotEmpty()){
-        if(totp.isBlank()){
+        val pattern: Pattern = Pattern.compile("[a-zA-Z0-9 ]*")
+        val matcher: Matcher = pattern.matcher(totp)
+        if(totp.isBlank() or (totp.replace("\\s".toRegex(), "").length > 64) or !matcher.matches()){
             Toast.makeText(
                 context, "TOTP驗證碼格式錯誤!", Toast.LENGTH_LONG
             ).show()

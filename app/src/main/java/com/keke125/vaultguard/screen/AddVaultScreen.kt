@@ -190,7 +190,6 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(totp = it))
                         },
-                        singleLine = true,
                         label = { Text("TOTP驗證碼") },
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)

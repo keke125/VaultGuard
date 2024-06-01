@@ -272,9 +272,9 @@ fun VaultDetailsScreen(
                                 Row {
                                     Text(
                                         text = time.toString(),
-                                        modifier = Modifier.offset(x = 30.dp, y = 8.dp)
+                                        modifier = Modifier.offset(x = 30.dp, y = 11.dp)
                                     )
-                                    CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() })
+                                    CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() }, modifier = Modifier.offset(y = 3.dp))
                                     IconButton(onClick = {
                                         copyText(
                                             clipboardManager, totp, context
