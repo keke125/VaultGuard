@@ -1,5 +1,6 @@
 package com.keke125.vaultguard.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
@@ -14,5 +15,9 @@ data class Vault(
     val password: String,
     val urlList: List<String>,
     val notes: String,
-    val totp: String
+    val totp: String,
+    @ColumnInfo(defaultValue = "")
+    val createdDateTime: String,
+    @ColumnInfo(defaultValue = "")
+    val lastModifiedDateTime: String
 )

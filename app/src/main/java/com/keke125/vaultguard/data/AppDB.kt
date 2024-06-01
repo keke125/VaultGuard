@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.data
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,7 +10,14 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.security.SecureRandom
 
 
-@Database(entities = [Vault::class], version = 1, exportSchema = false)
+@Database(
+    version = 2,
+    entities = [Vault::class],
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ],
+    exportSchema = true
+)
 abstract class AppDB : RoomDatabase() {
     abstract fun vaultDAO(): VaultDAO
 

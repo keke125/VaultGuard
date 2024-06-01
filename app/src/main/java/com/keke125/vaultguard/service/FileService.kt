@@ -1,5 +1,6 @@
 package com.keke125.vaultguard.service
 
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -9,6 +10,11 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 
 class FileService {
@@ -31,13 +37,23 @@ class FileService {
                 val password = csvRecord.get(3)
                 val notes = csvRecord.get(4)
                 val urlList = listOf(csvRecord.get(1))
+                val timeStamp: String
+                if (Build.VERSION.SDK_INT >= 26) {
+                    val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                    timeStamp = LocalDateTime.now().format(formatter).toString()
+                } else {
+                    val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                    timeStamp = simpleDateFormat.format(Date())
+                }
                 val vault = Vault(
                     name = name,
                     username = username,
                     password = password,
                     notes = notes,
                     urlList = urlList,
-                    totp = ""
+                    totp = "",
+                    createdDateTime = timeStamp,
+                    lastModifiedDateTime = timeStamp
                 )
                 vaults.add(vault)
             }
@@ -68,7 +84,9 @@ class FileService {
                         password = password,
                         notes = notes,
                         urlList = urlList,
-                        totp = totp
+                        totp = totp,
+                        createdDateTime = vault.createdDateTime,
+                        lastModifiedDateTime = vault.lastModifiedDateTime
                     )
                     vaults.add(newVault)
                 }

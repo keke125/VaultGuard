@@ -74,9 +74,12 @@ import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import dev.turingcomplete.kotlinonetimepassword.GoogleAuthenticator
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
@@ -117,6 +120,38 @@ fun VaultDetailsScreen(
             }
             val (time, onTimeChange) = remember {
                 mutableIntStateOf(0)
+            }
+            val createdDateTime = if (Build.VERSION.SDK_INT >= 26) {
+                if(uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()){
+                    val parseFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                    val showFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+                    LocalDateTime.parse(uiState.value.vaultDetails.createdDateTime, parseFormatter).format(showFormatter)
+                }else{
+                    ""
+                }
+            } else {
+                if(uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
+                    val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                    parseSimpleDateFormat.parse(uiState.value.vaultDetails.createdDateTime)
+                }else{
+                    ""
+                }
+            }
+            val lastModifiedDateTime = if (Build.VERSION.SDK_INT >= 26) {
+                if(uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()){
+                    val parseFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                    val showFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+                    LocalDateTime.parse(uiState.value.vaultDetails.lastModifiedDateTime, parseFormatter).format(showFormatter)
+                }else{
+                    ""
+                }
+            } else {
+                if(uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
+                    val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                    parseSimpleDateFormat.parse(uiState.value.vaultDetails.lastModifiedDateTime)
+                }else{
+                    ""
+                }
             }
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
@@ -224,7 +259,7 @@ fun VaultDetailsScreen(
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    if (uiState.value.vaultDetails.totp.isNotBlank()) {
+                    if (uiState.value.vaultDetails.totp.isNotBlank() and uiState.value.vaultDetails.totp.isNotEmpty()) {
                         generateTotp(uiState.value.vaultDetails.totp, onTotpChange, onTimeChange)
                         OutlinedTextField(
                             value = totp,
@@ -267,6 +302,22 @@ fun VaultDetailsScreen(
                                 Icon(Icons.Default.ContentCopy, "複製備註")
                             }
                         },
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = createdDateTime.toString(),
+                        onValueChange = {},
+                        label = { Text("新增時間") },
+                        minLines = 1,
+                        readOnly = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+                    OutlinedTextField(
+                        value = lastModifiedDateTime.toString(),
+                        onValueChange = {},
+                        label = { Text("上次更新時間") },
+                        minLines = 1,
+                        readOnly = true,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     if (uiState.value.vaultDetails.urlList.isNotEmpty()) {
