@@ -2,6 +2,7 @@ package com.keke125.vaultguard.screen
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -58,6 +60,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.EditVaultViewModel
@@ -136,9 +141,7 @@ fun EditVaultScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊",
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        fontSize = 20.sp
+                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -203,15 +206,59 @@ fun EditVaultScreen(
                         label = { Text("TOTP驗證碼") },
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
-                            IconButton(onClick = {
-                            copyText(
-                                clipboardManager,
-                                viewModel.vaultUiState.vaultDetails.totp,
-                                context
-                            )
-                        }) {
-                            Icon(Icons.Default.ContentCopy, "產生密碼")
-                        }},
+                            Row {
+                                IconButton(onClick = {
+                                    val options =
+                                        GmsBarcodeScannerOptions.Builder().setBarcodeFormats(
+                                            Barcode.FORMAT_QR_CODE
+                                        ).enableAutoZoom().build()
+                                    val scanner = GmsBarcodeScanning.getClient(context, options)
+                                    scanner.startScan().addOnSuccessListener { barcode ->
+                                        val rawValue: String? = barcode.rawValue
+                                        if (rawValue != null) {
+                                            val uri = Uri.parse(rawValue)
+                                            if (getSecretFromUri(uri) != null) {
+                                                viewModel.updateUiState(
+                                                    viewModel.vaultUiState.vaultDetails.copy(
+                                                        totp = getSecretFromUri(uri)!!
+                                                    )
+                                                )
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "無法取得TOTP驗證碼!",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "無法取得TOTP驗證碼!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }.addOnCanceledListener {
+                                        Toast.makeText(context, "取消掃描!", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }.addOnFailureListener {
+                                        Toast.makeText(
+                                            context, it.localizedMessage, Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }) {
+                                    Icon(Icons.Default.QrCodeScanner, "產生密碼")
+                                }
+                                IconButton(onClick = {
+                                    copyText(
+                                        clipboardManager,
+                                        viewModel.vaultUiState.vaultDetails.totp,
+                                        context
+                                    )
+                                }) {
+                                    Icon(Icons.Default.ContentCopy, "產生密碼")
+                                }
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -233,7 +280,8 @@ fun EditVaultScreen(
                     if (viewModel.vaultUiState.vaultDetails.urlList.isNotEmpty()) {
                         viewModel.vaultUiState.vaultDetails.urlList.forEachIndexed { index, url ->
                             UpdateUrl(url = url, onUrlChange = { newUrl ->
-                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                val newUrlList =
+                                    viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
                                 newUrlList[index] = newUrl
                                 viewModel.updateUiState(
                                     viewModel.vaultUiState.vaultDetails.copy(
@@ -241,7 +289,8 @@ fun EditVaultScreen(
                                     )
                                 )
                             }, onDelete = {
-                                val newUrlList = viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
+                                val newUrlList =
+                                    viewModel.vaultUiState.vaultDetails.urlList.toMutableList()
                                 newUrlList.removeAt(index)
                                 viewModel.updateUiState(
                                     viewModel.vaultUiState.vaultDetails.copy(
@@ -535,4 +584,17 @@ fun UpdatePasswordConfirm(
         }
     })
 
+}
+
+fun getSecretFromUri(uri: Uri): String? {
+    if (uri.authority != null && uri.authority == "totp") {
+        if (uri.queryParameterNames.contains("secret")) {
+            val secret = uri.getQueryParameter("secret")
+            return secret
+        } else {
+            return null
+        }
+    } else {
+        return null
+    }
 }

@@ -16,6 +16,7 @@ composeBom = "2024.05.00"
 navigationCompose = "2.7.7"
 datastorePreferences = "1.1.1"
 materialIconsExtended = "1.7.0-beta02"
+playServicesCodeScanner = "16.1.0"
 roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
 roomCompiler = "2.6.1"
@@ -60,6 +61,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlin-onetimepassword = { module = "dev.turingcomplete:kotlin-onetimepassword", version.ref = "kotlinOnetimepassword" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 zetetic-sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipherAndroidVersion" }
 
 [plugins]

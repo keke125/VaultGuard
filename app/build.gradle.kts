@@ -99,6 +99,7 @@ dependencies {
     implementation(libs.androidx.biometric.ktx)
     implementation(libs.androidx.security.crypto)
     implementation(libs.kotlin.onetimepassword)
+    implementation(libs.play.services.code.scanner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
