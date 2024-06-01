@@ -132,7 +132,7 @@ fun VaultDetailsScreen(
             } else {
                 if(uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
                     val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-                    parseSimpleDateFormat.parse(uiState.value.vaultDetails.createdDateTime)
+                    parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.createdDateTime)!!)
                 }else{
                     ""
                 }
@@ -148,7 +148,7 @@ fun VaultDetailsScreen(
             } else {
                 if(uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
                     val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-                    parseSimpleDateFormat.parse(uiState.value.vaultDetails.lastModifiedDateTime)
+                    parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.lastModifiedDateTime)!!)
                 }else{
                     ""
                 }
