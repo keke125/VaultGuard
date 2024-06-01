@@ -1,5 +1,6 @@
 package com.keke125.vaultguard.screen
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -184,9 +185,12 @@ fun VaultScreen(
             } else {
                 navController.navigate(Screen.Signup.route)
             }
+            BackHandler(enabled = true) {
+                val activity = context as Activity
+                activity.moveTaskToBack(true)
+            }
         }
     }
-    //BackHandler(enabled = true) {}
 }
 
 fun checkVault(
