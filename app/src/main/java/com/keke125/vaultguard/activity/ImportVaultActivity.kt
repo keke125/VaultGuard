@@ -164,11 +164,13 @@ fun ImportVaultScreen(
                 Button(onClick = {
                     val openGPMIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                         addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "text/comma-separated-values"
+                        val mimeTypes = arrayOf("text/csv", "text/comma-separated-values")
+                        type = "*/*"
+                        putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                     }
                     openGPMResultLauncher.launch(openGPMIntent)
                 }) {
-                    Text("匯入密碼(Google Password Manager)")
+                    Text("匯入密碼(Google 密碼管理工具)")
                 }
                 Button(onClick = {
                     val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
