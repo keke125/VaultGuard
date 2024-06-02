@@ -1,9 +1,13 @@
 package com.keke125.vaultguard.screen
 
+import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,10 +64,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.keke125.vaultguard.R
+import com.keke125.vaultguard.activity.BarcodeScannerActivity
+import com.keke125.vaultguard.activity.getSecretFromUri
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.EditVaultViewModel
 import com.keke125.vaultguard.model.VaultDetails
@@ -98,6 +101,44 @@ fun EditVaultScreen(
             }
             val clipboardManager =
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val openBarcodeScannerLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val url = result.data
+                    if (url != null) {
+                        if (url.getStringExtra("url") != null) {
+                            if (getSecretFromUri(Uri.parse(url.getStringExtra("url"))) != null) {
+                                viewModel.updateUiState(
+                                    viewModel.vaultUiState.vaultDetails.copy(
+                                        totp = getSecretFromUri(Uri.parse(url.getStringExtra("url")))!!
+                                    )
+                                )
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "無法取得TOTP驗證碼\n請檢查QR Code是否正確",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "無法取得TOTP驗證碼!\n請檢查QR Code是否正確",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "無法取得TOTP驗證碼!", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "掃描QR Code時發生錯誤!\n請檢查相機權限並完成掃描",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -208,43 +249,8 @@ fun EditVaultScreen(
                         trailingIcon = {
                             Row {
                                 IconButton(onClick = {
-                                    val options =
-                                        GmsBarcodeScannerOptions.Builder().setBarcodeFormats(
-                                            Barcode.FORMAT_QR_CODE
-                                        ).enableAutoZoom().build()
-                                    val scanner = GmsBarcodeScanning.getClient(context, options)
-                                    scanner.startScan().addOnSuccessListener { barcode ->
-                                        val rawValue: String? = barcode.rawValue
-                                        if (rawValue != null) {
-                                            val uri = Uri.parse(rawValue)
-                                            if (getSecretFromUri(uri) != null) {
-                                                viewModel.updateUiState(
-                                                    viewModel.vaultUiState.vaultDetails.copy(
-                                                        totp = getSecretFromUri(uri)!!
-                                                    )
-                                                )
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "無法取得TOTP驗證碼!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                "無法取得TOTP驗證碼!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }.addOnCanceledListener {
-                                        Toast.makeText(context, "取消掃描!", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }.addOnFailureListener {
-                                        Toast.makeText(
-                                            context, it.localizedMessage, Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                    val intent = Intent(context, BarcodeScannerActivity::class.java)
+                                    openBarcodeScannerLauncher.launch(intent)
                                 }) {
                                     Icon(Icons.Default.QrCodeScanner, "產生密碼")
                                 }
@@ -584,17 +590,4 @@ fun UpdatePasswordConfirm(
         }
     })
 
-}
-
-fun getSecretFromUri(uri: Uri): String? {
-    if (uri.authority != null && uri.authority == "totp") {
-        if (uri.queryParameterNames.contains("secret")) {
-            val secret = uri.getQueryParameter("secret")
-            return secret
-        } else {
-            return null
-        }
-    } else {
-        return null
-    }
 }
