@@ -16,12 +16,39 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -31,6 +58,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+
 
 class BarcodeScannerActivity : ComponentActivity() {
 
@@ -78,6 +106,7 @@ class BarcodeScannerActivity : ComponentActivity() {
     }
 
     @OptIn(ExperimentalGetImage::class)
+    @kotlin.OptIn(ExperimentalMaterial3Api::class)
     private fun setCameraPreview() {
         setContent {
             VaultGuardTheme {
@@ -90,9 +119,9 @@ class BarcodeScannerActivity : ComponentActivity() {
                         PreviewView(this)
                     }
 
-                    val options = BarcodeScannerOptions.Builder().setBarcodeFormats(
-                        Barcode.FORMAT_QR_CODE
-                    ).build()
+                    val options =
+                        BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+                            .build()
                     // getClient() creates a new instance of the MLKit barcode scanner with the specified options
                     val barcodeScanner = BarcodeScanning.getClient(options)
 
@@ -179,8 +208,52 @@ class BarcodeScannerActivity : ComponentActivity() {
                         }
 
                     }, ContextCompat.getMainExecutor(this))
-
-                    AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
+                    Scaffold(topBar = {
+                        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            titleContentColor = MaterialTheme.colorScheme.primary,
+                        ), navigationIcon = {
+                            IconButton(onClick = {
+                                finish()
+                            }) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                            }
+                        }, title = { Text("掃描QR Code") })
+                    }) { innerPadding ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            AndroidView(factory = { previewView },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.8f)
+                                    .drawWithContent {
+                                        drawContent()
+                                        drawQrBorderCanvas(
+                                            curve = 32.dp,
+                                            strokeWidth = 3.dp,
+                                            capSize = 62.dp,
+                                            gapAngle = 30,
+                                        )
+                                    })
+                            Column {
+                                Text(
+                                    text = "自動掃描中...",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                                Text(
+                                    text = "Vault Guard只會取得圖片中的TOTP驗證碼，\n不會儲存任何圖片。",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -189,6 +262,197 @@ class BarcodeScannerActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         analysisExecutor.shutdown()
+    }
+
+    private fun DrawScope.drawQrBorderCanvas(
+        borderColor: Color = Color.White,
+        curve: Dp,
+        strokeWidth: Dp,
+        capSize: Dp,
+        gapAngle: Int = 20,
+        shadowSize: Dp = strokeWidth * 2,
+        cap: StrokeCap = StrokeCap.Square,
+        lineCap: StrokeCap = StrokeCap.Round,
+    ) {
+        val curvePx = curve.toPx()
+        val mCapSize = capSize.toPx()
+        val sideLength = minOf(size.width, size.height) * 0.6f // Reduce the size to 60%
+        val offsetX = (size.width - sideLength) / 2
+        val offsetY = (size.height - sideLength) / 2
+        val sweepAngle = 90 / 2 - gapAngle / 2f
+
+        strokeWidth.toPx().toInt()
+        for (i in 4..shadowSize.toPx().toInt() step 2) {
+            drawRoundRect(
+                color = Color(0x05000000),
+                size = Size(sideLength, sideLength),
+                topLeft = Offset(offsetX, offsetY),
+                style = Stroke(width = i * 1f),
+                cornerRadius = CornerRadius(
+                    x = curvePx, y = curvePx
+                ),
+            )
+        }
+
+        val mCurve = curvePx * 2
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 0f,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX + sideLength - mCurve, offsetY + sideLength - mCurve
+            )
+        )
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 90 - sweepAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX + sideLength - mCurve, offsetY + sideLength - mCurve
+            )
+        )
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 90f,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX, offsetY + sideLength - mCurve
+            )
+        )
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 180 - sweepAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX, offsetY + sideLength - mCurve
+            )
+        )
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 180f,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX, offsetY
+            )
+        )
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 270 - sweepAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX, offsetY
+            )
+        )
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 270f,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX + sideLength - mCurve, offsetY
+            )
+        )
+
+        drawArc(
+            color = borderColor,
+            style = Stroke(strokeWidth.toPx(), cap = cap),
+            startAngle = 360 - sweepAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            size = Size(mCurve, mCurve),
+            topLeft = Offset(
+                offsetX + sideLength - mCurve, offsetY
+            )
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + sideLength, offsetY + sideLength - mCapSize),
+            Offset(offsetX + sideLength, offsetY + sideLength - curvePx),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + sideLength - mCapSize, offsetY + sideLength),
+            Offset(offsetX + sideLength - curvePx, offsetY + sideLength),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + mCapSize, offsetY + sideLength),
+            Offset(offsetX + curvePx, offsetY + sideLength),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX, offsetY + sideLength - curvePx),
+            Offset(offsetX, offsetY + sideLength - mCapSize),
+            strokeWidth.toPx(),
+            lineCap
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX, offsetY + curvePx),
+            Offset(offsetX, offsetY + mCapSize),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + curvePx, offsetY),
+            Offset(offsetX + mCapSize, offsetY),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + sideLength - curvePx, offsetY),
+            Offset(offsetX + sideLength - mCapSize, offsetY),
+            strokeWidth.toPx(),
+            lineCap,
+        )
+
+        drawLine(
+            SolidColor(borderColor),
+            Offset(offsetX + sideLength, offsetY + curvePx),
+            Offset(offsetX + sideLength, offsetY + mCapSize),
+            strokeWidth.toPx(),
+            lineCap
+        )
     }
 
     companion object {
