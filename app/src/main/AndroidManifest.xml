@@ -46,6 +46,9 @@
         <activity
             android:name=".activity.BarcodeScannerActivity"
             android:theme="@style/Theme.VaultGuard"/>
+        <activity
+            android:name=".activity.DeleteVaultsActivity"
+            android:theme="@style/Theme.VaultGuard"/>
     </application>
 
 </manifest>

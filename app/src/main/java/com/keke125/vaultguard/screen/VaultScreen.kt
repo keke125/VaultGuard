@@ -331,7 +331,7 @@ fun copyText(clipboardManager: ClipboardManager, username: String, context: Cont
     // Only show a toast for Android 12 and lower.
     //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "已成功複製!", Toast.LENGTH_SHORT
+        context, "複製成功", Toast.LENGTH_SHORT
     ).show()
 }
 
@@ -347,6 +347,6 @@ fun copyPassword(clipboardManager: ClipboardManager, password: String, context: 
     // Only show a toast for Android 12 and lower.
     // if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "已成功複製!", Toast.LENGTH_SHORT
+        context, "複製成功", Toast.LENGTH_SHORT
     ).show()
 }

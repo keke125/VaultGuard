@@ -2,14 +2,10 @@ package com.keke125.vaultguard.activity
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +15,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +26,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -35,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,19 +43,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.ExportVaultViewModel
-import com.keke125.vaultguard.model.ExportVaultsUiState
+import com.keke125.vaultguard.model.DeleteVaultsUiState
+import com.keke125.vaultguard.model.DeleteVaultsViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.launch
 
-class ExportVaultActivity : ComponentActivity() {
+class DeleteVaultsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +58,7 @@ class ExportVaultActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    ExportVaultScreen(context = this)
+                    DeleteVaultsScreen(this)
                 }
             }
         }
@@ -74,53 +67,21 @@ class ExportVaultActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExportVaultScreen(
-    viewModel: ExportVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
+fun DeleteVaultsScreen(
     context: Context,
-    exportVaultsUiState: ExportVaultsUiState = viewModel.exportVaultsUiState
+    viewModel: DeleteVaultsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    changeMainPasswordUiState: DeleteVaultsUiState = viewModel.deleteVaultsUiState
 ) {
-    val vaultUiState by viewModel.vaultUiState.collectAsState()
     val activity = LocalContext.current as? Activity
-    val jsonString = viewModel.exportVault(vaultUiState.vaultList)
-    val contentResolver = context.contentResolver
+    val coroutineScope = rememberCoroutineScope()
+    val deleteVaultsUiState by viewModel.vaultUiState.collectAsState()
     val (isPasswordVisible, onPasswordVisibleChange) = remember { mutableStateOf(false) }
-    val createFileResultLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val url = result.data
-                if (url != null && jsonString != null) {
-                    if (url.data != null) {
-                        try {
-                            contentResolver.openFileDescriptor(url.data!!, "w")?.use { it ->
-                                FileOutputStream(it.fileDescriptor).use {
-                                    it.write(
-                                        (jsonString).toByteArray()
-                                    )
-                                }
-                            }
-                            Toast.makeText(context, "匯出成功", Toast.LENGTH_SHORT).show()
-                        } catch (e: FileNotFoundException) {
-                            e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
-            }
-        }
+    val (isDeleteConfirmExpanded, onDeleteConfirmExpandedChange) = remember { mutableStateOf(false) }
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("匯出密碼") }, navigationIcon = {
+        ), title = { Text("清空密碼庫") }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -135,10 +96,13 @@ fun ExportVaultScreen(
                 .padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(value = exportVaultsUiState.exportVaults.password,
+            OutlinedTextField(
+                value = changeMainPasswordUiState.deleteVaults.password,
                 onValueChange = {
                     viewModel.updateUiState(
-                        exportVaultsUiState.exportVaults.copy(password = it)
+                        changeMainPasswordUiState.deleteVaults.copy(
+                            password = it
+                        )
                     )
                 },
                 label = { Text("主密碼") },
@@ -162,41 +126,67 @@ fun ExportVaultScreen(
                 }
             )
             Button(onClick = {
-                if (exportVaultsUiState.exportVaults.password.isEmpty() || exportVaultsUiState.exportVaults.password.isBlank()) {
+                if (changeMainPasswordUiState.deleteVaults.password.isEmpty() || changeMainPasswordUiState.deleteVaults.password.isBlank()) {
                     Toast.makeText(context, "請輸入主密碼", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                if (viewModel.checkMainPassword(exportVaultsUiState.exportVaults.password)) {
-                    if (vaultUiState.vaultList.isNotEmpty()) {
-                        val timeStamp: String
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-                            timeStamp = LocalDateTime.now().format(formatter).toString()
-                        } else {
-                            val simpleDateFormat =
-                                SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
-                            timeStamp = simpleDateFormat.format(Date())
-                        }
-                        val createFileIntent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                            addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "application/json"
-                            putExtra(Intent.EXTRA_TITLE, "vaultguard-$timeStamp-export.json")
-                        }
-                        viewModel.updateUiState(
-                            exportVaultsUiState.exportVaults.copy(
-                                password = ""
-                            )
-                        )
-                        createFileResultLauncher.launch(createFileIntent)
-                    } else {
-                        Toast.makeText(context, "密碼庫尚未儲存密碼!", Toast.LENGTH_SHORT).show()
-                    }
+                if (viewModel.checkMainPassword(changeMainPasswordUiState.deleteVaults.password)) {
+                    onDeleteConfirmExpandedChange(true)
                 } else {
                     Toast.makeText(context, "主密碼錯誤!", Toast.LENGTH_SHORT).show()
                 }
             }) {
-                Text("匯出密碼")
+                Text(text = "清空")
+            }
+            when {
+                isDeleteConfirmExpanded -> {
+                    DeleteVaultsConfirm(onDeleteConfirmExpandedChange, onDeleted = {
+                        if (deleteVaultsUiState.vaultList.isNotEmpty()) {
+                            coroutineScope.launch {
+                                viewModel.deleteVault(deleteVaultsUiState.vaultList)
+                            }
+                            viewModel.updateUiState(
+                                changeMainPasswordUiState.deleteVaults.copy(
+                                    password = ""
+                                )
+                            )
+                            Toast.makeText(context, "清空成功", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "密碼庫尚未儲存密碼!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+                }
             }
         }
     }
+}
+
+@Composable
+fun DeleteVaultsConfirm(
+    onPasswordDeleteRequiredChange: (Boolean) -> Unit,
+    onDeleted: () -> Unit,
+) {
+    AlertDialog(icon = {
+        Icon(Icons.Default.Warning, "警告")
+    }, title = {
+        Text(text = "是否要清空密碼庫?")
+    }, text = {
+        Text(text = "所有密碼將被刪除!")
+    }, onDismissRequest = {
+        onPasswordDeleteRequiredChange(false)
+    }, confirmButton = {
+        TextButton(onClick = {
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text("取消")
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDeleted()
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text("確定")
+        }
+    })
 }
