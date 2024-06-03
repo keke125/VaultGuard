@@ -97,6 +97,7 @@ fun ChangeMainPasswordScreen(
                     )
                 },
                 label = { Text("舊密碼") },
+                singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
                     IconButton(onClick = { onOldPasswordVisibleChange(!isOldPasswordVisible) }) {
@@ -126,6 +127,7 @@ fun ChangeMainPasswordScreen(
                     )
                 },
                 label = { Text("新密碼") },
+                singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
                     IconButton(onClick = { onNewPasswordVisibleChange(!isNewPasswordVisible) }) {

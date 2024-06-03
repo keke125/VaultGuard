@@ -142,6 +142,7 @@ fun ExportVaultScreen(
                     )
                 },
                 label = { Text("主密碼") },
+                singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
                     IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
