@@ -114,6 +114,11 @@ fun EditVaultScreen(
                                         totp = getSecretFromUri(Uri.parse(url.getStringExtra("url")))!!
                                     )
                                 )
+                                Toast.makeText(
+                                    context,
+                                    "掃描成功",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
                                 Toast.makeText(
                                     context,

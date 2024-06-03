@@ -284,7 +284,7 @@ class BarcodeScannerActivity : ComponentActivity() {
         strokeWidth.toPx().toInt()
         for (i in 4..shadowSize.toPx().toInt() step 2) {
             drawRoundRect(
-                color = Color(0x05000000),
+                color = Color.Transparent,
                 size = Size(sideLength, sideLength),
                 topLeft = Offset(offsetX, offsetY),
                 style = Stroke(width = i * 1f),
