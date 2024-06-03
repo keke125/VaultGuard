@@ -14,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +39,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
+import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @Composable
@@ -55,6 +58,11 @@ fun SignupScreen(
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val (isSignupConfirmExpanded, onSignupConfirmExpandedChange) = remember {
+                mutableStateOf(
+                    false
+                )
+            }
             if (!viewModel.isSignup()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -66,8 +74,7 @@ fun SignupScreen(
                         modifier = Modifier.size(128.dp)
                     )
                     Text(text = "設定主密碼", fontSize = 24.sp)
-                    OutlinedTextField(
-                        value = signupPassword,
+                    OutlinedTextField(value = signupPassword,
                         onValueChange = { onSignupPasswordChange(it) },
                         label = {
                             Text(
@@ -106,18 +113,31 @@ fun SignupScreen(
                                 context, "請輸入主密碼!", Toast.LENGTH_SHORT
                             ).show()
                         } else {
+                            onSignupConfirmExpandedChange(true)
+                        }
+                    }) {
+                        Text("設定")
+                    }
+                }
+            } else {
+                navController.navigate(Screen.Vault.route)
+            }
+            when {
+                isSignupConfirmExpanded -> {
+                    SignupConfirm(onSignupConfirmExpandedChange, onSignedUp = {
+                        if (signupPassword.isEmpty() || signupPassword.isBlank()) {
+                            Toast.makeText(
+                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
                             Toast.makeText(
                                 context, "設定成功", Toast.LENGTH_SHORT
                             ).show()
                             viewModel.updateMainPassword(signupPassword)
                             navController.navigate(Screen.Vault.route)
                         }
-                    }) {
-                        Text("設定")
-                    }
+                    })
                 }
-            }else{
-                navController.navigate(Screen.Vault.route)
             }
         }
     }
@@ -125,4 +145,33 @@ fun SignupScreen(
         val activity = navController.context as Activity
         activity.moveTaskToBack(true)
     }
+}
+
+@Composable
+fun SignupConfirm(
+    onSignupConfirmRequiredChange: (Boolean) -> Unit,
+    onSignedUp: () -> Unit,
+) {
+    AlertDialog(icon = {
+        Icon(Icons.Default.Warning, "警告")
+    }, title = {
+        Text(text = "確定設定此組密碼?")
+    }, text = {
+        Text(text = "請牢記主密碼，忘記將導致您無法存取您的所有密碼!")
+    }, onDismissRequest = {
+        onSignupConfirmRequiredChange(false)
+    }, confirmButton = {
+        TextButton(onClick = {
+            onSignupConfirmRequiredChange(false)
+        }) {
+            Text("取消")
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onSignedUp()
+            onSignupConfirmRequiredChange(false)
+        }) {
+            Text("確定")
+        }
+    })
 }
