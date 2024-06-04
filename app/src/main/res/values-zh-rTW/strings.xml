@@ -15,4 +15,5 @@
     <string name="app_edit_vault_title">編輯密碼</string>
     <string name="app_vault_details_title">檢視密碼</string>
     <string name="app_vault_screen_title">我的密碼庫</string>
+    <string name="tile_label">我的密碼庫</string>
 </resources>

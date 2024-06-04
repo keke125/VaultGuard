@@ -14,4 +14,5 @@
     <string name="app_edit_vault_title">Edit Vault</string>
     <string name="app_vault_details_title">View Vault Details</string>
     <string name="app_vault_screen_title">My Vault</string>
+    <string name="tile_label">My Vault</string>
 </resources>
