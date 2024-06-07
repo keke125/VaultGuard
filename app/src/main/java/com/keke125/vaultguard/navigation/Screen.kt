@@ -7,4 +7,5 @@ sealed class Screen(val route : String) {
     data object SearchVault: Screen("search_vault_screen")
     data object VaultRepository: Screen("vault_repository_screen")
     data object Signup: Screen("signup_screen")
+    data object Folder: Screen("folder_screen")
 }

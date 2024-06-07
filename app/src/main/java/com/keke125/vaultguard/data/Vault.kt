@@ -3,9 +3,18 @@ package com.keke125.vaultguard.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.ForeignKey
 import androidx.room.TypeConverters
 
-@Entity(tableName = "vault")
+@Entity(
+    tableName = "vault",
+    foreignKeys = [
+        ForeignKey(
+            entity = Folder::class,
+            parentColumns = ["uid"],
+            childColumns = ["folderUid"])
+    ]
+)
 @TypeConverters(Converters::class)
 data class Vault(
     @PrimaryKey(autoGenerate = true)
@@ -19,5 +28,7 @@ data class Vault(
     @ColumnInfo(defaultValue = "")
     val createdDateTime: String,
     @ColumnInfo(defaultValue = "")
-    val lastModifiedDateTime: String
+    val lastModifiedDateTime: String,
+    @ColumnInfo(defaultValue = "null")
+    val folderUid: Int?,
 )

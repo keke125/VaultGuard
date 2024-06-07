@@ -10,12 +10,17 @@ import com.keke125.vaultguard.VaultGuardApplication
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            AddVaultViewModel(vaultGuardApplication().container.vaultsRepository)
+            AddVaultViewModel(
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository
+            )
         }
 
         initializer {
             VaultDetailsViewModel(
-                this.createSavedStateHandle(), vaultGuardApplication().container.vaultsRepository
+                this.createSavedStateHandle(),
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository
             )
         }
 
@@ -25,7 +30,9 @@ object AppViewModelProvider {
 
         initializer {
             EditVaultViewModel(
-                this.createSavedStateHandle(), vaultGuardApplication().container.vaultsRepository
+                this.createSavedStateHandle(),
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository
             )
         }
 
@@ -34,11 +41,18 @@ object AppViewModelProvider {
         }
 
         initializer {
-            ExportVaultViewModel(vaultGuardApplication().container.vaultsRepository,vaultGuardApplication().fileService,vaultGuardApplication().passwordService)
+            ExportVaultViewModel(
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().fileService,
+                vaultGuardApplication().passwordService
+            )
         }
 
         initializer {
-            ImportVaultViewModel(vaultGuardApplication().container.vaultsRepository,vaultGuardApplication().fileService)
+            ImportVaultViewModel(
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().fileService
+            )
         }
 
         initializer {
@@ -50,11 +64,34 @@ object AppViewModelProvider {
         }
 
         initializer {
-            DeleteVaultsViewModel(vaultGuardApplication().container.vaultsRepository,vaultGuardApplication().passwordService)
+            DeleteVaultsViewModel(
+                vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().passwordService
+            )
         }
 
         initializer {
             ChangeMainPasswordViewModel(vaultGuardApplication().passwordService)
+        }
+
+        initializer {
+            FolderViewModel(vaultGuardApplication().container.foldersRepository)
+        }
+
+        initializer {
+            AddFolderViewModel(vaultGuardApplication().container.foldersRepository)
+        }
+
+        initializer {
+            EditFolderViewModel(
+                this.createSavedStateHandle(), vaultGuardApplication().container.foldersRepository
+            )
+        }
+
+        initializer {
+            FolderDetailsViewModel(
+                this.createSavedStateHandle(), vaultGuardApplication().container.foldersRepository
+            )
         }
     }
 }

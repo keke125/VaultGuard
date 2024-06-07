@@ -122,34 +122,39 @@ fun VaultDetailsScreen(
                 mutableIntStateOf(0)
             }
             val createdDateTime = if (Build.VERSION.SDK_INT >= 26) {
-                if(uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()){
+                if (uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
                     val parseFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                     val showFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-                    LocalDateTime.parse(uiState.value.vaultDetails.createdDateTime, parseFormatter).format(showFormatter)
-                }else{
+                    LocalDateTime.parse(uiState.value.vaultDetails.createdDateTime, parseFormatter)
+                        .format(showFormatter)
+                } else {
                     ""
                 }
             } else {
-                if(uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
-                    val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                if (uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
+                    val parseSimpleDateFormat =
+                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
                     parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.createdDateTime)!!)
-                }else{
+                } else {
                     ""
                 }
             }
             val lastModifiedDateTime = if (Build.VERSION.SDK_INT >= 26) {
-                if(uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()){
+                if (uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
                     val parseFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                     val showFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-                    LocalDateTime.parse(uiState.value.vaultDetails.lastModifiedDateTime, parseFormatter).format(showFormatter)
-                }else{
+                    LocalDateTime.parse(
+                        uiState.value.vaultDetails.lastModifiedDateTime, parseFormatter
+                    ).format(showFormatter)
+                } else {
                     ""
                 }
             } else {
-                if(uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
-                    val parseSimpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                if (uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
+                    val parseSimpleDateFormat =
+                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
                     parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.lastModifiedDateTime)!!)
-                }else{
+                } else {
                     ""
                 }
             }
@@ -274,7 +279,10 @@ fun VaultDetailsScreen(
                                         text = time.toString(),
                                         modifier = Modifier.offset(x = 30.dp, y = 11.dp)
                                     )
-                                    CircularProgressIndicator(progress = { ((time.toFloat() / 30.0)).toFloat() }, modifier = Modifier.offset(y = 3.dp))
+                                    CircularProgressIndicator(
+                                        progress = { ((time.toFloat() / 30.0)).toFloat() },
+                                        modifier = Modifier.offset(y = 3.dp)
+                                    )
                                     IconButton(onClick = {
                                         copyText(
                                             clipboardManager, totp, context
@@ -287,6 +295,13 @@ fun VaultDetailsScreen(
                             modifier = Modifier.fillMaxWidth(0.8f)
                         )
                     }
+                    OutlinedTextField(
+                        value = if (viewModel.folderUiState.folder != null) viewModel.folderUiState.folder!!.name else "(未分類)",
+                        onValueChange = {},
+                        label = { Text("資料夾") },
+                        readOnly = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
                     OutlinedTextField(
                         value = uiState.value.vaultDetails.notes,
                         onValueChange = {},
@@ -438,7 +453,9 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                                     packageManager.getLaunchIntentSenderForPackage(
                                         url.removePrefix("androidapp://")
                                     )
-                                intentSender.sendIntent(context, intentSender.creatorUid, null, null, null)
+                                intentSender.sendIntent(
+                                    context, intentSender.creatorUid, null, null, null
+                                )
                             } catch (e: IntentSender.SendIntentException) {
                                 Toast.makeText(
                                     context, "沒有可開啟連結的應用程式!", Toast.LENGTH_SHORT

@@ -33,7 +33,10 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +49,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -93,12 +97,17 @@ fun AddVaultScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
+            val foldersUiState by viewModel.foldersUiState.collectAsState()
+            val (folderName, onFolderNameChange) = remember {
+                mutableStateOf("(未分類)")
+            }
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val (isDropdownExpanded, onDropdownExpandedChange) = remember { mutableStateOf(false) }
             val openBarcodeScannerLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
             ) { result ->
@@ -113,9 +122,7 @@ fun AddVaultScreen(
                                     )
                                 )
                                 Toast.makeText(
-                                    context,
-                                    "掃描成功",
-                                    Toast.LENGTH_SHORT
+                                    context, "掃描成功", Toast.LENGTH_SHORT
                                 ).show()
                             } else {
                                 Toast.makeText(
@@ -251,6 +258,43 @@ fun AddVaultScreen(
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    ExposedDropdownMenuBox(
+                        expanded = isDropdownExpanded,
+                        onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
+                    ) {
+                        OutlinedTextField(
+                            value = folderName,
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("資料夾") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth(0.8f)
+                        )
+                        ExposedDropdownMenu(
+                            expanded = isDropdownExpanded,
+                            onDismissRequest = { onDropdownExpandedChange(false) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            DropdownMenuItem(text = { Text("(未分類)") }, onClick = {
+                                onFolderNameChange("(未分類)")
+                                onDropdownExpandedChange(false)
+                                viewModel.updateUiState(vaultUiState.vaultDetails.copy(folderUid = null))
+                            })
+                            foldersUiState.folderList.forEach { folder ->
+                                DropdownMenuItem(text = { Text(folder.name) }, onClick = {
+                                    onFolderNameChange(folder.name)
+                                    onDropdownExpandedChange(false)
+                                    viewModel.updateUiState(
+                                        vaultUiState.vaultDetails.copy(
+                                            folderUid = folder.uid
+                                        )
+                                    )
+                                })
+                            }
+                        }
+                    }
                     OutlinedTextField(
                         value = vaultUiState.vaultDetails.notes,
                         onValueChange = {

@@ -19,10 +19,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.keke125.vaultguard.screen.AddFolderDestination
+import com.keke125.vaultguard.screen.AddFolderScreen
 import com.keke125.vaultguard.screen.AddVaultDestination
 import com.keke125.vaultguard.screen.AddVaultScreen
+import com.keke125.vaultguard.screen.EditFolderDestination
+import com.keke125.vaultguard.screen.EditFolderScreen
 import com.keke125.vaultguard.screen.EditVaultDestination
 import com.keke125.vaultguard.screen.EditVaultScreen
+import com.keke125.vaultguard.screen.FolderDetailsDestination
+import com.keke125.vaultguard.screen.FolderDetailsScreen
+import com.keke125.vaultguard.screen.FolderScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
 import com.keke125.vaultguard.screen.SearchVaultScreen
 import com.keke125.vaultguard.screen.SettingScreen
@@ -38,7 +45,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     Scaffold(bottomBar = {
-        if (currentDestination?.route == Screen.Vault.route || currentDestination?.route == Screen.PasswordGenerator.route || currentDestination?.route == Screen.Setting.route) {
+        if (currentDestination?.route == Screen.Vault.route || currentDestination?.route == Screen.PasswordGenerator.route || currentDestination?.route == Screen.Setting.route || currentDestination?.route == Screen.Folder.route) {
             BottomAppBar(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.primary,
@@ -116,8 +123,32 @@ fun MainScreen(modifier: Modifier = Modifier) {
             composable(Screen.VaultRepository.route) {
                 VaultsRepositoryScreen(navController = navController)
             }
-            composable(Screen.Signup.route){
+            composable(Screen.Signup.route) {
                 SignupScreen(navController = navController)
+            }
+            composable(Screen.Folder.route) {
+                FolderScreen(navController = navController,
+                    navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}") },
+                    navigateToEditFolder = { navController.navigate("${EditFolderDestination.route}/${it}") })
+            }
+            composable(AddFolderDestination.route) {
+                AddFolderScreen(navController = navController)
+            }
+            composable(
+                route = EditFolderDestination.routeWithArgs,
+                arguments = listOf(navArgument(EditFolderDestination.FOLDERID) {
+                    type = NavType.IntType
+                })
+            ){
+                EditFolderScreen(navController = navController)
+            }
+            composable(
+                route = FolderDetailsDestination.routeWithArgs,
+                arguments = listOf(navArgument(FolderDetailsDestination.FOLDERID) {
+                    type = NavType.IntType
+                })
+            ) {
+                FolderDetailsScreen(navController = navController)
             }
         }
     }

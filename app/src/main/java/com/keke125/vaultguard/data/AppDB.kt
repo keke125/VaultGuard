@@ -10,6 +10,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.security.SecureRandom
 
 
+/*
 @Database(
     version = 2,
     entities = [Vault::class],
@@ -18,9 +19,26 @@ import java.security.SecureRandom
     ],
     exportSchema = true
 )
+*/
+@Database(
+    version = 8,
+    entities = [Vault::class,Folder::class],
+    autoMigrations = [
+        AutoMigration (from = 7, to = 8)
+    ],
+    exportSchema = true
+)
 abstract class AppDB : RoomDatabase() {
     abstract fun vaultDAO(): VaultDAO
 
+    abstract fun folderDAO(): FolderDAO
+
+    /*
+    from 3 to 4, set on 4
+    @DeleteColumn(tableName = "folder", columnName = "createdDateTime")
+    @DeleteColumn(tableName = "folder", columnName = "lastModifiedDateTime")
+    class VaultGuardAutoMigration : AutoMigrationSpec
+    */
     companion object {
         @Volatile
         private var Instance: AppDB? = null
@@ -52,7 +70,8 @@ abstract class AppDB : RoomDatabase() {
                         }
                     }
                 }
-                val factory = SupportOpenHelperFactory(dbPassword?.toByteArray())
+                val passphrase = dbPassword?.toByteArray()
+                val factory = SupportOpenHelperFactory(passphrase)
                 Room.databaseBuilder(context, AppDB::class.java, "app_db")
                     .openHelperFactory(factory).fallbackToDestructiveMigration().build()
                     .also { Instance = it }

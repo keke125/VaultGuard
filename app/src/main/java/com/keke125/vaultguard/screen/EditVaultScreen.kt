@@ -35,7 +35,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +51,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -93,12 +98,14 @@ fun EditVaultScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
+            val foldersUiState by viewModel.foldersUiState.collectAsState()
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
             val (isPasswordGeneratorVisible, onPasswordGeneratorVisibleChange) = remember {
                 mutableStateOf(false)
             }
+            val (isDropdownExpanded, onDropdownExpandedChange) = remember { mutableStateOf(false) }
             val clipboardManager =
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val openBarcodeScannerLauncher = rememberLauncherForActivityResult(
@@ -272,6 +279,45 @@ fun EditVaultScreen(
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    ExposedDropdownMenuBox(
+                        expanded = isDropdownExpanded,
+                        onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
+                    ) {
+                        OutlinedTextField(
+                            value = viewModel.folderName.value ?: "(未分類)",
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("資料夾") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth(0.8f)
+                        )
+                        ExposedDropdownMenu(
+                            expanded = isDropdownExpanded,
+                            onDismissRequest = { onDropdownExpandedChange(false) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("(未分類)") },
+                                onClick = {
+                                    viewModel.updateFolderName("(未分類)")
+                                    onDropdownExpandedChange(false)
+                                    viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(folderUid = null))
+                                }
+                            )
+                            foldersUiState.folderList.forEach { folder ->
+                                DropdownMenuItem(
+                                    text = { Text(folder.name) },
+                                    onClick = {
+                                        viewModel.updateFolderName(folder.name)
+                                        onDropdownExpandedChange(false)
+                                        viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(folderUid = folder.uid))
+                                    }
+                                )
+                            }
+                        }
+                    }
                     OutlinedTextField(
                         value = viewModel.vaultUiState.vaultDetails.notes,
                         onValueChange = {

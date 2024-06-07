@@ -53,7 +53,8 @@ class FileService {
                     urlList = urlList,
                     totp = "",
                     createdDateTime = timeStamp,
-                    lastModifiedDateTime = timeStamp
+                    lastModifiedDateTime = timeStamp,
+                    folderUid = null
                 )
                 vaults.add(vault)
             }
@@ -86,7 +87,8 @@ class FileService {
                         urlList = urlList,
                         totp = totp,
                         createdDateTime = vault.createdDateTime,
-                        lastModifiedDateTime = vault.lastModifiedDateTime
+                        lastModifiedDateTime = vault.lastModifiedDateTime,
+                        folderUid = vault.folderUid
                     )
                     vaults.add(newVault)
                 }
