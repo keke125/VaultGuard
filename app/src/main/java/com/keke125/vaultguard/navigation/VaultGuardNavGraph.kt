@@ -134,8 +134,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(Screen.Folder.route) {
                 FolderScreen(navController = navController,
-                    navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}") },
-                    navigateToEditFolder = { navController.navigate("${EditFolderDestination.route}/${it}") })
+                    navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}")})
             }
             composable(AddFolderDestination.route) {
                 AddFolderScreen(navController = navController)

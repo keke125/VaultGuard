@@ -53,7 +53,6 @@ import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 fun FolderScreen(
     navController: NavController,
     navigateToViewFolder: (Int) -> Unit,
-    navigateToEditFolder: (Int) -> Unit,
     folderViewModel: FolderViewModel = viewModel(factory = AppViewModelProvider.Factory),
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -126,8 +125,6 @@ fun FolderScreen(
                                         HorizontalDivider()
                                     }
                                 }
-                            } else {
-                                Text("尚未儲存資料夾")
                             }
                         }
                     }
