@@ -10,21 +10,11 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.security.SecureRandom
 
 
-/*
 @Database(
-    version = 2,
-    entities = [Vault::class],
-    autoMigrations = [
-        AutoMigration (from = 1, to = 2)
-    ],
-    exportSchema = true
-)
-*/
-@Database(
-    version = 8,
+    version = 9,
     entities = [Vault::class,Folder::class],
     autoMigrations = [
-        AutoMigration (from = 2, to = 8)
+        AutoMigration (from = 8, to = 9)
     ],
     exportSchema = true
 )
@@ -33,12 +23,6 @@ abstract class AppDB : RoomDatabase() {
 
     abstract fun folderDAO(): FolderDAO
 
-    /*
-    from 3 to 4, set on 4
-    @DeleteColumn(tableName = "folder", columnName = "createdDateTime")
-    @DeleteColumn(tableName = "folder", columnName = "lastModifiedDateTime")
-    class VaultGuardAutoMigration : AutoMigrationSpec
-    */
     companion object {
         @Volatile
         private var Instance: AppDB? = null

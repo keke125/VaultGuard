@@ -2,6 +2,7 @@ package com.keke125.vaultguard.screen
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -24,12 +30,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,6 +50,7 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.FolderDetailsViewModel
 import com.keke125.vaultguard.navigation.NavigationDestination
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import kotlinx.coroutines.launch
 
 object FolderDetailsDestination : NavigationDestination {
     override val route = "folder_details"
@@ -64,7 +73,14 @@ fun FolderDetailsScreen(
 
         ) {
             val context = navController.context
+            val coroutineScope = rememberCoroutineScope()
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val (folderDialogExpanded, onFolderDialogExpandedChange) = remember {
+                mutableStateOf(false)
+            }
+            val (isFolderDeleteRequired, onFolderDeleteRequiredChange) = remember {
+                mutableStateOf(false)
+            }
             val uiState = viewModel.uiState.collectAsState()
             val vaultUiState = viewModel.vaultUiState.collectAsState()
             Scaffold(topBar = {
@@ -87,6 +103,15 @@ fun FolderDetailsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                    }
+                }, actions = {
+                    if (viewModel.folderId != 0) {
+                        IconButton(onClick = { onFolderDialogExpandedChange(true) }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "更多內容"
+                            )
+                        }
                     }
                 })
             }, floatingActionButton = {
@@ -115,9 +140,7 @@ fun FolderDetailsScreen(
                                 }
                                 ListItem(headlineContent = {
                                     Text(
-                                        vault.name,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
+                                        vault.name, maxLines = 1, overflow = TextOverflow.Ellipsis
                                     )
                                 }, supportingContent = {
                                     Text(
@@ -155,8 +178,89 @@ fun FolderDetailsScreen(
                     } else {
                         Text("尚未儲存密碼")
                     }
+                    if (viewModel.folderId != 0) {
+                        FolderMoreOptionsDialog(folderDialogExpanded,
+                            onFolderDialogExpandedChange,
+                            { navController.navigate("${EditFolderDestination.route}/${uiState.value.folderDetails.uid}") },
+                            { onFolderDeleteRequiredChange(true) })
+                        when {
+                            isFolderDeleteRequired -> {
+                                DeleteFolderConfirm(onFolderDeleteRequiredChange, onDeleted = {
+                                    coroutineScope.launch {
+                                        viewModel.deleteItem()
+                                    }
+                                    navController.popBackStack()
+                                    Toast.makeText(
+                                        context, "資料夾及密碼已被刪除", Toast.LENGTH_SHORT
+                                    ).show()
+                                })
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FolderMoreOptionsDialog(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    navigateToEditFolder: () -> Unit,
+    navigateToDeleteFolder: () -> Unit
+) {
+    when {
+        expanded -> {
+            BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
+                Column {
+                    ListItem(headlineContent = { Text("資料夾") })
+                    ListItem(headlineContent = { Text("編輯資料夾") }, leadingContent = {
+                        Icon(Icons.Filled.Edit, null)
+                    }, modifier = Modifier.clickable {
+                        onExpandedChange(false)
+                        navigateToEditFolder()
+                    })
+                    ListItem(headlineContent = { Text("刪除資料夾及密碼") }, leadingContent = {
+                        Icon(
+                            Icons.Outlined.Delete, contentDescription = null
+                        )
+                    }, modifier = Modifier.clickable {
+                        onExpandedChange(false)
+                        navigateToDeleteFolder()
+                    })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DeleteFolderConfirm(
+    onFolderDeleteRequiredChange: (Boolean) -> Unit,
+    onDeleted: () -> Unit,
+) {
+    AlertDialog(icon = {
+        Icon(Icons.Default.Warning, "警告")
+    }, title = {
+        Text(text = "是否要刪除資料庫及密碼?")
+    }, text = {
+        Text(text = "資料庫內的所有密碼將被刪除")
+    }, onDismissRequest = {
+        onFolderDeleteRequiredChange(false)
+    }, confirmButton = {
+        TextButton(onClick = {
+            onFolderDeleteRequiredChange(false)
+        }) {
+            Text("取消")
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDeleted()
+            onFolderDeleteRequiredChange(false)
+        }) {
+            Text("確定")
+        }
+    })
 }

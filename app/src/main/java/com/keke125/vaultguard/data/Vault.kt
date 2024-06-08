@@ -12,7 +12,8 @@ import androidx.room.TypeConverters
         ForeignKey(
             entity = Folder::class,
             parentColumns = ["uid"],
-            childColumns = ["folderUid"])
+            childColumns = ["folderUid"],
+            onDelete = ForeignKey.CASCADE)
     ]
 )
 @TypeConverters(Converters::class)
