@@ -24,7 +24,7 @@ import java.security.SecureRandom
     version = 8,
     entities = [Vault::class,Folder::class],
     autoMigrations = [
-        AutoMigration (from = 7, to = 8)
+        AutoMigration (from = 2, to = 8)
     ],
     exportSchema = true
 )
