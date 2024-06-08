@@ -67,6 +67,7 @@ object AppViewModelProvider {
         initializer {
             DeleteVaultsViewModel(
                 vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository,
                 vaultGuardApplication().passwordService
             )
         }

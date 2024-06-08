@@ -75,6 +75,7 @@ fun DeleteVaultsScreen(
     val activity = LocalContext.current as? Activity
     val coroutineScope = rememberCoroutineScope()
     val deleteVaultsUiState by viewModel.vaultUiState.collectAsState()
+    val deleteFoldersUiState by viewModel.folderUiState.collectAsState()
     val (isPasswordVisible, onPasswordVisibleChange) = remember { mutableStateOf(false) }
     val (isDeleteConfirmExpanded, onDeleteConfirmExpandedChange) = remember { mutableStateOf(false) }
     Scaffold(topBar = {
@@ -142,9 +143,11 @@ fun DeleteVaultsScreen(
             when {
                 isDeleteConfirmExpanded -> {
                     DeleteVaultsConfirm(onDeleteConfirmExpandedChange, onDeleted = {
-                        if (deleteVaultsUiState.vaultList.isNotEmpty()) {
+                        if (deleteVaultsUiState.vaultList.isNotEmpty() || deleteFoldersUiState.folderList.isNotEmpty()) {
                             coroutineScope.launch {
-                                viewModel.deleteVault(deleteVaultsUiState.vaultList)
+                                viewModel.deleteVaultsAndFolders(
+                                    deleteVaultsUiState.vaultList, deleteFoldersUiState.folderList
+                                )
                             }
                             viewModel.updateUiState(
                                 changeMainPasswordUiState.deleteVaults.copy(
@@ -153,7 +156,7 @@ fun DeleteVaultsScreen(
                             )
                             Toast.makeText(context, "清空成功", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, "密碼庫尚未儲存密碼!", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, "尚未儲存密碼或資料夾!", Toast.LENGTH_SHORT)
                                 .show()
                         }
                     })
@@ -173,7 +176,7 @@ fun DeleteVaultsConfirm(
     }, title = {
         Text(text = "是否要清空密碼庫?")
     }, text = {
-        Text(text = "所有密碼將被刪除!")
+        Text(text = "所有密碼及資料夾將被刪除!")
     }, onDismissRequest = {
         onPasswordDeleteRequiredChange(false)
     }, confirmButton = {

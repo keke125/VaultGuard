@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.keke125.vaultguard.data.Folder
+import com.keke125.vaultguard.data.FoldersRepository
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.service.PasswordService
@@ -14,7 +16,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class DeleteVaultsViewModel(
-    private val vaultsRepository: VaultsRepository, private val passwordService: PasswordService
+    private val vaultsRepository: VaultsRepository,
+    private val foldersRepository: FoldersRepository,
+    private val passwordService: PasswordService
 ) : ViewModel() {
 
     val vaultUiState: StateFlow<VaultUiState> =
@@ -24,11 +28,19 @@ class DeleteVaultsViewModel(
             initialValue = VaultUiState()
         )
 
+    val folderUiState: StateFlow<FoldersUiState> =
+        foldersRepository.getAllFolders().map { FoldersUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = FoldersUiState()
+        )
+
     var deleteVaultsUiState by mutableStateOf(DeleteVaultsUiState())
         private set
 
-    suspend fun deleteVault(vaults: List<Vault>) {
+    suspend fun deleteVaultsAndFolders(vaults: List<Vault>, folders: List<Folder>) {
         vaultsRepository.deleteVaults(vaults)
+        foldersRepository.deleteFolders(folders)
     }
 
     fun updateUiState(deleteVaults: DeleteVaults) {
