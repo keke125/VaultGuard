@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.keke125.vaultguard.data.Folder
+import com.keke125.vaultguard.data.FoldersRepository
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.service.FileService
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class ExportVaultViewModel(
     vaultsRepository: VaultsRepository,
+    foldersRepository: FoldersRepository,
     private val fileService: FileService,
     private val passwordService: PasswordService
 ) : ViewModel() {
@@ -27,6 +30,13 @@ class ExportVaultViewModel(
             initialValue = VaultUiState()
         )
 
+    val folderUiState: StateFlow<FoldersUiState> =
+        foldersRepository.getAllFolders().map { FoldersUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = FoldersUiState()
+        )
+
     var exportVaultsUiState by mutableStateOf(ExportVaultsUiState())
         private set
 
@@ -34,8 +44,8 @@ class ExportVaultViewModel(
         exportVaultsUiState = ExportVaultsUiState(exportVaults = exportVaults)
     }
 
-    fun exportVault(vaults: List<Vault>): String? {
-        return fileService.exportToJson(vaults)
+    fun exportVaultAndFolder(vaults: List<Vault>, folders: List<Folder>): String? {
+        return fileService.exportToJson(vaults, folders)
     }
 
     fun checkMainPassword(password: String): Boolean {

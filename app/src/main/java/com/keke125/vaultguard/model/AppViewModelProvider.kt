@@ -44,6 +44,7 @@ object AppViewModelProvider {
         initializer {
             ExportVaultViewModel(
                 vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository,
                 vaultGuardApplication().fileService,
                 vaultGuardApplication().passwordService
             )
@@ -52,6 +53,7 @@ object AppViewModelProvider {
         initializer {
             ImportVaultViewModel(
                 vaultGuardApplication().container.vaultsRepository,
+                vaultGuardApplication().container.foldersRepository,
                 vaultGuardApplication().fileService
             )
         }

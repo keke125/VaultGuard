@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
+import com.keke125.vaultguard.data.Folder
 import com.keke125.vaultguard.data.Vault
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
@@ -18,17 +19,19 @@ import java.util.Locale
 
 
 class FileService {
-    fun exportToJson(vaults: List<Vault>): String? {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val json = gson.toJson(vaults)
+    fun exportToJson(vaults: List<Vault>, folders: List<Folder>): String? {
+        val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
+        val vaultsAndFolders = Pair(vaults, folders)
+        val json = gson.toJson(vaultsAndFolders)
         return json
     }
 
     fun readCsvFromGPM(inputStream: InputStream): List<Vault>? {
         try {
             val csvParser = CSVParser.parse(
-                inputStream, StandardCharsets.UTF_8, CSVFormat.DEFAULT.withFirstRecordAsHeader()
-                    .withIgnoreHeaderCase()
+                inputStream,
+                StandardCharsets.UTF_8,
+                CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase()
             )
             val vaults = mutableListOf<Vault>()
             for (csvRecord in csvParser) {
@@ -42,7 +45,8 @@ class FileService {
                     val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                     timeStamp = LocalDateTime.now().format(formatter).toString()
                 } else {
-                    val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                    val simpleDateFormat =
+                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
                     timeStamp = simpleDateFormat.format(Date())
                 }
                 val vault = Vault(
@@ -59,19 +63,25 @@ class FileService {
                 vaults.add(vault)
             }
             return vaults
-        }catch (e: Exception){
+        } catch (e: Exception) {
             return null
         }
     }
 
-    fun readJsonFromVG(inputStream: InputStream): List<Vault>? {
+    fun readJsonFromVG(inputStream: InputStream): Pair<List<Vault>, List<Folder>>? {
         try {
             val gson = Gson()
             val reader = JsonReader(inputStream.reader())
-            val vaultListType = object : TypeToken<List<Vault>?>() {}
-            val vaultsFromJson = gson.fromJson(reader,vaultListType)
+            val listType = object : TypeToken<Pair<List<Vault>, List<Folder>>>() {}
+            val vaultsAndFoldersFromJson = gson.fromJson(reader, listType)
+            val vaultsFromJson = vaultsAndFoldersFromJson.first
+            val foldersFromJson = vaultsAndFoldersFromJson.second
             val vaults = mutableListOf<Vault>()
-            if (vaultsFromJson != null) {
+            val folders = mutableListOf<Folder>()
+            if (vaultsFromJson.isEmpty() and foldersFromJson.isEmpty()) {
+                return null
+            }
+            if (vaultsFromJson.isNotEmpty()) {
                 for (vault in vaultsFromJson) {
                     val name = vault.name
                     val username = vault.username
@@ -79,6 +89,9 @@ class FileService {
                     val notes = vault.notes
                     val urlList = vault.urlList
                     val totp = vault.totp
+                    val createdDateTime = vault.createdDateTime
+                    val lastModifiedDateTime = vault.lastModifiedDateTime
+                    val folderUid = vault.folderUid
                     val newVault = Vault(
                         name = name,
                         username = username,
@@ -86,18 +99,24 @@ class FileService {
                         notes = notes,
                         urlList = urlList,
                         totp = totp,
-                        createdDateTime = vault.createdDateTime,
-                        lastModifiedDateTime = vault.lastModifiedDateTime,
-                        folderUid = vault.folderUid
+                        createdDateTime = createdDateTime,
+                        lastModifiedDateTime = lastModifiedDateTime,
+                        folderUid = folderUid
                     )
                     vaults.add(newVault)
                 }
-                return vaults
             }
-            else{
-                return null
+            if (foldersFromJson.isNotEmpty()) {
+                for (folder in foldersFromJson) {
+                    val name = folder.name
+                    val newFolder = Folder(
+                        name = name
+                    )
+                    folders.add(newFolder)
+                }
             }
-        }catch (e: Exception){
+            return Pair(vaults, folders)
+        } catch (e: Exception) {
             return null
         }
     }

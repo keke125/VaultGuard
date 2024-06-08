@@ -80,8 +80,9 @@ fun ExportVaultScreen(
     exportVaultsUiState: ExportVaultsUiState = viewModel.exportVaultsUiState
 ) {
     val vaultUiState by viewModel.vaultUiState.collectAsState()
+    val folderUiState by viewModel.folderUiState.collectAsState()
     val activity = LocalContext.current as? Activity
-    val jsonString = viewModel.exportVault(vaultUiState.vaultList)
+    val jsonString = viewModel.exportVaultAndFolder(vaultUiState.vaultList, folderUiState.folderList)
     val contentResolver = context.contentResolver
     val (isPasswordVisible, onPasswordVisibleChange) = remember { mutableStateOf(false) }
     val createFileResultLauncher =
@@ -168,7 +169,7 @@ fun ExportVaultScreen(
                     return@Button
                 }
                 if (viewModel.checkMainPassword(exportVaultsUiState.exportVaults.password)) {
-                    if (vaultUiState.vaultList.isNotEmpty()) {
+                    if (vaultUiState.vaultList.isNotEmpty() || folderUiState.folderList.isNotEmpty()) {
                         val timeStamp: String
                         if (Build.VERSION.SDK_INT >= 26) {
                             val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
@@ -190,7 +191,7 @@ fun ExportVaultScreen(
                         )
                         createFileResultLauncher.launch(createFileIntent)
                     } else {
-                        Toast.makeText(context, "密碼庫尚未儲存密碼!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "尚未儲存密碼或資料夾!", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(context, "主密碼錯誤!", Toast.LENGTH_SHORT).show()

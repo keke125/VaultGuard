@@ -111,10 +111,13 @@ fun ImportVaultScreen(
                     if (url.data != null) {
                         try {
                             contentResolver.openInputStream(url.data!!)?.use {
-                                val vaults = viewModel.importVaultFromVG(it)
-                                if (vaults != null) {
+                                val vaultsAndFolders = viewModel.importVaultAndFolderFromVG(it)
+                                if (vaultsAndFolders != null) {
+                                    val vaults = vaultsAndFolders.first
+                                    val folders = vaultsAndFolders.second
                                     coroutineScope.launch {
                                         viewModel.saveVaults(vaults)
+                                        viewModel.saveFolders(folders)
                                     }
                                     Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
                                 } else {
