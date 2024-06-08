@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -94,21 +95,34 @@ fun FolderScreen(
                                 .padding(vertical = 8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            ListItem(headlineContent = { Text("(未分類)") }, leadingContent = {
+                                Icon(
+                                    Icons.Default.Folder,
+                                    contentDescription = "",
+                                )
+                            }, modifier = Modifier.clickable {
+                                navigateToViewFolder(0)
+                            })
+                            HorizontalDivider()
                             if (folderUiState.folderList.isNotEmpty()) {
                                 LazyColumn(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     items(folderUiState.folderList) { folder ->
-                                        ListItem(headlineContent = { Text(folder.name) },
-                                            leadingContent = {
-                                                Icon(
-                                                    Icons.Default.Folder,
-                                                    contentDescription = "",
-                                                )
-                                            },
-                                            modifier = Modifier.clickable {
-                                                navigateToViewFolder(folder.uid)
-                                            })
+                                        ListItem(headlineContent = {
+                                            Text(
+                                                folder.name,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }, leadingContent = {
+                                            Icon(
+                                                Icons.Default.Folder,
+                                                contentDescription = "",
+                                            )
+                                        }, modifier = Modifier.clickable {
+                                            navigateToViewFolder(folder.uid)
+                                        })
                                         HorizontalDivider()
                                     }
                                 }

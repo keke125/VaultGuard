@@ -11,6 +11,7 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             AddVaultViewModel(
+                this.createSavedStateHandle(),
                 vaultGuardApplication().container.vaultsRepository,
                 vaultGuardApplication().container.foldersRepository
             )
@@ -90,7 +91,9 @@ object AppViewModelProvider {
 
         initializer {
             FolderDetailsViewModel(
-                this.createSavedStateHandle(), vaultGuardApplication().container.foldersRepository
+                this.createSavedStateHandle(),
+                vaultGuardApplication().container.foldersRepository,
+                vaultGuardApplication().container.vaultsRepository
             )
         }
     }

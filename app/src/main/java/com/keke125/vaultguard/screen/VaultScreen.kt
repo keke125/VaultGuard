@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -95,7 +96,7 @@ fun VaultScreen(
                         Scaffold(floatingActionButton = {
                             FloatingActionButton(
                                 onClick = {
-                                    navController.navigate(AddVaultDestination.route)
+                                    navController.navigate("${AddVaultDestination.route}/0")
                                 },
                             ) {
                                 Icon(Icons.Filled.Add, "新增密碼")
@@ -139,8 +140,8 @@ fun VaultScreen(
                                             val (vaultExpanded, onVaultExpandedChange) = remember {
                                                 mutableStateOf(false)
                                             }
-                                            ListItem(headlineContent = { Text(vault.name) },
-                                                supportingContent = { Text(vault.username) },
+                                            ListItem(headlineContent = { Text(vault.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                                supportingContent = { Text(vault.username, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                                                 leadingContent = {
                                                     Icon(
                                                         Icons.Default.AccountCircle,
@@ -249,7 +250,7 @@ fun VaultDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text(vault.name) })
+                    ListItem(headlineContent = { Text(vault.name, maxLines = 1, overflow = TextOverflow.Ellipsis) })
                     ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
                         Icon(
                             Icons.Outlined.Visibility, contentDescription = null

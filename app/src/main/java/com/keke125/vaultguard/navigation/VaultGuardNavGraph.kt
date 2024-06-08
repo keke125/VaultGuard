@@ -107,7 +107,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
             ) {
                 VaultDetailsScreen(navController = navController)
             }
-            composable(route = AddVaultDestination.route) {
+            composable(
+                route = AddVaultDestination.routeWithArgs,
+                arguments = listOf(navArgument(AddVaultDestination.FOLDERID) {
+                    type = NavType.IntType
+                })
+            )
+            {
                 AddVaultScreen(
                     navController = navController
                 )
@@ -139,7 +145,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 arguments = listOf(navArgument(EditFolderDestination.FOLDERID) {
                     type = NavType.IntType
                 })
-            ){
+            ) {
                 EditFolderScreen(navController = navController)
             }
             composable(
@@ -148,7 +154,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     type = NavType.IntType
                 })
             ) {
-                FolderDetailsScreen(navController = navController)
+                FolderDetailsScreen(
+                    navController = navController,
+                    navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
+                    navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
+                )
             }
         }
     }

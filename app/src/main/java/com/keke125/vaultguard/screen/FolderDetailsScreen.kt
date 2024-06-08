@@ -2,24 +2,25 @@ package com.keke125.vaultguard.screen
 
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,11 +28,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
@@ -51,6 +54,8 @@ object FolderDetailsDestination : NavigationDestination {
 @Composable
 fun FolderDetailsScreen(
     navController: NavController,
+    navigateToViewVault: (Int) -> Unit,
+    navigateToEditVault: (Int) -> Unit,
     viewModel: FolderDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
@@ -59,15 +64,24 @@ fun FolderDetailsScreen(
 
         ) {
             val context = navController.context
-            val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val uiState = viewModel.uiState.collectAsState()
+            val vaultUiState = viewModel.vaultUiState.collectAsState()
             Scaffold(topBar = {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ), title = {
-                    Text(stringResource(FolderDetailsDestination.titleRes))
+                    Text(
+                        text = if (viewModel.folderId == 0) String.format(
+                            stringResource(
+                                FolderDetailsDestination.titleRes
+                            ), "(未分類)"
+                        ) else String.format(
+                            stringResource(FolderDetailsDestination.titleRes),
+                            uiState.value.folderDetails.name
+                        ), maxLines = 1, overflow = TextOverflow.Ellipsis
+                    )
                 }, navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
@@ -78,42 +92,69 @@ fun FolderDetailsScreen(
             }, floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate("${EditFolderDestination.route}/${uiState.value.folderDetails.uid}")
+                        navController.navigate("${AddVaultDestination.route}/${viewModel.folderId}")
                     },
                 ) {
-                    Icon(Icons.Filled.Edit, "編輯資料夾")
+                    Icon(Icons.Filled.Add, "新增密碼")
                 }
             }) { innerPadding ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(innerPadding)
-                        .padding(vertical = 8.dp)
-                        .verticalScroll(rememberScrollState()),
+                        .padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
-                    )
-                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
-                    OutlinedTextField(
-                        value = uiState.value.folderDetails.name,
-                        onValueChange = {},
-                        singleLine = true,
-                        readOnly = true,
-                        label = { Text("名稱") },
-                        leadingIcon = { Icon(Icons.Default.Folder, null) },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                copyText(
-                                    clipboardManager, uiState.value.folderDetails.name, context
+                    if (vaultUiState.value.vaultList.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(vaultUiState.value.vaultList) { vault ->
+                                val (vaultExpanded, onVaultExpandedChange) = remember {
+                                    mutableStateOf(false)
+                                }
+                                ListItem(headlineContent = {
+                                    Text(
+                                        vault.name,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }, supportingContent = {
+                                    Text(
+                                        vault.username,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }, leadingContent = {
+                                    Icon(
+                                        Icons.Default.AccountCircle,
+                                        contentDescription = "",
+                                    )
+                                }, trailingContent = {
+                                    IconButton(onClick = { onVaultExpandedChange(true) }) {
+                                        Icon(
+                                            imageVector = Icons.Default.MoreVert,
+                                            contentDescription = "更多內容"
+                                        )
+                                    }
+                                }, modifier = Modifier.clickable {
+                                    navigateToViewVault(vault.uid)
+                                })
+                                HorizontalDivider()
+                                VaultDialog(
+                                    vaultExpanded,
+                                    onVaultExpandedChange,
+                                    vault,
+                                    clipboard,
+                                    context,
+                                    navigateToViewVault,
+                                    navigateToEditVault
                                 )
-                            }) {
-                                Icon(Icons.Default.ContentCopy, "複製名稱")
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth(0.8f)
-                    )
+                        }
+                    } else {
+                        Text("尚未儲存密碼")
+                    }
                 }
             }
         }

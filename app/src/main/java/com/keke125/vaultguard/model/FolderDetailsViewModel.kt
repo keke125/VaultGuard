@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keke125.vaultguard.data.Folder
 import com.keke125.vaultguard.data.FoldersRepository
+import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.screen.FolderDetailsDestination
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,9 @@ import kotlinx.coroutines.flow.stateIn
 class FolderDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val foldersRepository: FoldersRepository,
+    vaultsRepository: VaultsRepository
 ) : ViewModel() {
-    private val folderId: Int = checkNotNull(savedStateHandle[FolderDetailsDestination.FOLDERID])
+    val folderId: Int = checkNotNull(savedStateHandle[FolderDetailsDestination.FOLDERID])
 
     val uiState: StateFlow<FolderDetailsUiState> =
         foldersRepository.getFolderByUid(folderId).filterNotNull().map {
@@ -26,6 +28,20 @@ class FolderDetailsViewModel(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = FolderDetailsUiState()
         )
+
+    val vaultUiState: StateFlow<VaultUiState> = if (folderId == 0) {
+        vaultsRepository.getVaultsByFolderUid(null).map { VaultUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = VaultUiState()
+        )
+    } else {
+        vaultsRepository.getVaultsByFolderUid(folderId).map { VaultUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = VaultUiState()
+        )
+    }
 
     suspend fun deleteItem() {
         foldersRepository.deleteFolder(uiState.value.folderDetails.toFolder())

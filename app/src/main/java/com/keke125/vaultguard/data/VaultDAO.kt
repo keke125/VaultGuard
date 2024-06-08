@@ -25,6 +25,9 @@ interface VaultDAO {
     @Query("SELECT * FROM vault WHERE name LIKE '%' || :name || '%'")
     fun findByName(name: String): Flow<List<Vault>>
 
+    @Query("SELECT * FROM vault WHERE folderUid = :folderUid or (folderUid is null and :folderUid is null)")
+    fun findByFolderUid(folderUid: Int?): Flow<List<Vault>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)
 

@@ -82,6 +82,8 @@ import kotlinx.coroutines.launch
 object AddVaultDestination : NavigationDestination {
     override val route = "add_vault"
     override val titleRes = R.string.app_add_vault_title
+    const val FOLDERID = "folderId"
+    val routeWithArgs = "${route}/{$FOLDERID}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,10 +99,8 @@ fun AddVaultScreen(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val context = navController.context
+            val folderUiState by viewModel.folderUiState.collectAsState()
             val foldersUiState by viewModel.foldersUiState.collectAsState()
-            val (folderName, onFolderNameChange) = remember {
-                mutableStateOf("(未分類)")
-            }
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -263,7 +263,7 @@ fun AddVaultScreen(
                         onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
                     ) {
                         OutlinedTextField(
-                            value = folderName,
+                            value = folderUiState.folder?.name ?: "(未分類)",
                             onValueChange = {},
                             readOnly = true,
                             label = { Text("資料夾") },
@@ -278,13 +278,13 @@ fun AddVaultScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             DropdownMenuItem(text = { Text("(未分類)") }, onClick = {
-                                onFolderNameChange("(未分類)")
                                 onDropdownExpandedChange(false)
+                                viewModel.updateFolderUiState(0)
                                 viewModel.updateUiState(vaultUiState.vaultDetails.copy(folderUid = null))
                             })
                             foldersUiState.folderList.forEach { folder ->
                                 DropdownMenuItem(text = { Text(folder.name) }, onClick = {
-                                    onFolderNameChange(folder.name)
+                                    viewModel.updateFolderUiState(folder.uid)
                                     onDropdownExpandedChange(false)
                                     viewModel.updateUiState(
                                         vaultUiState.vaultDetails.copy(
