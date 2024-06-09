@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -64,13 +63,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                                     )
                                 },
                                 onClick = {
-                                    navController.navigate(navigationItem.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+                                    navController.navigate(navigationItem.route)
                                 })
                         }
                 }
@@ -112,8 +105,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 arguments = listOf(navArgument(AddVaultDestination.FOLDERID) {
                     type = NavType.IntType
                 })
-            )
-            {
+            ) {
                 AddVaultScreen(
                     navController = navController
                 )
@@ -134,7 +126,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(Screen.Folder.route) {
                 FolderScreen(navController = navController,
-                    navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}")})
+                    navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}") })
             }
             composable(AddFolderDestination.route) {
                 AddFolderScreen(navController = navController)

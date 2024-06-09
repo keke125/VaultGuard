@@ -43,7 +43,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.DeleteVaultsUiState
 import com.keke125.vaultguard.model.DeleteVaultsViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import kotlinx.coroutines.launch
@@ -69,8 +68,7 @@ class DeleteVaultsActivity : ComponentActivity() {
 @Composable
 fun DeleteVaultsScreen(
     context: Context,
-    viewModel: DeleteVaultsViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    changeMainPasswordUiState: DeleteVaultsUiState = viewModel.deleteVaultsUiState
+    viewModel: DeleteVaultsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val activity = LocalContext.current as? Activity
     val coroutineScope = rememberCoroutineScope()
@@ -98,10 +96,10 @@ fun DeleteVaultsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
-                value = changeMainPasswordUiState.deleteVaults.password,
+                value = viewModel.deleteVaultsUiState.deleteVaults.password,
                 onValueChange = {
                     viewModel.updateUiState(
-                        changeMainPasswordUiState.deleteVaults.copy(
+                        viewModel.deleteVaultsUiState.deleteVaults.copy(
                             password = it
                         )
                     )
@@ -128,11 +126,11 @@ fun DeleteVaultsScreen(
                 }
             )
             Button(onClick = {
-                if (changeMainPasswordUiState.deleteVaults.password.isEmpty() || changeMainPasswordUiState.deleteVaults.password.isBlank()) {
+                if (viewModel.deleteVaultsUiState.deleteVaults.password.isEmpty() || viewModel.deleteVaultsUiState.deleteVaults.password.isBlank()) {
                     Toast.makeText(context, "請輸入主密碼", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                if (viewModel.checkMainPassword(changeMainPasswordUiState.deleteVaults.password)) {
+                if (viewModel.checkMainPassword(viewModel.deleteVaultsUiState.deleteVaults.password)) {
                     onDeleteConfirmExpandedChange(true)
                 } else {
                     Toast.makeText(context, "主密碼錯誤!", Toast.LENGTH_SHORT).show()
@@ -150,7 +148,7 @@ fun DeleteVaultsScreen(
                                 )
                             }
                             viewModel.updateUiState(
-                                changeMainPasswordUiState.deleteVaults.copy(
+                                viewModel.deleteVaultsUiState.deleteVaults.copy(
                                     password = ""
                                 )
                             )

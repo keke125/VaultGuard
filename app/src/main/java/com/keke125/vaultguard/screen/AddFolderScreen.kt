@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.model.AddFolderUiState
 import com.keke125.vaultguard.model.AddFolderViewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.navigation.NavigationDestination
@@ -49,7 +48,6 @@ object AddFolderDestination : NavigationDestination {
 fun AddFolderScreen(
     navController: NavController,
     viewModel: AddFolderViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    folderUiState: AddFolderUiState = viewModel.folderUiState
 ) {
     val coroutineScope = rememberCoroutineScope()
     VaultGuardTheme {
@@ -66,7 +64,7 @@ fun AddFolderScreen(
                 }, actions = {
                     TextButton(onClick = {
                         if (checkFolder(
-                                folderUiState.folderDetails.name, context
+                                viewModel.folderUiState.folderDetails.name, context
                             )
                         ) {
                             coroutineScope.launch {
@@ -80,7 +78,8 @@ fun AddFolderScreen(
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        //navController.popBackStack()
+                        navController.navigateUp()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
@@ -99,9 +98,9 @@ fun AddFolderScreen(
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
-                        value = folderUiState.folderDetails.name,
+                        value = viewModel.folderUiState.folderDetails.name,
                         onValueChange = {
-                            viewModel.updateUiState(folderUiState.folderDetails.copy(name = it))
+                            viewModel.updateUiState(viewModel.folderUiState.folderDetails.copy(name = it))
                         },
                         singleLine = true,
                         label = { Text("名稱(必填)") },

@@ -177,7 +177,7 @@ fun AddVaultScreen(
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }

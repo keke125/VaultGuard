@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.ExportVaultViewModel
-import com.keke125.vaultguard.model.ExportVaultsUiState
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -76,8 +75,7 @@ class ExportVaultActivity : ComponentActivity() {
 @Composable
 fun ExportVaultScreen(
     viewModel: ExportVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    context: Context,
-    exportVaultsUiState: ExportVaultsUiState = viewModel.exportVaultsUiState
+    context: Context
 ) {
     val vaultUiState by viewModel.vaultUiState.collectAsState()
     val folderUiState by viewModel.folderUiState.collectAsState()
@@ -136,10 +134,10 @@ fun ExportVaultScreen(
                 .padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(value = exportVaultsUiState.exportVaults.password,
+            OutlinedTextField(value = viewModel.exportVaultsUiState.exportVaults.password,
                 onValueChange = {
                     viewModel.updateUiState(
-                        exportVaultsUiState.exportVaults.copy(password = it)
+                        viewModel.exportVaultsUiState.exportVaults.copy(password = it)
                     )
                 },
                 label = { Text("主密碼") },
@@ -164,11 +162,11 @@ fun ExportVaultScreen(
                 }
             )
             Button(onClick = {
-                if (exportVaultsUiState.exportVaults.password.isEmpty() || exportVaultsUiState.exportVaults.password.isBlank()) {
+                if (viewModel.exportVaultsUiState.exportVaults.password.isEmpty() || viewModel.exportVaultsUiState.exportVaults.password.isBlank()) {
                     Toast.makeText(context, "請輸入主密碼", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                if (viewModel.checkMainPassword(exportVaultsUiState.exportVaults.password)) {
+                if (viewModel.checkMainPassword(viewModel.exportVaultsUiState.exportVaults.password)) {
                     if (vaultUiState.vaultList.isNotEmpty() || folderUiState.folderList.isNotEmpty()) {
                         val timeStamp: String
                         if (Build.VERSION.SDK_INT >= 26) {
@@ -185,7 +183,7 @@ fun ExportVaultScreen(
                             putExtra(Intent.EXTRA_TITLE, "vaultguard-$timeStamp-export.json")
                         }
                         viewModel.updateUiState(
-                            exportVaultsUiState.exportVaults.copy(
+                            viewModel.exportVaultsUiState.exportVaults.copy(
                                 password = ""
                             )
                         )
