@@ -26,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,6 +65,8 @@ fun ImportVaultScreen(
     context: Context
 ) {
     val activity = LocalContext.current as? Activity
+    val vaultUiState by viewModel.vaultUiState.collectAsState()
+    val folderUiState by viewModel.folderUiState.collectAsState()
     val contentResolver = context.contentResolver
     val coroutineScope = rememberCoroutineScope()
     val openGPMResultLauncher =
@@ -116,8 +120,8 @@ fun ImportVaultScreen(
                                     val vaults = vaultsAndFolders.first
                                     val folders = vaultsAndFolders.second
                                     coroutineScope.launch {
-                                        viewModel.saveVaults(vaults)
                                         viewModel.saveFolders(folders)
+                                        viewModel.saveVaults(vaults)
                                     }
                                     Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
                                 } else {
@@ -176,11 +180,15 @@ fun ImportVaultScreen(
                     Text("匯入密碼(Google 密碼管理工具)")
                 }
                 Button(onClick = {
-                    val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "application/json"
+                    if (vaultUiState.vaultList.isEmpty() && folderUiState.folderList.isEmpty()) {
+                        val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "application/json"
+                        }
+                        openVGResultLauncher.launch(openVGIntent)
+                    } else {
+                        Toast.makeText(context, "請先清空密碼庫!", Toast.LENGTH_SHORT).show()
                     }
-                    openVGResultLauncher.launch(openVGIntent)
                 }) {
                     Text("匯入密碼(VaultGuard)")
                 }

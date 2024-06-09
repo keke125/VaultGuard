@@ -109,8 +109,10 @@ class FileService {
             if (foldersFromJson.isNotEmpty()) {
                 for (folder in foldersFromJson) {
                     val name = folder.name
+                    val uid = folder.uid
                     val newFolder = Folder(
-                        name = name
+                        name = name,
+                        uid = uid
                     )
                     folders.add(newFolder)
                 }
