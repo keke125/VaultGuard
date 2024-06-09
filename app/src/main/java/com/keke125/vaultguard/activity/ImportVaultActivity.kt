@@ -10,16 +10,21 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,6 +33,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,6 +77,9 @@ fun ImportVaultScreen(
     val folderUiState by viewModel.folderUiState.collectAsState()
     val contentResolver = context.contentResolver
     val coroutineScope = rememberCoroutineScope()
+    val (isDropdownExpanded, onDropdownExpandedChange) = remember { mutableStateOf(false) }
+    val (importType, onImportTypeChange) = remember { mutableIntStateOf(0) }
+    val (importTypeName, onImportTypeNameChange) = remember { mutableStateOf("Google 密碼管理工具") }
     val openGPMResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -168,29 +179,60 @@ fun ImportVaultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column {
-                Button(onClick = {
-                    val openGPMIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        val mimeTypes = arrayOf("text/csv", "text/comma-separated-values")
-                        type = "*/*"
-                        putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+                ExposedDropdownMenuBox(
+                    expanded = isDropdownExpanded,
+                    onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
+                ) {
+                    OutlinedTextField(
+                        value = importTypeName,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("匯入類型") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(0.8f)
+                    )
+                    ExposedDropdownMenu(
+                        expanded = isDropdownExpanded,
+                        onDismissRequest = { onDropdownExpandedChange(false) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        DropdownMenuItem(text = { Text("Google 密碼管理工具") }, onClick = {
+                            onImportTypeNameChange("Google 密碼管理工具")
+                            onImportTypeChange(0)
+                            onDropdownExpandedChange(false)
+                        })
+                        DropdownMenuItem(text = { Text("Vault Guard") }, onClick = {
+                            onImportTypeNameChange("Vault Guard")
+                            onImportTypeChange(1)
+                            onDropdownExpandedChange(false)
+                        })
                     }
-                    openGPMResultLauncher.launch(openGPMIntent)
-                }) {
-                    Text("匯入密碼(Google 密碼管理工具)")
                 }
+                Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Button(onClick = {
-                    if (vaultUiState.vaultList.isEmpty() && folderUiState.folderList.isEmpty()) {
-                        val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    if (importType == 0) {
+                        val openGPMIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                             addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "application/json"
+                            val mimeTypes = arrayOf("text/csv", "text/comma-separated-values")
+                            type = "*/*"
+                            putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                         }
-                        openVGResultLauncher.launch(openVGIntent)
+                        openGPMResultLauncher.launch(openGPMIntent)
                     } else {
-                        Toast.makeText(context, "請先清空密碼庫!", Toast.LENGTH_SHORT).show()
+                        if (vaultUiState.vaultList.isEmpty() && folderUiState.folderList.isEmpty()) {
+                            val openVGIntent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = "application/json"
+                            }
+                            openVGResultLauncher.launch(openVGIntent)
+                        } else {
+                            Toast.makeText(context, "請先清空密碼庫!", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }) {
-                    Text("匯入密碼(VaultGuard)")
+                }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Text("匯入密碼")
                 }
             }
         }
