@@ -18,9 +18,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -230,7 +231,7 @@ class BarcodeScannerActivity : ComponentActivity() {
                             AndroidView(factory = { previewView },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .fillMaxHeight(0.8f)
+                                    .weight(1f)
                                     .drawWithContent {
                                         drawContent()
                                         drawQrBorderCanvas(
@@ -240,18 +241,17 @@ class BarcodeScannerActivity : ComponentActivity() {
                                             gapAngle = 30,
                                         )
                                     })
-                            Column {
-                                Text(
-                                    text = "自動掃描中...",
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Text(
-                                    text = "Vault Guard只會取得圖片中的TOTP驗證碼，\n不會儲存任何圖片。",
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                            }
+                            Text(
+                                text = "自動掃描中...",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Vault Guard只會取得圖片中的TOTP驗證碼，\n不會儲存任何圖片。",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
                         }
                     }
                 }
