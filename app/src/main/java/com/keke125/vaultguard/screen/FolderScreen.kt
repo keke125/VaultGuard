@@ -84,7 +84,7 @@ fun FolderScreen(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             titleContentColor = MaterialTheme.colorScheme.primary,
                         ), title = {
-                            Text(stringResource(R.string.app_add_folder_title))
+                            Text(stringResource(R.string.app_folder_screen_title))
                         })
                     }) { innerPadding ->
                         Column(
@@ -135,10 +135,6 @@ fun FolderScreen(
                 }
             } else {
                 navController.navigate(Screen.Signup.route)
-            }
-            BackHandler(enabled = true) {
-                val activity = context as Activity
-                activity.moveTaskToBack(true)
             }
         }
     }
