@@ -72,3 +72,4 @@
 }
 
 -keep class com.keke125.vaultguard.data.** { *; }
+-keep class kotlin.Pair { *; }
