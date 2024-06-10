@@ -250,10 +250,14 @@ fun AddVaultScreen(
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
                             IconButton(onClick = {
-                                val intent = Intent(context, BarcodeScannerActivity::class.java)
-                                openBarcodeScannerLauncher.launch(intent)
+                                if(context.packageManager.hasSystemFeature("android.hardware.camera.any")){
+                                    val intent = Intent(context, BarcodeScannerActivity::class.java)
+                                    openBarcodeScannerLauncher.launch(intent)
+                                }else{
+                                    Toast.makeText(context, "此裝置不支援掃描QR Code", Toast.LENGTH_SHORT).show()
+                                }
                             }) {
-                                Icon(Icons.Default.QrCodeScanner, "產生密碼")
+                                Icon(Icons.Default.QrCodeScanner, "掃描QR Code")
                             }
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
