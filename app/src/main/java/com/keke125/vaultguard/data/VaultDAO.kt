@@ -28,6 +28,9 @@ interface VaultDAO {
     @Query("SELECT * FROM vault WHERE folderUid = :folderUid or (folderUid is null and :folderUid is null)")
     fun findByFolderUid(folderUid: Int?): Flow<List<Vault>>
 
+    @Query("SELECT * FROM vault WHERE (LOWER(name) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(username) LIKE '%' || LOWER(:keyword) || '%' OR LOWER(urlList) LIKE '%' || LOWER(:keyword) || '%') and (folderUid = :folderUid or (folderUid is null and :folderUid is null))")
+    fun getAllFilteredByFolderUid(keyword: String, folderUid: Int?): Flow<List<Vault>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg vaults: Vault)
 

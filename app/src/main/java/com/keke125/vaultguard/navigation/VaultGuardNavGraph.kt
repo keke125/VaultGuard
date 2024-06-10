@@ -30,6 +30,8 @@ import com.keke125.vaultguard.screen.FolderDetailsDestination
 import com.keke125.vaultguard.screen.FolderDetailsScreen
 import com.keke125.vaultguard.screen.FolderScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
+import com.keke125.vaultguard.screen.SearchVaultByFolderUidDestination
+import com.keke125.vaultguard.screen.SearchVaultByFolderUidScreen
 import com.keke125.vaultguard.screen.SearchVaultScreen
 import com.keke125.vaultguard.screen.SettingScreen
 import com.keke125.vaultguard.screen.SignupScreen
@@ -145,7 +147,18 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     type = NavType.IntType
                 })
             ) {
-                FolderDetailsScreen(
+                FolderDetailsScreen(navController = navController,
+                    navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
+                    navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
+                    navigateToSearchVaultByFolderUid = { navController.navigate("${SearchVaultByFolderUidDestination.route}/${it}") })
+            }
+            composable(
+                route = SearchVaultByFolderUidDestination.routeWithArgs,
+                arguments = listOf(navArgument(SearchVaultByFolderUidDestination.FOLDERID) {
+                    type = NavType.IntType
+                })
+            ) {
+                SearchVaultByFolderUidScreen(
                     navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },

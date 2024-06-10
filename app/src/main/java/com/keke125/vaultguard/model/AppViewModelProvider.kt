@@ -99,6 +99,13 @@ object AppViewModelProvider {
                 vaultGuardApplication().container.vaultsRepository
             )
         }
+
+        initializer {
+            SearchVaultByFolderUidViewModel(
+                this.createSavedStateHandle(),
+                vaultGuardApplication().container.vaultsRepository
+            )
+        }
     }
 }
 

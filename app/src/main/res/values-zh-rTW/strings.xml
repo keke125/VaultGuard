@@ -20,4 +20,5 @@
     <string name="app_edit_folder_title">編輯資料夾</string>
     <string name="app_folder_details_title">檢視 %1$s 資料夾</string>
     <string name="app_folder_screen_title">我的資料夾</string>
+    <string name="app_search_vault_title">搜尋密碼</string>
 </resources>

@@ -19,4 +19,5 @@
     <string name="app_edit_folder_title">Edit Folder</string>
     <string name="app_folder_details_title">View %1$s Folder Details</string>
     <string name="app_folder_screen_title">My Folder</string>
+    <string name="app_search_vault_title">Search Vault</string>
 </resources>

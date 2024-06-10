@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -65,6 +67,7 @@ fun FolderDetailsScreen(
     navController: NavController,
     navigateToViewVault: (Int) -> Unit,
     navigateToEditVault: (Int) -> Unit,
+    navigateToSearchVaultByFolderUid: (Int) -> Unit,
     viewModel: FolderDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
@@ -105,12 +108,20 @@ fun FolderDetailsScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
                 }, actions = {
-                    if (viewModel.folderId != 0) {
-                        IconButton(onClick = { onFolderDialogExpandedChange(true) }) {
+                    Row {
+                        IconButton(onClick = { navigateToSearchVaultByFolderUid(viewModel.folderId) }) {
                             Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = "更多內容"
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "搜尋密碼"
                             )
+                        }
+                        if (viewModel.folderId != 0) {
+                            IconButton(onClick = { onFolderDialogExpandedChange(true) }) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = "更多內容"
+                                )
+                            }
                         }
                     }
                 })

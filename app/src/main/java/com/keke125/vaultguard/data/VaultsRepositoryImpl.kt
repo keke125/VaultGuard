@@ -6,11 +6,17 @@ class VaultsRepositoryImpl(private val vaultDAO: VaultDAO) : VaultsRepository {
 
     override fun getAllVaults(): Flow<List<Vault>> = vaultDAO.getAll()
 
-    override fun getAllVaultsFiltered(keyword: String): Flow<List<Vault>>  = vaultDAO.getAllFiltered(keyword)
+    override fun getAllVaultsFiltered(keyword: String): Flow<List<Vault>> =
+        vaultDAO.getAllFiltered(keyword)
 
     override fun getVaultByUid(uid: Int): Flow<Vault?> = vaultDAO.findById(uid)
 
-    override fun getVaultsByFolderUid(folderUid: Int?): Flow<List<Vault>> = vaultDAO.findByFolderUid(folderUid)
+    override fun getVaultsByFolderUid(folderUid: Int?): Flow<List<Vault>> =
+        vaultDAO.findByFolderUid(folderUid)
+
+    override fun getAllVaultsFilteredByFolderUid(
+        keyword: String, folderUid: Int?
+    ): Flow<List<Vault>> = vaultDAO.getAllFilteredByFolderUid(keyword, folderUid)
 
     override suspend fun insertVault(vault: Vault) = vaultDAO.insert(vault)
 

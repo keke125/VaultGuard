@@ -39,8 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.SearchVaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -75,7 +77,7 @@ fun SearchVaultScreen(
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
-                }, title = { Text("搜尋密碼") })
+                }, title = { Text(stringResource(R.string.app_search_vault_title)) })
             }) { innerPadding ->
                 SearchBar(query = keyword, onQueryChange = {
                     onKeywordChange(it)
@@ -149,15 +151,15 @@ fun SearchVaultScreen(
                         }
                     }
                 }, modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester)
-                        .onGloballyPositioned {
-                            if (!textFieldLoaded) {
-                                focusRequester.requestFocus()
-                                textFieldLoaded = true
-                            }
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .onGloballyPositioned {
+                        if (!textFieldLoaded) {
+                            focusRequester.requestFocus()
+                            textFieldLoaded = true
                         }
-                        .padding(innerPadding)
+                    }
+                    .padding(innerPadding)
                 )
             }
         }
