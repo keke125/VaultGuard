@@ -261,8 +261,12 @@ fun EditVaultScreen(
                         trailingIcon = {
                             Row {
                                 IconButton(onClick = {
-                                    val intent = Intent(context, BarcodeScannerActivity::class.java)
-                                    openBarcodeScannerLauncher.launch(intent)
+                                    if(context.packageManager.hasSystemFeature("android.hardware.camera.any") && context.packageManager.hasSystemFeature("android.hardware.camera")){
+                                        val intent = Intent(context, BarcodeScannerActivity::class.java)
+                                        openBarcodeScannerLauncher.launch(intent)
+                                    }else{
+                                        Toast.makeText(context, "此裝置不支援掃描QR Code", Toast.LENGTH_SHORT).show()
+                                    }
                                 }) {
                                     Icon(Icons.Default.QrCodeScanner, "產生密碼")
                                 }
@@ -273,7 +277,7 @@ fun EditVaultScreen(
                                         context
                                     )
                                 }) {
-                                    Icon(Icons.Default.ContentCopy, "產生密碼")
+                                    Icon(Icons.Default.ContentCopy, "複製TOTP驗證碼")
                                 }
                             }
                         },

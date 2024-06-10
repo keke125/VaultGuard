@@ -250,7 +250,7 @@ fun AddVaultScreen(
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
                             IconButton(onClick = {
-                                if(context.packageManager.hasSystemFeature("android.hardware.camera.any")){
+                                if(context.packageManager.hasSystemFeature("android.hardware.camera.any") && context.packageManager.hasSystemFeature("android.hardware.camera")){
                                     val intent = Intent(context, BarcodeScannerActivity::class.java)
                                     openBarcodeScannerLauncher.launch(intent)
                                 }else{
