@@ -12,8 +12,8 @@ android {
         applicationId = "com.keke125.vaultguard"
         minSdk = 24
         targetSdk = 34
-        versionCode = 28
-        versionName = "1.7.9"
+        versionCode = 29
+        versionName = "1.7.10"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
