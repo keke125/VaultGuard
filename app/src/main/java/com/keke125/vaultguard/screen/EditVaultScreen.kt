@@ -162,7 +162,6 @@ fun EditVaultScreen(
                         if (checkVault(
                                 viewModel.vaultUiState.vaultDetails.name,
                                 viewModel.vaultUiState.vaultDetails.username,
-                                viewModel.vaultUiState.vaultDetails.password,
                                 viewModel.vaultUiState.vaultDetails.urlList,
                                 viewModel.vaultUiState.vaultDetails.totp,
                                 context

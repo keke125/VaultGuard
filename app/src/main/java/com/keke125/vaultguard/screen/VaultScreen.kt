@@ -197,7 +197,7 @@ fun VaultScreen(
 }
 
 fun checkVault(
-    name: String, username: String, password: String, urlList: List<String>, totp: String, context: Context
+    name: String, username: String, urlList: List<String>, totp: String, context: Context
 ): Boolean {
     if (name.isEmpty() || name.isBlank()) {
         Toast.makeText(
@@ -207,11 +207,6 @@ fun checkVault(
     } else if (username.isEmpty() || username.isBlank()) {
         Toast.makeText(
             context, "請輸入帳號!", Toast.LENGTH_LONG
-        ).show()
-        return false
-    } else if (password.isEmpty() || password.isBlank()) {
-        Toast.makeText(
-            context, "請輸入密碼!", Toast.LENGTH_LONG
         ).show()
         return false
     } else if (urlList.contains("")) {

@@ -160,7 +160,6 @@ fun AddVaultScreen(
                         if (checkVault(
                                 vaultUiState.vaultDetails.name,
                                 vaultUiState.vaultDetails.username,
-                                vaultUiState.vaultDetails.password,
                                 vaultUiState.vaultDetails.urlList,
                                 vaultUiState.vaultDetails.totp,
                                 context
