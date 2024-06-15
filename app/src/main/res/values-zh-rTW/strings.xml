@@ -99,4 +99,9 @@
     <string name="app_regenerate_pw">重新產生密碼</string>
     <string name="app_select">選擇</string>
     <string name="app_delete_url">刪除網址</string>
+    <string name="app_update_success">更新成功</string>
+    <string name="app_update">更新</string>
+    <string name="app_copy_totp">複製TOTP驗證碼</string>
+    <string name="app_ask_update_pw">是否要更新密碼?</string>
+    <string name="app_ask_update_pw_desc">當前密碼將被取代</string>
 </resources>

@@ -123,30 +123,30 @@ fun EditVaultScreen(
                                 )
                                 Toast.makeText(
                                     context,
-                                    "掃描成功",
+                                    context.getString(R.string.app_scan_success),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "無法取得TOTP驗證碼\n請檢查QR Code是否正確",
+                                    context.getString(R.string.app_totp_error1),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else {
                             Toast.makeText(
                                 context,
-                                "無法取得TOTP驗證碼!\n請檢查QR Code是否正確",
+                                context.getString(R.string.app_totp_error1),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     } else {
-                        Toast.makeText(context, "無法取得TOTP驗證碼!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.app_totp_error2), Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(
                         context,
-                        "掃描QR Code時發生錯誤!\n請檢查相機權限並完成掃描",
+                        context.getString(R.string.app_scan_fail),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -171,16 +171,16 @@ fun EditVaultScreen(
                                 viewModel.updateVault()
                             }
                             navController.popBackStack()
-                            Toast.makeText(context, "更新成功", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_update_success), Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Text("更新")
+                        Text(stringResource(id = R.string.app_update))
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, context.getString(R.string.app_back_prev_screen))
                     }
                 })
             }) { innerPadding ->
@@ -193,7 +193,7 @@ fun EditVaultScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
+                        text = stringResource(id = R.string.app_basic_info), modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -202,7 +202,7 @@ fun EditVaultScreen(
                             viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text("名稱") },
+                        label = { Text(stringResource(id = R.string.app_vault_name)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -216,8 +216,8 @@ fun EditVaultScreen(
                             )
                         },
                         singleLine = true,
-                        label = { Text("帳號") },
-                        leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
+                        label = { Text(stringResource(id = R.string.app_vault_username)) },
+                        leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
@@ -229,21 +229,21 @@ fun EditVaultScreen(
                                 )
                             )
                         },
-                        label = { Text("密碼") },
-                        leadingIcon = { Icon(Icons.Default.Password, "") },
+                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
+                        leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {
                                 IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                                     if (isPasswordVisible) {
-                                        Icon(Icons.Default.VisibilityOff, "隱藏密碼")
+                                        Icon(Icons.Default.VisibilityOff, context.getString(R.string.app_hide_pw))
                                     } else {
-                                        Icon(Icons.Default.Visibility, "顯示密碼")
+                                        Icon(Icons.Default.Visibility, context.getString(R.string.app_show_pw))
                                     }
                                 }
                                 IconButton(onClick = {
                                     onPasswordGeneratorVisibleChange(true)
                                 }) {
-                                    Icon(Icons.Default.Refresh, "產生密碼")
+                                    Icon(Icons.Default.Refresh, context.getString(R.string.app_generate_pw))
                                 }
                             }
                         },
@@ -255,7 +255,7 @@ fun EditVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(totp = it))
                         },
-                        label = { Text("TOTP驗證碼") },
+                        label = { Text(stringResource(id = R.string.app_totp)) },
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
                             Row {
@@ -264,10 +264,10 @@ fun EditVaultScreen(
                                         val intent = Intent(context, BarcodeScannerActivity::class.java)
                                         openBarcodeScannerLauncher.launch(intent)
                                     }else{
-                                        Toast.makeText(context, "此裝置不支援掃描QR Code", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, context.getString(R.string.app_scan_unavailable), Toast.LENGTH_SHORT).show()
                                     }
                                 }) {
-                                    Icon(Icons.Default.QrCodeScanner, "產生密碼")
+                                    Icon(Icons.Default.QrCodeScanner, context.getString(R.string.app_scan_qrcode))
                                 }
                                 IconButton(onClick = {
                                     copyText(
@@ -276,7 +276,7 @@ fun EditVaultScreen(
                                         context
                                     )
                                 }) {
-                                    Icon(Icons.Default.ContentCopy, "複製TOTP驗證碼")
+                                    Icon(Icons.Default.ContentCopy, context.getString(R.string.app_copy_totp))
                                 }
                             }
                         },
@@ -287,10 +287,10 @@ fun EditVaultScreen(
                         onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
                     ) {
                         OutlinedTextField(
-                            value = viewModel.folderName.value ?: "(未分類)",
+                            value = viewModel.folderName.value ?: stringResource(id = R.string.app_uncategorized),
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("資料夾") },
+                            label = { Text(stringResource(id = R.string.app_folder)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
                             modifier = Modifier
                                 .menuAnchor()
@@ -302,9 +302,9 @@ fun EditVaultScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             DropdownMenuItem(
-                                text = { Text("(未分類)") },
+                                text = { Text(stringResource(id = R.string.app_uncategorized)) },
                                 onClick = {
-                                    viewModel.updateFolderName("(未分類)")
+                                    viewModel.updateFolderName(context.getString(R.string.app_uncategorized))
                                     onDropdownExpandedChange(false)
                                     viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(folderUid = null))
                                 }
@@ -326,13 +326,13 @@ fun EditVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(notes = it))
                         },
-                        label = { Text("備註") },
+                        label = { Text(stringResource(id = R.string.app_note)) },
                         minLines = 3,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))
                     Text(
-                        text = "網址 (URL)",
+                        text = stringResource(id = R.string.app_url),
                         modifier = Modifier.fillMaxWidth(0.8f),
                         fontSize = 20.sp
                     )
@@ -370,7 +370,7 @@ fun EditVaultScreen(
                             )
                         )
                     }) {
-                        Text("新增網址")
+                        Text(stringResource(id = R.string.app_add_url))
                     }
                 }
                 when {
@@ -446,7 +446,7 @@ fun PasswordGeneratorDialogConfirm(
                             )
                         )
                     }) {
-                        Icon(Icons.Default.Refresh, "重新產生密碼")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.app_regenerate_password))
                     }
                 }
                 Row(
@@ -591,12 +591,12 @@ fun PasswordGeneratorDialogConfirm(
                     TextButton(onClick = {
                         onConfirmChange(true)
                     }) {
-                        Text(text = "選擇", fontSize = 20.sp)
+                        Text(text = stringResource(id = R.string.app_select), fontSize = 20.sp)
                     }
                     TextButton(onClick = {
                         onDismissRequest()
                     }) {
-                        Text(text = "取消", fontSize = 20.sp)
+                        Text(text = stringResource(id = R.string.app_cancel), fontSize = 20.sp)
                     }
                 }
             }
@@ -620,27 +620,27 @@ fun UpdatePasswordConfirm(
     onRealPasswordChange: (String) -> Unit
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Warning, "警告")
+        Icon(Icons.Default.Warning, stringResource(id = R.string.app_warn))
     }, title = {
-        Text(text = "是否要更新密碼?")
+        Text(text = stringResource(id = R.string.app_ask_update_pw))
     }, text = {
-        Text(text = "當前密碼將被取代")
+        Text(text = stringResource(id = R.string.app_ask_update_pw_desc))
     }, onDismissRequest = {
         onConfirmDismissRequest()
     }, confirmButton = {
-        TextButton(onClick = {
-            onConfirmDismissRequest()
-            onPasswordGeneratorDialogDismissRequest()
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
         TextButton(onClick = {
             onRealPasswordChange(password)
             onConfirmDismissRequest()
             onPasswordGeneratorDialogDismissRequest()
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onConfirmDismissRequest()
+            onPasswordGeneratorDialogDismissRequest()
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 

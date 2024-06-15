@@ -172,7 +172,7 @@ fun AddVaultScreen(
                             Toast.makeText(context, context.getString(R.string.app_save_success), Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Text("儲存")
+                        Text(stringResource(id = R.string.app_save))
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
