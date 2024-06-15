@@ -118,7 +118,7 @@ fun SearchVaultByFolderUidScreen(
                     onActiveChange = {
                         onSearchActiveChange(it)
                     },
-                    placeholder = { Text("透過名稱、帳號、網址搜尋") },
+                    placeholder = { Text(stringResource(id = R.string.app_search_vault)) },
                     content = {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -164,7 +164,7 @@ fun SearchVaultByFolderUidScreen(
                                     }
                                 }
                             } else if (keyword.isNotEmpty()) {
-                                Text("找不到相符的密碼")
+                                Text(stringResource(id = R.string.app_search_vault_empty))
                             }
                         }
                     },

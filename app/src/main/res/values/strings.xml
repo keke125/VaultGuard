@@ -109,4 +109,9 @@
     <string name="app_edit_folder">Edit Folder</string>
     <string name="app_add_folder">Add Folder</string>
     <string name="app_name_required1">Please enter the name!</string>
+    <string name="app_search_vault">Search by name, username, or URL</string>
+    <string name="app_search_vault_empty">No matching passwords found.</string>
+    <string name="app_setting_title">Setting</string>
+    <string name="app_vault_repository">Vault Repository</string>
+    <string name="app_security">Security</string>
 </resources>

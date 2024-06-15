@@ -110,4 +110,9 @@
     <string name="app_edit_folder">編輯資料夾</string>
     <string name="app_add_folder">新增資料夾</string>
     <string name="app_name_required1">請輸入名稱!</string>
+    <string name="app_search_vault">透過名稱、帳號、網址搜尋</string>
+    <string name="app_search_vault_empty">找不到相符的密碼</string>
+    <string name="app_setting_title">設定</string>
+    <string name="app_vault_repository">密碼庫</string>
+    <string name="app_security">安全性</string>
 </resources>

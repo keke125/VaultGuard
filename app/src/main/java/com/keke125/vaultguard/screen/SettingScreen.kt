@@ -22,11 +22,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.activity.AuthSettingActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import com.keke125.vaultguard.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +42,7 @@ fun SettingScreen(navController: NavController) {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                ), title = { Text("設定") })
+                ), title = { Text(stringResource(id = R.string.app_setting_title)) })
             }) { innerPadding ->
                 Column(
                     modifier = Modifier
@@ -49,7 +51,7 @@ fun SettingScreen(navController: NavController) {
                         .padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ListItem(headlineContent = { Text("密碼庫") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_repository)) }, leadingContent = {
                         Icon(
                             Icons.Default.Storage,
                             contentDescription = null,
@@ -58,7 +60,7 @@ fun SettingScreen(navController: NavController) {
                         navController.navigate(Screen.VaultRepository.route)
                     })
                     HorizontalDivider()
-                    ListItem(headlineContent = { Text("安全性") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_security)) }, leadingContent = {
                         Icon(
                             Icons.Default.Security,
                             contentDescription = null,
