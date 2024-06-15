@@ -38,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.DeleteVaultsViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import kotlinx.coroutines.launch
+import com.keke125.vaultguard.R
 
 class DeleteVaultsActivity : ComponentActivity() {
 
@@ -80,7 +82,7 @@ fun DeleteVaultsScreen(
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("清空密碼庫") }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_clear_vault_repo)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -104,7 +106,7 @@ fun DeleteVaultsScreen(
                         )
                     )
                 },
-                label = { Text("主密碼") },
+                label = { Text(stringResource(id = R.string.app_main_pw)) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
@@ -127,16 +129,16 @@ fun DeleteVaultsScreen(
             )
             Button(onClick = {
                 if (viewModel.deleteVaultsUiState.deleteVaults.password.isEmpty() || viewModel.deleteVaultsUiState.deleteVaults.password.isBlank()) {
-                    Toast.makeText(context, "請輸入主密碼", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_main_pw_required), Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 if (viewModel.checkMainPassword(viewModel.deleteVaultsUiState.deleteVaults.password)) {
                     onDeleteConfirmExpandedChange(true)
                 } else {
-                    Toast.makeText(context, "主密碼錯誤!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_main_pw_error), Toast.LENGTH_SHORT).show()
                 }
             }) {
-                Text(text = "清空")
+                Text(text = stringResource(id = R.string.app_clear))
             }
             when {
                 isDeleteConfirmExpanded -> {
@@ -152,9 +154,9 @@ fun DeleteVaultsScreen(
                                     password = ""
                                 )
                             )
-                            Toast.makeText(context, "清空成功", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_clear_vault_repo_success), Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, "尚未儲存密碼或資料夾!", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, context.getString(R.string.app_clear_vault_repo_fail), Toast.LENGTH_SHORT)
                                 .show()
                         }
                     })
@@ -170,25 +172,25 @@ fun DeleteVaultsConfirm(
     onDeleted: () -> Unit,
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Warning, "警告")
+        Icon(Icons.Default.Warning, stringResource(id = R.string.app_warn))
     }, title = {
-        Text(text = "是否要清空密碼庫?")
+        Text(text = stringResource(id = R.string.app_ask_clear))
     }, text = {
-        Text(text = "所有密碼及資料夾將被刪除!")
+        Text(text = stringResource(id = R.string.app_ask_clear_des))
     }, onDismissRequest = {
         onPasswordDeleteRequiredChange(false)
     }, confirmButton = {
         TextButton(onClick = {
-            onPasswordDeleteRequiredChange(false)
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onDeleted()
             onPasswordDeleteRequiredChange(false)
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 }

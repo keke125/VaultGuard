@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.ChangeMainPasswordUiState
 import com.keke125.vaultguard.model.ChangeMainPasswordViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import com.keke125.vaultguard.R
 
 class ChangeMainPasswordActivity : ComponentActivity() {
 
@@ -72,7 +74,7 @@ fun ChangeMainPasswordScreen(
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("變更主密碼") }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_change_main_pw)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -96,7 +98,7 @@ fun ChangeMainPasswordScreen(
                         )
                     )
                 },
-                label = { Text("舊密碼") },
+                label = { Text(stringResource(id = R.string.app_old_pw)) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
@@ -126,7 +128,7 @@ fun ChangeMainPasswordScreen(
                         )
                     )
                 },
-                label = { Text("新密碼") },
+                label = { Text(stringResource(id = R.string.app_new_pw)) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
@@ -149,11 +151,11 @@ fun ChangeMainPasswordScreen(
             )
             Button(onClick = {
                 if (changeMainPasswordUiState.changeMainPassword.oldPassword.isEmpty() || changeMainPasswordUiState.changeMainPassword.oldPassword.isBlank()) {
-                    Toast.makeText(context, "請輸入舊密碼", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_old_pw_required), Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 if (changeMainPasswordUiState.changeMainPassword.newPassword.isEmpty() || changeMainPasswordUiState.changeMainPassword.newPassword.isBlank()) {
-                    Toast.makeText(context, "請輸入新密碼", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_new_pw_required), Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 val result = viewModel.changeMainPassword()
@@ -163,13 +165,13 @@ fun ChangeMainPasswordScreen(
                             oldPassword = "", newPassword = ""
                         )
                     )
-                    Toast.makeText(context, "變更成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_change_main_pw_success), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "變更失敗! 請確認舊密碼是否正確", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, context.getString(R.string.app_change_main_pw_fail), Toast.LENGTH_SHORT)
                         .show()
                 }
             }) {
-                Text(text = "變更")
+                Text(text = context.getString(R.string.app_change))
             }
         }
     }
