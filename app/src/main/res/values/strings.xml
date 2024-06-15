@@ -46,7 +46,7 @@
     <string name="app_change">Change</string>
     <string name="app_clear_vault_repo">Clear Vault Repository</string>
     <string name="app_main_pw">Main Password</string>
-    <string name="app_main_pw_required">Please enter the main password!</string>
+    <string name="app_main_pw_required1">Please enter the main password!</string>
     <string name="app_main_pw_error">Please confirm that the main password is correct.</string>
     <string name="app_clear">Clear</string>
     <string name="app_clear_vault_repo_success">Clear successful</string>
@@ -66,4 +66,12 @@
     <string name="app_import_type">Import Type</string>
     <string name="app_google_pw_manager">Google Password Manager</string>
     <string name="app_clear_vault_repo_required">Please clear the vault repository first!</string>
+    <string name="app_login">Login</string>
+    <string name="app_main_pw_required2">Please enter the main password</string>
+    <string name="app_login_success">Login successful</string>
+    <string name="app_login_fail">Login failed!</string>
+    <string name="app_biometric_auth_fail1">Authentication Error: $errString!</string>
+    <string name="app_biometric_auth_fail2">Authentication Failed!</string>
+    <string name="app_biometric_title">Login to Vault Guard</string>
+    <string name="app_biometric_subtitle">Use biometric authentication to login to Vault Guard</string>
 </resources>

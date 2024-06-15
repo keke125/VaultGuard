@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -110,7 +111,7 @@ fun LoginScreen(
 
                                 BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                                     Toast.makeText(
-                                        context, "您的裝置尚未註冊生物辨識!", Toast.LENGTH_LONG
+                                        context, context.getString(R.string.app_biometric_not_registered), Toast.LENGTH_LONG
                                     ).show()
                                     false
                                 }
@@ -132,13 +133,13 @@ fun LoginScreen(
                                     contentDescription = "",
                                     modifier = Modifier.size(128.dp)
                                 )
-                                Text(text = "登入", fontSize = 32.sp)
+                                Text(text = stringResource(id = R.string.app_login), fontSize = 32.sp)
                                 OutlinedTextField(
                                     value = loginPassword,
                                     onValueChange = { onLoginPasswordChange(it) },
                                     label = {
                                         Text(
-                                            text = "主密碼"
+                                            text = stringResource(id = R.string.app_main_pw)
                                         )
                                     },
                                     leadingIcon = {
@@ -159,7 +160,7 @@ fun LoginScreen(
                                         }
                                     },
                                     singleLine = true,
-                                    placeholder = { Text(text = "請輸入主密碼") },
+                                    placeholder = { Text(text = stringResource(id = R.string.app_main_pw_required2)) },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                                     visualTransformation = if (isPasswordVisible) {
                                         VisualTransformation.None
@@ -171,22 +172,22 @@ fun LoginScreen(
                                 Button(onClick = {
                                     if (loginPassword.isEmpty() || loginPassword.isBlank()) {
                                         Toast.makeText(
-                                            context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                                            context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
                                         ).show()
                                     } else if (authViewModel.checkMainPassword(
                                             loginPassword
                                         )
                                     ) {
                                         Toast.makeText(
-                                            context, "登入成功", Toast.LENGTH_SHORT
+                                            context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                         ).show()
                                         activity.finish()
                                     } else {
-                                        Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT)
+                                        Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT)
                                             .show()
                                     }
                                 }) {
-                                    Text("登入")
+                                    Text(stringResource(id = R.string.app_login))
                                 }
                             }
                         }
@@ -200,13 +201,13 @@ fun LoginScreen(
                                 contentDescription = "",
                                 modifier = Modifier.size(128.dp)
                             )
-                            Text(text = "登入", fontSize = 32.sp)
+                            Text(text = stringResource(id = R.string.app_login), fontSize = 32.sp)
                             OutlinedTextField(
                                 value = loginPassword,
                                 onValueChange = { onLoginPasswordChange(it) },
                                 label = {
                                     Text(
-                                        text = "主密碼"
+                                        text = stringResource(id = R.string.app_main_pw)
                                     )
                                 },
                                 leadingIcon = {
@@ -226,7 +227,7 @@ fun LoginScreen(
                                     }
                                 },
                                 singleLine = true,
-                                placeholder = { Text(text = "請輸入主密碼") },
+                                placeholder = { Text(text = stringResource(id = R.string.app_main_pw_required2)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                                 visualTransformation = if (isPasswordVisible) {
                                     VisualTransformation.None
@@ -238,21 +239,21 @@ fun LoginScreen(
                             Button(onClick = {
                                 if (loginPassword.isEmpty() || loginPassword.isBlank()) {
                                     Toast.makeText(
-                                        context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                                        context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
                                     ).show()
                                 } else if (authViewModel.checkMainPassword(
                                         loginPassword
                                     )
                                 ) {
                                     Toast.makeText(
-                                        context, "登入成功", Toast.LENGTH_SHORT
+                                        context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                     ).show()
                                     activity.finish()
                                 } else {
-                                    Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT).show()
                                 }
                             }) {
-                                Text("登入")
+                                Text(stringResource(id = R.string.app_login))
                             }
                         }
                     }
@@ -266,13 +267,13 @@ fun LoginScreen(
                             contentDescription = "",
                             modifier = Modifier.size(128.dp)
                         )
-                        Text(text = "登入", fontSize = 32.sp)
+                        Text(text = stringResource(id = R.string.app_login), fontSize = 32.sp)
                         OutlinedTextField(
                             value = loginPassword,
                             onValueChange = { onLoginPasswordChange(it) },
                             label = {
                                 Text(
-                                    text = "主密碼"
+                                    text = stringResource(id = R.string.app_main_pw)
                                 )
                             },
                             leadingIcon = {
@@ -292,7 +293,7 @@ fun LoginScreen(
                                 }
                             },
                             singleLine = true,
-                            placeholder = { Text(text = "請輸入主密碼") },
+                            placeholder = { Text(text = stringResource(id = R.string.app_main_pw_required2)) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                             visualTransformation = if (isPasswordVisible) {
                                 VisualTransformation.None
@@ -304,21 +305,21 @@ fun LoginScreen(
                         Button(onClick = {
                             if (loginPassword.isEmpty() || loginPassword.isBlank()) {
                                 Toast.makeText(
-                                    context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                                    context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
                                 ).show()
                             } else if (authViewModel.checkMainPassword(
                                     loginPassword
                                 )
                             ) {
                                 Toast.makeText(
-                                    context, "登入成功", Toast.LENGTH_SHORT
+                                    context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                 ).show()
                                 activity.finish()
                             } else {
-                                Toast.makeText(context, "登入失敗!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT).show()
                             }
                         }) {
-                            Text("登入")
+                            Text(stringResource(id = R.string.app_login))
                         }
                     }
                 }
@@ -347,7 +348,7 @@ fun BiometricScreen(
             ) {
                 super.onAuthenticationError(errorCode, errString)
                 Toast.makeText(
-                    context, "驗證錯誤: $errString!", Toast.LENGTH_SHORT
+                    context, context.getString(R.string.app_biometric_auth_fail1), Toast.LENGTH_SHORT
                 ).show()
                 onBiometricAuthCancel(true)
                 authViewModel.authWithBiometric(false)
@@ -364,13 +365,13 @@ fun BiometricScreen(
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
                 Toast.makeText(
-                    context, "驗證失敗!", Toast.LENGTH_SHORT
+                    context, context.getString(R.string.app_biometric_auth_fail2), Toast.LENGTH_SHORT
                 ).show()
                 authViewModel.authWithBiometric(false)
             }
         })
-    val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle("登入Vault Guard")
-        .setSubtitle("使用生物辨識登入Vault Guard")
+    val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle(context.getString(R.string.app_biometric_title))
+        .setSubtitle(context.getString(R.string.app_biometric_subtitle))
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)
         .build()
     if (isTryAuth) {

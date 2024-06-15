@@ -47,7 +47,7 @@
     <string name="app_change">變更</string>
     <string name="app_clear_vault_repo">清空密碼庫</string>
     <string name="app_main_pw">主密碼</string>
-    <string name="app_main_pw_required">請輸入主密碼!</string>
+    <string name="app_main_pw_required1">請輸入主密碼!</string>
     <string name="app_main_pw_error">請確認主密碼是否正確!</string>
     <string name="app_clear">清空</string>
     <string name="app_clear_vault_repo_success">清空成功</string>
@@ -67,4 +67,12 @@
     <string name="app_import_type">匯入類型</string>
     <string name="app_google_pw_manager">Google 密碼管理工具</string>
     <string name="app_clear_vault_repo_required">請先清空密碼庫!</string>
+    <string name="app_login">登入</string>
+    <string name="app_main_pw_required2">請輸入主密碼</string>
+    <string name="app_login_success">登入成功</string>
+    <string name="app_login_fail">登入失敗!</string>
+    <string name="app_biometric_auth_fail1">驗證錯誤: $errString!</string>
+    <string name="app_biometric_auth_fail2">驗證失敗!</string>
+    <string name="app_biometric_title">登入Vault Guard</string>
+    <string name="app_biometric_subtitle">使用生物辨識登入Vault Guard</string>
 </resources>

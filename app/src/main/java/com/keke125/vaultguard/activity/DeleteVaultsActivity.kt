@@ -129,7 +129,7 @@ fun DeleteVaultsScreen(
             )
             Button(onClick = {
                 if (viewModel.deleteVaultsUiState.deleteVaults.password.isEmpty() || viewModel.deleteVaultsUiState.deleteVaults.password.isBlank()) {
-                    Toast.makeText(context, context.getString(R.string.app_main_pw_required), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 if (viewModel.checkMainPassword(viewModel.deleteVaultsUiState.deleteVaults.password)) {
