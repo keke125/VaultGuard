@@ -122,29 +122,29 @@ fun AddVaultScreen(
                                     )
                                 )
                                 Toast.makeText(
-                                    context, "掃描成功", Toast.LENGTH_SHORT
+                                    context, context.getString(R.string.app_scan_success), Toast.LENGTH_SHORT
                                 ).show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "無法取得TOTP驗證碼\n請檢查QR Code是否正確",
+                                    context.getString(R.string.app_totp_error1),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else {
                             Toast.makeText(
                                 context,
-                                "無法取得TOTP驗證碼!\n請檢查QR Code是否正確",
+                                context.getString(R.string.app_totp_error1),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     } else {
-                        Toast.makeText(context, "無法取得TOTP驗證碼!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.app_totp_error2), Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(
                         context,
-                        "掃描QR Code時發生錯誤!\n請檢查相機權限並完成掃描",
+                        context.getString(R.string.app_scan_fail),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -169,7 +169,7 @@ fun AddVaultScreen(
                                 viewModel.saveVault()
                             }
                             navController.popBackStack()
-                            Toast.makeText(context, "儲存成功", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_save_success), Toast.LENGTH_SHORT).show()
                         }
                     }) {
                         Text("儲存")
@@ -178,7 +178,7 @@ fun AddVaultScreen(
                     IconButton(onClick = {
                         navController.navigateUp()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, context.getString(R.string.app_back_prev_screen))
                     }
                 })
             }) { innerPadding ->
@@ -191,7 +191,7 @@ fun AddVaultScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
+                        text = stringResource(id = R.string.app_basic_info), modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -200,7 +200,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text("名稱(必填)") },
+                        label = { Text(stringResource(id = R.string.app_vault_name)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -210,7 +210,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(username = it))
                         },
                         singleLine = true,
-                        label = { Text("帳號(必填)") },
+                        label = { Text(stringResource(id = R.string.app_vault_username)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -219,21 +219,21 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(password = it))
                         },
-                        label = { Text("密碼(必填)") },
+                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
                         leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {
                                 IconButton(onClick = { onPasswordVisibleChange(!isPasswordVisible) }) {
                                     if (isPasswordVisible) {
-                                        Icon(Icons.Default.VisibilityOff, "隱藏密碼")
+                                        Icon(Icons.Default.VisibilityOff, context.getString(R.string.app_hide_pw))
                                     } else {
-                                        Icon(Icons.Default.Visibility, "顯示密碼")
+                                        Icon(Icons.Default.Visibility, context.getString(R.string.app_show_pw))
                                     }
                                 }
                                 IconButton(onClick = {
                                     onPasswordGeneratorVisibleChange(true)
                                 }) {
-                                    Icon(Icons.Default.Refresh, "產生密碼")
+                                    Icon(Icons.Default.Refresh, context.getString(R.string.app_generate_pw))
                                 }
                             }
                         },
@@ -245,7 +245,7 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(totp = it))
                         },
-                        label = { Text("TOTP驗證碼") },
+                        label = { Text(stringResource(id = R.string.app_totp)) },
                         leadingIcon = { Icon(Icons.Default.Key, null) },
                         trailingIcon = {
                             IconButton(onClick = {
@@ -253,10 +253,10 @@ fun AddVaultScreen(
                                     val intent = Intent(context, BarcodeScannerActivity::class.java)
                                     openBarcodeScannerLauncher.launch(intent)
                                 }else{
-                                    Toast.makeText(context, "此裝置不支援掃描QR Code", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_scan_unavailable), Toast.LENGTH_SHORT).show()
                                 }
                             }) {
-                                Icon(Icons.Default.QrCodeScanner, "掃描QR Code")
+                                Icon(Icons.Default.QrCodeScanner, context.getString(R.string.app_scan_qrcode))
                             }
                         },
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -266,10 +266,10 @@ fun AddVaultScreen(
                         onExpandedChange = { onDropdownExpandedChange(!isDropdownExpanded) },
                     ) {
                         OutlinedTextField(
-                            value = folderUiState.folder?.name ?: "(未分類)",
+                            value = folderUiState.folder?.name ?: stringResource(id = R.string.app_uncategorized),
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("資料夾") },
+                            label = { Text(stringResource(id = R.string.app_folder)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
                             modifier = Modifier
                                 .menuAnchor()
@@ -280,7 +280,7 @@ fun AddVaultScreen(
                             onDismissRequest = { onDropdownExpandedChange(false) },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            DropdownMenuItem(text = { Text("(未分類)") }, onClick = {
+                            DropdownMenuItem(text = { Text(stringResource(id = R.string.app_uncategorized)) }, onClick = {
                                 onDropdownExpandedChange(false)
                                 viewModel.updateFolderUiState(0)
                                 viewModel.updateUiState(vaultUiState.vaultDetails.copy(folderUid = null))
@@ -303,13 +303,13 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(notes = it))
                         },
-                        label = { Text("備註") },
+                        label = { Text(stringResource(id = R.string.app_note)) },
                         minLines = 3,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))
                     Text(
-                        text = "網址 (URL)",
+                        text = stringResource(id = R.string.app_url),
                         modifier = Modifier.fillMaxWidth(0.8f),
                         fontSize = 20.sp
                     )
@@ -347,7 +347,7 @@ fun AddVaultScreen(
                             )
                         )
                     }) {
-                        Text("新增網址")
+                        Text(stringResource(id = R.string.app_add_url))
                     }
                 }
             }
@@ -420,7 +420,7 @@ fun PasswordGeneratorDialog(
                             )
                         )
                     }) {
-                        Icon(Icons.Default.Refresh, "重新產生密碼")
+                        Icon(Icons.Default.Refresh, context.getString(R.string.app_regenerate_password))
                     }
                 }
                 Row(
@@ -566,12 +566,12 @@ fun PasswordGeneratorDialog(
                         onRealPasswordChange(vaultDetails.copy(password = password))
                         onDismissRequest()
                     }) {
-                        Text(text = "選擇", fontSize = 20.sp)
+                        Text(text = stringResource(id = R.string.app_select), fontSize = 20.sp)
                     }
                     TextButton(onClick = {
                         onDismissRequest()
                     }) {
-                        Text(text = "取消", fontSize = 20.sp)
+                        Text(text = stringResource(id = R.string.app_cancel), fontSize = 20.sp)
                     }
                 }
             }
@@ -589,11 +589,11 @@ fun UpdateUrl(url: String, onUrlChange: (url: String) -> Unit, onDelete: () -> U
             onUrlChange(text)
         },
         singleLine = true,
-        label = { Text("網址") },
+        label = { Text(stringResource(id = R.string.app_url)) },
         leadingIcon = { Icon(Icons.Default.Link, null) },
         trailingIcon = {
             IconButton(onClick = { onDelete() }) {
-                Icon(Icons.Default.Delete, "刪除網址")
+                Icon(Icons.Default.Delete, stringResource(id = R.string.app_delete_url))
             }
         },
         modifier = Modifier.fillMaxWidth(0.8f)

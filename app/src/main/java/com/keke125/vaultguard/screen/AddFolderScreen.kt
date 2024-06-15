@@ -71,17 +71,17 @@ fun AddFolderScreen(
                                 viewModel.saveFolder()
                             }
                             navController.popBackStack()
-                            Toast.makeText(context, "儲存成功", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_save_success), Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Text("儲存")
+                        Text(stringResource(id = R.string.app_save))
                     }
                 }, navigationIcon = {
                     IconButton(onClick = {
                         //navController.popBackStack()
                         navController.navigateUp()
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, context.getString(R.string.app_back_prev_screen))
                     }
                 })
             }) { innerPadding ->
@@ -94,7 +94,7 @@ fun AddFolderScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
+                        text = stringResource(id = R.string.app_basic_info), modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -103,7 +103,7 @@ fun AddFolderScreen(
                             viewModel.updateUiState(viewModel.folderUiState.folderDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text("名稱(必填)") },
+                        label = { Text(stringResource(id = R.string.app_vault_name)) },
                         leadingIcon = { Icon(Icons.Default.Folder, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
