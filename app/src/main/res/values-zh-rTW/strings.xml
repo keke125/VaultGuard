@@ -79,12 +79,12 @@
     <string name="app_save_success">儲存成功</string>
     <string name="app_back_prev_screen">返回上一頁</string>
     <string name="app_basic_info">基本資訊</string>
-    <string name="app_vault_name">名稱 (必填)</string>
+    <string name="app_vault_name1">名稱 (必填)</string>
     <string name="app_scan_success">掃描成功</string>
     <string name="app_totp_error1">無法取得TOTP驗證碼\\n請檢查QR Code是否正確!</string>
     <string name="app_totp_error2">無法取得TOTP驗證碼!</string>
     <string name="app_scan_fail">掃描QR Code時發生錯誤!\\n請檢查相機權限並完成掃描</string>
-    <string name="app_vault_username">帳號 (必填)</string>
+    <string name="app_vault_username1">帳號 (必填)</string>
     <string name="app_vault_pw">密碼</string>
     <string name="app_hide_pw">隱藏密碼</string>
     <string name="app_show_pw">顯示密碼</string>
@@ -115,4 +115,21 @@
     <string name="app_setting_title">設定</string>
     <string name="app_vault_repository">密碼庫</string>
     <string name="app_security">安全性</string>
+    <string name="app_signup_title">設定主密碼</string>
+    <string name="app_set">設定</string>
+    <string name="app_set_success">設定成功</string>
+    <string name="app_ask_signup">確定設定此組密碼?</string>
+    <string name="app_ask_signup_desc">請牢記主密碼，忘記將導致您無法存取您的所有密碼!</string>
+    <string name="app_vault_name2">名稱</string>
+    <string name="app_vault_username2">帳號</string>
+    <string name="app_add_time">新增時間</string>
+    <string name="app_modify_time">上次更新時間</string>
+    <string name="app_delete_vault_success">已刪除密碼</string>
+    <string name="app_ask_delete_vault">是否要刪除密碼?</string>
+    <string name="app_ask_delete_vault_desc">當前密碼將被刪除</string>
+    <string name="app_delete_vault">刪除密碼</string>
+    <string name="app_open_url_error1">沒有可開啟連結的應用程式!</string>
+    <string name="app_open_url_error2">網址錯誤或沒有可開啟連結的應用程式!</string>
+    <string name="app_open_url">開啟連結中…</string>
+    <string name="app_open_url_error3">網址錯誤!</string>
 </resources>

@@ -52,7 +52,7 @@
     <string name="app_clear_vault_repo_success">Clear successful</string>
     <string name="app_clear_vault_repo_fail">Change failed! There are no vaults or folders in the vault repository.</string>
     <string name="app_ask_clear">Would you like to clear vault repository?</string>
-    <string name="app_ask_clear_des">All vaults and folders will be deleted!</string>
+    <string name="app_ask_clear_des">All vaults and folders will be removed!</string>
     <string name="app_warn">Warning</string>
     <string name="app_export_success">Export vault successful</string>
     <string name="app_export_fail1">Export vault failed!</string>
@@ -78,12 +78,12 @@
     <string name="app_save_success">Save successful</string>
     <string name="app_back_prev_screen">Go back to the previous page</string>
     <string name="app_basic_info">Basic Information</string>
-    <string name="app_vault_name">Name (Required)</string>
+    <string name="app_vault_name1">Name (Required)</string>
     <string name="app_scan_success">Scan successful</string>
     <string name="app_totp_error1">Unable to retrieve TOTP verification code!\\nPlease check if the QR Code is correct.</string>
     <string name="app_totp_error2">Unable to retrieve TOTP verification code!</string>
     <string name="app_scan_fail">Error occurred while scanning QR Code!\\nPlease check camera permissions and complete the scan.</string>
-    <string name="app_vault_username">Username (Required)</string>
+    <string name="app_vault_username1">Username (Required)</string>
     <string name="app_vault_pw">Password</string>
     <string name="app_hide_pw">Hide password</string>
     <string name="app_show_pw">Show password</string>
@@ -104,8 +104,8 @@
     <string name="app_ask_update_pw">Would you like to update the password?</string>
     <string name="app_ask_update_pw_desc">The current password will be replaced.</string>
     <string name="app_vault_empty">There are no vaults here.</string>
-    <string name="app_delete_folder_success">Folder and the vaults in it have been removed.</string>
-    <string name="app_delete_folder">Remove folder and the vaults in it</string>
+    <string name="app_delete_folder_success">The folder and the vaults in it have been removed.</string>
+    <string name="app_delete_folder">Remove the folder and the vaults in it</string>
     <string name="app_edit_folder">Edit Folder</string>
     <string name="app_add_folder">Add Folder</string>
     <string name="app_name_required1">Please enter the name!</string>
@@ -114,4 +114,21 @@
     <string name="app_setting_title">Setting</string>
     <string name="app_vault_repository">Vault Repository</string>
     <string name="app_security">Security</string>
+    <string name="app_signup_title">Set the main password</string>
+    <string name="app_set">Set</string>
+    <string name="app_set_success">Set successful</string>
+    <string name="app_ask_signup">Would you like to set this password as your main password?</string>
+    <string name="app_ask_signup_desc">Please remember your main password. Forgetting it will result in losing access to all your vaults!</string>
+    <string name="app_vault_name2">Name</string>
+    <string name="app_vault_username2">Username</string>
+    <string name="app_add_time">Added Time</string>
+    <string name="app_modify_time">Last Modified Time</string>
+    <string name="app_delete_vault_success">The vault has been removed.</string>
+    <string name="app_ask_delete_vault">Would you like to remove this vault?</string>
+    <string name="app_ask_delete_vault_desc">This vault will be removed.</string>
+    <string name="app_delete_vault">Remove Vault</string>
+    <string name="app_open_url_error1">There is no app available to open the link!</string>
+    <string name="app_open_url_error2">The URL is incorrect or there is no app available to open the link.</string>
+    <string name="app_open_url">Opening the URL…</string>
+    <string name="app_open_url_error3">Invalid URL!</string>
 </resources>

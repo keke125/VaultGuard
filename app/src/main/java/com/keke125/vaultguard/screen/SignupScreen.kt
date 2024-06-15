@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -73,12 +74,12 @@ fun SignupScreen(
                         contentDescription = "",
                         modifier = Modifier.size(128.dp)
                     )
-                    Text(text = "設定主密碼", fontSize = 24.sp)
+                    Text(text = stringResource(id = R.string.app_signup_title), fontSize = 24.sp)
                     OutlinedTextField(value = signupPassword,
                         onValueChange = { onSignupPasswordChange(it) },
                         label = {
                             Text(
-                                text = "主密碼"
+                                text = stringResource(id = R.string.app_main_pw)
                             )
                         },
                         leadingIcon = {
@@ -98,7 +99,7 @@ fun SignupScreen(
                             }
                         },
                         singleLine = true,
-                        placeholder = { Text(text = "請輸入密碼") },
+                        placeholder = { Text(text = stringResource(id = R.string.app_main_pw_required2)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         visualTransformation = if (isPasswordVisible) {
                             VisualTransformation.None
@@ -110,13 +111,13 @@ fun SignupScreen(
                     Button(onClick = {
                         if (signupPassword.isEmpty() || signupPassword.isBlank()) {
                             Toast.makeText(
-                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                                context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             onSignupConfirmExpandedChange(true)
                         }
                     }) {
-                        Text("設定")
+                        Text(stringResource(id = R.string.app_set))
                     }
                 }
             } else {
@@ -127,11 +128,11 @@ fun SignupScreen(
                     SignupConfirm(onSignupConfirmExpandedChange, onSignedUp = {
                         if (signupPassword.isEmpty() || signupPassword.isBlank()) {
                             Toast.makeText(
-                                context, "請輸入主密碼!", Toast.LENGTH_SHORT
+                                context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             Toast.makeText(
-                                context, "設定成功", Toast.LENGTH_SHORT
+                                context, context.getString(R.string.app_set_success), Toast.LENGTH_SHORT
                             ).show()
                             viewModel.updateMainPassword(signupPassword)
                             navController.navigate(Screen.Vault.route)
@@ -155,23 +156,23 @@ fun SignupConfirm(
     AlertDialog(icon = {
         Icon(Icons.Default.Warning, "警告")
     }, title = {
-        Text(text = "確定設定此組密碼?")
+        Text(text = stringResource(id = R.string.app_ask_signup))
     }, text = {
-        Text(text = "請牢記主密碼，忘記將導致您無法存取您的所有密碼!")
+        Text(text = stringResource(id = R.string.app_ask_signup_desc))
     }, onDismissRequest = {
         onSignupConfirmRequiredChange(false)
     }, confirmButton = {
         TextButton(onClick = {
-            onSignupConfirmRequiredChange(false)
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onSignedUp()
             onSignupConfirmRequiredChange(false)
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onSignupConfirmRequiredChange(false)
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 }

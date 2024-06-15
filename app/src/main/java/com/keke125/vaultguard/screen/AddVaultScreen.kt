@@ -200,7 +200,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_name)) },
+                        label = { Text(stringResource(id = R.string.app_vault_name1)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -210,7 +210,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(username = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_username)) },
+                        label = { Text(stringResource(id = R.string.app_vault_username1)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )

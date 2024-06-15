@@ -196,7 +196,7 @@ fun VaultDetailsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "基本資訊", modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
+                        text = stringResource(id = R.string.app_basic_info), modifier = Modifier.fillMaxWidth(0.8f), fontSize = 20.sp
                     )
                     Spacer(modifier = Modifier.padding(vertical = 4.dp))
                     OutlinedTextField(
@@ -204,7 +204,7 @@ fun VaultDetailsScreen(
                         onValueChange = {},
                         singleLine = true,
                         readOnly = true,
-                        label = { Text("名稱") },
+                        label = { Text(stringResource(id = R.string.app_vault_name2)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         trailingIcon = {
                             IconButton(onClick = {
@@ -222,7 +222,7 @@ fun VaultDetailsScreen(
                         onValueChange = {},
                         singleLine = true,
                         readOnly = true,
-                        label = { Text("帳號") },
+                        label = { Text(stringResource(id = R.string.app_vault_username2)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
                         trailingIcon = {
                             IconButton(onClick = {
@@ -239,7 +239,7 @@ fun VaultDetailsScreen(
                         value = uiState.value.vaultDetails.password,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("密碼") },
+                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
                         leadingIcon = { Icon(Icons.Default.Password, "") },
                         trailingIcon = {
                             Row {
@@ -271,7 +271,7 @@ fun VaultDetailsScreen(
                             onValueChange = {},
                             singleLine = true,
                             readOnly = true,
-                            label = { Text("TOTP驗證碼") },
+                            label = { Text(stringResource(id = R.string.app_totp)) },
                             leadingIcon = { Icon(Icons.Default.Key, null) },
                             trailingIcon = {
                                 Row {
@@ -298,14 +298,14 @@ fun VaultDetailsScreen(
                     OutlinedTextField(
                         value = if (viewModel.folderUiState.folder != null) viewModel.folderUiState.folder!!.name else "(未分類)",
                         onValueChange = {},
-                        label = { Text("資料夾") },
+                        label = { Text(stringResource(id = R.string.app_folder)) },
                         readOnly = true,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     OutlinedTextField(
                         value = uiState.value.vaultDetails.notes,
                         onValueChange = {},
-                        label = { Text("備註") },
+                        label = { Text(stringResource(id = R.string.app_note)) },
                         minLines = 3,
                         readOnly = true,
                         trailingIcon = {
@@ -322,7 +322,7 @@ fun VaultDetailsScreen(
                     OutlinedTextField(
                         value = createdDateTime.toString(),
                         onValueChange = {},
-                        label = { Text("新增時間") },
+                        label = { Text(stringResource(id = R.string.app_add_time)) },
                         minLines = 1,
                         readOnly = true,
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -330,7 +330,7 @@ fun VaultDetailsScreen(
                     OutlinedTextField(
                         value = lastModifiedDateTime.toString(),
                         onValueChange = {},
-                        label = { Text("上次更新時間") },
+                        label = { Text(stringResource(id = R.string.app_modify_time)) },
                         minLines = 1,
                         readOnly = true,
                         modifier = Modifier.fillMaxWidth(0.8f)
@@ -338,7 +338,7 @@ fun VaultDetailsScreen(
                     if (uiState.value.vaultDetails.urlList.isNotEmpty()) {
                         Spacer(modifier = Modifier.padding(vertical = 16.dp))
                         Text(
-                            text = "網址 (URL)",
+                            text = stringResource(id = R.string.app_url),
                             modifier = Modifier.fillMaxWidth(0.8f),
                             fontSize = 20.sp
                         )
@@ -361,7 +361,7 @@ fun VaultDetailsScreen(
                                     viewModel.deleteItem()
                                 }
                                 navController.popBackStack()
-                                Toast.makeText(context, "密碼已被刪除", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_delete_vault_success), Toast.LENGTH_SHORT).show()
                             })
                         }
                     }
@@ -379,23 +379,23 @@ fun DeletePasswordConfirm(
     AlertDialog(icon = {
         Icon(Icons.Default.Warning, "警告")
     }, title = {
-        Text(text = "是否要刪除密碼?")
+        Text(text = stringResource(id = R.string.app_ask_delete_vault))
     }, text = {
-        Text(text = "當前密碼將被刪除")
+        Text(text = stringResource(id = R.string.app_ask_delete_vault_desc))
     }, onDismissRequest = {
         onPasswordDeleteRequiredChange(false)
     }, confirmButton = {
         TextButton(onClick = {
-            onPasswordDeleteRequiredChange(false)
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onDeleted()
             onPasswordDeleteRequiredChange(false)
         }) {
-            Text("確定")
+            Text( stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onPasswordDeleteRequiredChange(false)
+        }) {
+            Text( stringResource(id = R.string.app_cancel))
         }
     })
 }
@@ -411,7 +411,7 @@ fun MoreOptionsDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text("刪除密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_delete_vault)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Delete, contentDescription = null
                         )
@@ -421,7 +421,7 @@ fun MoreOptionsDialog(
                     })
                     ListItem(headlineContent = { }, trailingContent = {
                         TextButton(onClick = { onExpandedChange(false) }) {
-                            Text("取消", color = ListItemDefaults.colors().headlineColor)
+                            Text(stringResource(id = R.string.app_cancel), color = ListItemDefaults.colors().headlineColor)
                         }
                     })
                 }
@@ -440,7 +440,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
         onValueChange = {},
         readOnly = true,
         singleLine = true,
-        label = { Text("網址") },
+        label = { Text(stringResource(id = R.string.app_url)) },
         leadingIcon = { Icon(Icons.Default.Link, null) },
         trailingIcon = {
             Row {
@@ -458,12 +458,12 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                                 )
                             } catch (e: IntentSender.SendIntentException) {
                                 Toast.makeText(
-                                    context, "沒有可開啟連結的應用程式!", Toast.LENGTH_SHORT
+                                    context, context.getString(R.string.app_open_url_error1), Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: Exception) {
                                 Toast.makeText(
                                     context,
-                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    context.getString(R.string.app_open_url_error2),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -475,19 +475,19 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                             }
 
                             try {
-                                Toast.makeText(context, "開啟連結中...", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
                                 startActivity(context, sendIntent, null)
                             } catch (e: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
-                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    context.getString(R.string.app_open_url_error2),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: Exception) {
-                                Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         if (url.startsWith("androidapp://")) {
@@ -498,7 +498,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                                 startActivity(context, it, null)
                             } else {
                                 Toast.makeText(
-                                    context, "沒有可開啟連結的應用程式!", Toast.LENGTH_SHORT
+                                    context, context.getString(R.string.app_open_url_error1), Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else if (url.startsWith("https://") or url.startsWith("http://")) {
@@ -509,19 +509,19 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                             }
 
                             try {
-                                Toast.makeText(context, "開啟連結中...", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
                                 startActivity(context, sendIntent, null)
                             } catch (e: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
-                                    "網址錯誤或沒有可開啟連結的應用程式!",
+                                    context.getString(R.string.app_open_url_error2),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: Exception) {
-                                Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(context, "網址錯誤!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }) {
