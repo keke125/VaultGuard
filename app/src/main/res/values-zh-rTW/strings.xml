@@ -55,4 +55,16 @@
     <string name="app_ask_clear">是否要清空密碼庫?</string>
     <string name="app_ask_clear_des">所有密碼及資料夾將被刪除!</string>
     <string name="app_warn">警告</string>
+    <string name="app_export_success">匯出成功</string>
+    <string name="app_export_fail1">匯出失敗!</string>
+    <string name="app_export_vault">匯出密碼</string>
+    <string name="app_export_fail2">匯出失敗! 尚未儲存密碼或資料夾!</string>
+    <string name="app_ask_export">是否要匯出密碼?</string>
+    <string name="app_ask_export_des">匯出後的密碼將不會受到加密保護，請妥善保管您的密碼!</string>
+    <string name="app_import_success">匯入成功</string>
+    <string name="app_import_fail">匯入失敗!</string>
+    <string name="app_import_vault">匯入密碼</string>
+    <string name="app_import_type">匯入類型</string>
+    <string name="app_google_pw_manager">Google 密碼管理工具</string>
+    <string name="app_clear_vault_repo_required">請先清空密碼庫!</string>
 </resources>

@@ -40,8 +40,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.ImportVaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -93,29 +95,29 @@ fun ImportVaultScreen(
                                     coroutineScope.launch {
                                         viewModel.saveVaults(vaults)
                                     }
-                                    Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_import_success), Toast.LENGTH_SHORT).show()
                                 } else {
-                                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } catch (e: FileNotFoundException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         } catch (e: IOException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
             }
         }
     val openVGResultLauncher =
@@ -134,36 +136,36 @@ fun ImportVaultScreen(
                                         viewModel.saveFolders(folders)
                                         viewModel.saveVaults(vaults)
                                     }
-                                    Toast.makeText(context, "匯入成功", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_import_success), Toast.LENGTH_SHORT).show()
                                 } else {
-                                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } catch (e: FileNotFoundException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         } catch (e: IOException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "匯入失敗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.app_import_fail), Toast.LENGTH_SHORT).show()
             }
         }
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("匯入密碼") }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_import_vault)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -187,7 +189,7 @@ fun ImportVaultScreen(
                         value = importTypeName,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("匯入類型") },
+                        label = { Text(stringResource(id = R.string.app_import_type)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
                         modifier = Modifier
                             .menuAnchor()
@@ -198,13 +200,13 @@ fun ImportVaultScreen(
                         onDismissRequest = { onDropdownExpandedChange(false) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        DropdownMenuItem(text = { Text("Google 密碼管理工具") }, onClick = {
-                            onImportTypeNameChange("Google 密碼管理工具")
+                        DropdownMenuItem(text = { Text(stringResource(id = R.string.app_google_pw_manager)) }, onClick = {
+                            onImportTypeNameChange(context.getString(R.string.app_google_pw_manager))
                             onImportTypeChange(0)
                             onDropdownExpandedChange(false)
                         })
-                        DropdownMenuItem(text = { Text("Vault Guard") }, onClick = {
-                            onImportTypeNameChange("Vault Guard")
+                        DropdownMenuItem(text = { Text(stringResource(id = R.string.app_name)) }, onClick = {
+                            onImportTypeNameChange(context.getString(R.string.app_name))
                             onImportTypeChange(1)
                             onDropdownExpandedChange(false)
                         })
@@ -228,11 +230,11 @@ fun ImportVaultScreen(
                             }
                             openVGResultLauncher.launch(openVGIntent)
                         } else {
-                            Toast.makeText(context, "請先清空密碼庫!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_clear_vault_repo_required), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    Text("匯入密碼")
+                    Text(stringResource(id = R.string.app_import_vault))
                 }
             }
         }

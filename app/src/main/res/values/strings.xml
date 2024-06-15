@@ -54,4 +54,16 @@
     <string name="app_ask_clear">Would you like to clear vault repository?</string>
     <string name="app_ask_clear_des">All vaults and folders will be deleted!</string>
     <string name="app_warn">Warning</string>
+    <string name="app_export_success">Export vault successful</string>
+    <string name="app_export_fail1">Export vault failed!</string>
+    <string name="app_export_vault">Export Vault</string>
+    <string name="app_export_fail2">Export failed! There are no vaults or folders in the vault repository.</string>
+    <string name="app_ask_export">Would you like to export vault?</string>
+    <string name="app_ask_export_des">The exported passwords will not be encrypted. Please ensure to keep your passwords safe!</string>
+    <string name="app_import_success">Import vault successful</string>
+    <string name="app_import_fail">Import vault failed!</string>
+    <string name="app_import_vault">Import Vault</string>
+    <string name="app_import_type">Import Type</string>
+    <string name="app_google_pw_manager">Google Password Manager</string>
+    <string name="app_clear_vault_repo_required">Please clear the vault repository first!</string>
 </resources>

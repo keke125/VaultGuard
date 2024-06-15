@@ -41,10 +41,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.ExportVaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -106,29 +108,29 @@ fun ExportVaultScreen(
                                     )
                                 }
                             }
-                            Toast.makeText(context, "匯出成功", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_export_success), Toast.LENGTH_SHORT).show()
                         } catch (e: FileNotFoundException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_export_fail1), Toast.LENGTH_SHORT).show()
                         } catch (e: IOException) {
                             e.printStackTrace()
-                            Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_export_fail1), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.app_export_fail1), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_export_fail1), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "匯出失敗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.app_export_fail1), Toast.LENGTH_SHORT).show()
             }
         }
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("匯出密碼") }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_export_vault)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -150,7 +152,7 @@ fun ExportVaultScreen(
                         viewModel.exportVaultsUiState.exportVaults.copy(password = it)
                     )
                 },
-                label = { Text("主密碼") },
+                label = { Text(stringResource(id = R.string.app_main_pw)) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Password, null) },
                 trailingIcon = {
@@ -173,16 +175,16 @@ fun ExportVaultScreen(
             )
             Button(onClick = {
                 if (viewModel.exportVaultsUiState.exportVaults.password.isEmpty() || viewModel.exportVaultsUiState.exportVaults.password.isBlank()) {
-                    Toast.makeText(context, "請輸入主密碼", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_main_pw_required), Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 if (viewModel.checkMainPassword(viewModel.exportVaultsUiState.exportVaults.password)) {
                     onExportVaultsConfirmExpandedChange(true)
                 } else {
-                    Toast.makeText(context, "主密碼錯誤!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.app_main_pw_error), Toast.LENGTH_SHORT).show()
                 }
             }) {
-                Text("匯出密碼")
+                Text(stringResource(id = R.string.app_export_vault))
             }
             when {
                 isExportVaultsConfirmExpanded -> {
@@ -209,7 +211,7 @@ fun ExportVaultScreen(
                             )
                             createFileResultLauncher.launch(createFileIntent)
                         } else {
-                            Toast.makeText(context, "尚未儲存密碼或資料夾!", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, context.getString(R.string.app_export_fail2), Toast.LENGTH_SHORT)
                                 .show()
                         }
                     })
@@ -225,25 +227,25 @@ fun ExportVaultsConfirm(
     onDeleted: () -> Unit,
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Warning, "警告")
+        Icon(Icons.Default.Warning, stringResource(id = R.string.app_warn))
     }, title = {
-        Text(text = "是否要匯出密碼?")
+        Text(text = stringResource(id = R.string.app_ask_export))
     }, text = {
-        Text(text = "匯出後的密碼將不會受到加密保護，請妥善保管您的密碼!")
+        Text(text = stringResource(id = R.string.app_ask_export_des))
     }, onDismissRequest = {
         onExportVaultsConfirmExpandedChange(false)
     }, confirmButton = {
         TextButton(onClick = {
-            onExportVaultsConfirmExpandedChange(false)
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onDeleted()
             onExportVaultsConfirmExpandedChange(false)
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onExportVaultsConfirmExpandedChange(false)
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 }
