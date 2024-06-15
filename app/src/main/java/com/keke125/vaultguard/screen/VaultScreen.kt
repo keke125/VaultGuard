@@ -172,7 +172,7 @@ fun VaultScreen(
                                         }
                                     }
                                 } else {
-                                    Text("尚未儲存密碼")
+                                    Text(stringResource(id = R.string.app_vault_empty))
                                 }
                             }
                             VaultRepositoryDialog(
@@ -201,17 +201,17 @@ fun checkVault(
 ): Boolean {
     if (name.isEmpty() || name.isBlank()) {
         Toast.makeText(
-            context, "請輸入名稱!", Toast.LENGTH_LONG
+            context, context.getString(R.string.app_name_required1), Toast.LENGTH_LONG
         ).show()
         return false
     } else if (username.isEmpty() || username.isBlank()) {
         Toast.makeText(
-            context, "請輸入帳號!", Toast.LENGTH_LONG
+            context, context.getString(R.string.app_username_required), Toast.LENGTH_LONG
         ).show()
         return false
     } else if (urlList.contains("")) {
         Toast.makeText(
-            context, "請輸入網址!", Toast.LENGTH_LONG
+            context, context.getString(R.string.app_url_required), Toast.LENGTH_LONG
         ).show()
         return false
     }else if(totp.isNotEmpty()){
@@ -219,7 +219,7 @@ fun checkVault(
         val matcher: Matcher = pattern.matcher(totp)
         if(totp.isBlank() or (totp.replace("\\s".toRegex(), "").length > 64) or !matcher.matches()){
             Toast.makeText(
-                context, "TOTP驗證碼格式錯誤!", Toast.LENGTH_LONG
+                context, context.getString(R.string.app_totp_error), Toast.LENGTH_LONG
             ).show()
             return false
         }else{
@@ -246,7 +246,7 @@ fun VaultDialog(
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
                     ListItem(headlineContent = { Text(vault.name, maxLines = 1, overflow = TextOverflow.Ellipsis) })
-                    ListItem(headlineContent = { Text("檢視密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_details_title)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Visibility, contentDescription = null
                         )
@@ -254,7 +254,7 @@ fun VaultDialog(
                         navigateToViewVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("編輯密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_edit_vault_title)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Edit, contentDescription = null
                         )
@@ -262,7 +262,7 @@ fun VaultDialog(
                         navigateToEditVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("複製帳號") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_copy_username)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.ContentCopy, contentDescription = null
                         )
@@ -272,7 +272,7 @@ fun VaultDialog(
                         )
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text("複製密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_copy_password)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.ContentCopy, contentDescription = null
                         )
@@ -284,7 +284,7 @@ fun VaultDialog(
                     })
                     ListItem(headlineContent = { }, trailingContent = {
                         TextButton(onClick = { onExpandedChange(false) }) {
-                            Text("取消", color = ListItemDefaults.colors().headlineColor)
+                            Text(stringResource(id = R.string.app_cancel), color = ListItemDefaults.colors().headlineColor)
                         }
                     })
                 }
@@ -305,8 +305,8 @@ fun VaultRepositoryDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text("密碼庫") })
-                    ListItem(headlineContent = { Text("鎖定密碼庫") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_repository)) })
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_lock_vault_repo)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Lock, contentDescription = null
                         )
@@ -323,16 +323,16 @@ fun VaultRepositoryDialog(
 
 fun copyText(clipboardManager: ClipboardManager, username: String, context: Context) {
     // When setting the clipboard text.
-    clipboardManager.setPrimaryClip(ClipData.newPlainText("username", username))
+    clipboardManager.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.app_vault_username2), username))
     // Only show a toast for Android 12 and lower.
     //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "複製成功", Toast.LENGTH_SHORT
+        context, context.getString(R.string.app_copied_text), Toast.LENGTH_SHORT
     ).show()
 }
 
 fun copyPassword(clipboardManager: ClipboardManager, password: String, context: Context) {
-    val clipData = ClipData.newPlainText("password", password)
+    val clipData = ClipData.newPlainText(context.getString(R.string.app_vault_pw), password)
     clipData.apply {
         description.extras = PersistableBundle().apply {
             putBoolean("android.content.extra.IS_SENSITIVE", true)
@@ -343,6 +343,6 @@ fun copyPassword(clipboardManager: ClipboardManager, password: String, context: 
     // Only show a toast for Android 12 and lower.
     // if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
-        context, "複製成功", Toast.LENGTH_SHORT
+        context, context.getString(R.string.app_copied_password), Toast.LENGTH_SHORT
     ).show()
 }

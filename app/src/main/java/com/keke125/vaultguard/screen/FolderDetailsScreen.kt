@@ -255,23 +255,23 @@ fun DeleteFolderConfirm(
     AlertDialog(icon = {
         Icon(Icons.Default.Warning, "警告")
     }, title = {
-        Text(text = "是否要刪除資料庫及密碼?")
+        Text(text = stringResource(id = R.string.app_ask_delete_folder))
     }, text = {
-        Text(text = "資料庫內的所有密碼將被刪除")
+        Text(text = stringResource(id = R.string.app_ask_delete_folder_desc))
     }, onDismissRequest = {
         onFolderDeleteRequiredChange(false)
     }, confirmButton = {
         TextButton(onClick = {
-            onFolderDeleteRequiredChange(false)
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onDeleted()
             onFolderDeleteRequiredChange(false)
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onFolderDeleteRequiredChange(false)
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 }

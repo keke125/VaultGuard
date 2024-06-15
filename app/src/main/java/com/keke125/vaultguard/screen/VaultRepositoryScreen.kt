@@ -22,12 +22,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.keke125.vaultguard.activity.DeleteVaultsActivity
 import com.keke125.vaultguard.activity.ExportVaultActivity
 import com.keke125.vaultguard.activity.ImportVaultActivity
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
+import com.keke125.vaultguard.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +43,7 @@ fun VaultsRepositoryScreen(navController: NavController) {
                 TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                ), title = { Text("密碼庫設定") }, navigationIcon = {
+                ), title = { Text(stringResource(id = R.string.app_vault_setting_title)) }, navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
@@ -56,16 +58,16 @@ fun VaultsRepositoryScreen(navController: NavController) {
                         .padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ListItem(headlineContent = { Text("匯入密碼") },
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_import_vault)) },
                         modifier = Modifier.clickable {
                             context.startActivity(Intent(context, ImportVaultActivity::class.java))
                         })
                     HorizontalDivider()
-                    ListItem(headlineContent = { Text("匯出密碼") }, modifier = Modifier.clickable {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_export_vault)) }, modifier = Modifier.clickable {
                         context.startActivity(Intent(context, ExportVaultActivity::class.java))
                     })
                     HorizontalDivider()
-                    ListItem(headlineContent = { Text("清空密碼庫") }, modifier = Modifier.clickable {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_clear_vault_repo)) }, modifier = Modifier.clickable {
                         context.startActivity(Intent(context, DeleteVaultsActivity::class.java))
                     })
                     HorizontalDivider()

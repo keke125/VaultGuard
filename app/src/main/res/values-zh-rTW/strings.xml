@@ -132,4 +132,13 @@
     <string name="app_open_url_error2">網址錯誤或沒有可開啟連結的應用程式!</string>
     <string name="app_open_url">開啟連結中…</string>
     <string name="app_open_url_error3">網址錯誤!</string>
+    <string name="app_ask_delete_folder">是否要刪除資料夾及資料夾內的密碼?</string>
+    <string name="app_ask_delete_folder_desc">資料夾及資料夾內的密碼將被刪除</string>
+    <string name="app_vault_setting_title">密碼庫設定</string>
+    <string name="app_username_required">請輸入帳號!</string>
+    <string name="app_url_required">請輸入網址!</string>
+    <string name="app_totp_error">TOTP驗證碼格式錯誤!</string>
+    <string name="app_copy_username">複製帳號</string>
+    <string name="app_lock_vault_repo">鎖定密碼庫</string>
+    <string name="app_copied_text">已複製!</string>
 </resources>
