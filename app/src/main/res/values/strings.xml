@@ -103,4 +103,10 @@
     <string name="app_copy_totp">Copy TOTP verification code</string>
     <string name="app_ask_update_pw">Would you like to update the password?</string>
     <string name="app_ask_update_pw_desc">The current password will be replaced.</string>
+    <string name="app_vault_empty">There are no vaults here.</string>
+    <string name="app_delete_folder_success">Folder and the vaults in it have been removed.</string>
+    <string name="app_delete_folder">Remove folder and the vaults in it</string>
+    <string name="app_edit_folder">Edit Folder</string>
+    <string name="app_add_folder">Add Folder</string>
+    <string name="app_name_required1">Please enter the name!</string>
 </resources>

@@ -104,4 +104,10 @@
     <string name="app_copy_totp">複製TOTP驗證碼</string>
     <string name="app_ask_update_pw">是否要更新密碼?</string>
     <string name="app_ask_update_pw_desc">當前密碼將被取代</string>
+    <string name="app_vault_empty">尚未儲存密碼</string>
+    <string name="app_delete_folder_success">已刪除資料夾及資料夾內的密碼</string>
+    <string name="app_delete_folder">刪除資料夾及資料夾內的密碼</string>
+    <string name="app_edit_folder">編輯資料夾</string>
+    <string name="app_add_folder">新增資料夾</string>
+    <string name="app_name_required1">請輸入名稱!</string>
 </resources>

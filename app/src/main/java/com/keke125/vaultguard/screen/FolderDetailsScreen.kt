@@ -95,7 +95,7 @@ fun FolderDetailsScreen(
                         text = if (viewModel.folderId == 0) String.format(
                             stringResource(
                                 FolderDetailsDestination.titleRes
-                            ), "(未分類)"
+                            ), stringResource(id = R.string.app_uncategorized)
                         ) else String.format(
                             stringResource(FolderDetailsDestination.titleRes),
                             uiState.value.folderDetails.name
@@ -187,7 +187,7 @@ fun FolderDetailsScreen(
                             }
                         }
                     } else {
-                        Text("尚未儲存密碼")
+                        Text(stringResource(id = R.string.app_vault_empty))
                     }
                     if (viewModel.folderId != 0) {
                         FolderMoreOptionsDialog(folderDialogExpanded,
@@ -202,7 +202,7 @@ fun FolderDetailsScreen(
                                     }
                                     navController.popBackStack()
                                     Toast.makeText(
-                                        context, "資料夾及密碼已被刪除", Toast.LENGTH_SHORT
+                                        context, context.getString(R.string.app_delete_folder_success), Toast.LENGTH_SHORT
                                     ).show()
                                 })
                             }
@@ -226,14 +226,14 @@ fun FolderMoreOptionsDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text("資料夾") })
-                    ListItem(headlineContent = { Text("編輯資料夾") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_folder)) })
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_edit_folder)) }, leadingContent = {
                         Icon(Icons.Filled.Edit, null)
                     }, modifier = Modifier.clickable {
                         onExpandedChange(false)
                         navigateToEditFolder()
                     })
-                    ListItem(headlineContent = { Text("刪除資料夾及密碼") }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_delete_folder)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Delete, contentDescription = null
                         )

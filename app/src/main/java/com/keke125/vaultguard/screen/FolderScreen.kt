@@ -1,10 +1,8 @@
 package com.keke125.vaultguard.screen
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -76,7 +74,7 @@ fun FolderScreen(
                                 navController.navigate(AddFolderDestination.route)
                             },
                         ) {
-                            Icon(Icons.Filled.Add, "新增資料夾")
+                            Icon(Icons.Filled.Add, stringResource(id = R.string.app_add_folder))
                         }
 
                     }, topBar = {
@@ -94,10 +92,10 @@ fun FolderScreen(
                                 .padding(vertical = 8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            ListItem(headlineContent = { Text("(未分類)") }, leadingContent = {
+                            ListItem(headlineContent = { Text(stringResource(id = R.string.app_uncategorized)) }, leadingContent = {
                                 Icon(
                                     Icons.Default.Folder,
-                                    contentDescription = "",
+                                    contentDescription = null,
                                 )
                             }, modifier = Modifier.clickable {
                                 navigateToViewFolder(0)
@@ -117,7 +115,7 @@ fun FolderScreen(
                                         }, leadingContent = {
                                             Icon(
                                                 Icons.Default.Folder,
-                                                contentDescription = "",
+                                                contentDescription = null,
                                             )
                                         }, modifier = Modifier.clickable {
                                             navigateToViewFolder(folder.uid)
@@ -145,7 +143,7 @@ fun checkFolder(
 ): Boolean {
     if (name.isEmpty() || name.isBlank()) {
         Toast.makeText(
-            context, "請輸入名稱!", Toast.LENGTH_LONG
+            context, context.getString(R.string.app_name_required1), Toast.LENGTH_LONG
         ).show()
         return false
     } else {
