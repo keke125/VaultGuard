@@ -21,4 +21,21 @@
     <string name="app_folder_details_title">檢視 %1$s 資料夾</string>
     <string name="app_folder_screen_title">我的資料夾</string>
     <string name="app_search_vault_title">搜尋密碼</string>
+    <string name="app_biometric_not_registered">您的裝置尚未註冊生物辨識!</string>
+    <string name="app_security_setting">安全性設定</string>
+    <string name="app_change_main_pw">變更主密碼</string>
+    <string name="app_biometric_unavailable">您的裝置不支援生物辨識!</string>
+    <string name="app_biometric_temp_unavailable">生物辨識功能暫時無法使用!</string>
+    <string name="app_biometric_error">設定生物辨識時發生錯誤!</string>
+    <string name="app_use_biometric">使用生物辨識</string>
+    <string name="app_info">提醒</string>
+    <string name="app_ask_biometric">是否要註冊生物辨識?</string>
+    <string name="app_ask_biometric_des">如果要繼續設定，程式將引導您進入系統設定</string>
+    <string name="app_confirm">確定</string>
+    <string name="app_cancel">取消</string>
+    <string name="app_camera_permission">無法取得相機權限</string>
+    <string name="app_cancel_scan">取消掃描!</string>
+    <string name="app_scan_qrcode">掃描QR Code</string>
+    <string name="app_auto_scan">自動掃描中...</string>
+    <string name="app_scan_qrcode_des">Vault Guard只會取得圖片中的TOTP驗證碼，\\n不會儲存任何圖片。</string>
 </resources>

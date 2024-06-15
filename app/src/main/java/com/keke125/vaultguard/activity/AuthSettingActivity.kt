@@ -47,9 +47,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.FragmentActivity
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.BiometricAuthSettingViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
@@ -98,7 +100,7 @@ class AuthSettingActivity : AppCompatActivity() {
                     }
 
                     BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                        Toast.makeText(this, "您的裝置尚未註冊生物辨識!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.app_biometric_not_registered), Toast.LENGTH_LONG).show()
                         false
                     }
 
@@ -120,7 +122,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text("安全性設定") }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_security_setting)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -155,7 +157,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                     Intent(Settings.ACTION_SECURITY_SETTINGS)
                 }
             }
-            ListItem(headlineContent = { Text("變更主密碼") },
+            ListItem(headlineContent = { Text(stringResource(id = R.string.app_change_main_pw)) },
                 modifier = Modifier.clickable {
                     context.startActivity(Intent(context, ChangeMainPasswordActivity::class.java))
                 }
@@ -181,7 +183,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                                             "No biometric features available on this device."
                                         )
                                         Toast.makeText(
-                                            context, "您的裝置不支援生物辨識!", Toast.LENGTH_LONG
+                                            context, context.getString(R.string.app_biometric_unavailable), Toast.LENGTH_LONG
                                         ).show()
                                         viewModel.updateBiometricEnabled(false)
                                         false
@@ -193,7 +195,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                                             "Biometric features are currently unavailable."
                                         )
                                         Toast.makeText(
-                                            context, "生物辨識功能暫時無法使用!", Toast.LENGTH_LONG
+                                            context, context.getString(R.string.app_biometric_temp_unavailable), Toast.LENGTH_LONG
                                         ).show()
                                         viewModel.updateBiometricEnabled(false)
                                         false
@@ -205,7 +207,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                                     }
 
                                     else -> {
-                                        Toast.makeText(context, "發生錯誤!", Toast.LENGTH_LONG)
+                                        Toast.makeText(context, context.getString(R.string.app_biometric_error), Toast.LENGTH_LONG)
                                             .show()
                                         false
                                     }
@@ -216,7 +218,7 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                         }
                     })
                     Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                    Text(text = "使用生物辨識")
+                    Text(text = stringResource(id = R.string.app_use_biometric))
                 }
             })
             HorizontalDivider()
@@ -242,26 +244,26 @@ fun PromptBiometricDialogConfirm(
     onDismissRequest: () -> Unit, onPromptBiometricResultChange: () -> Unit, context: Context
 ) {
     AlertDialog(icon = {
-        Icon(Icons.Default.Info, "提醒")
+        Icon(Icons.Default.Info, stringResource(id = R.string.app_info))
     }, title = {
-        Text(text = "是否要註冊生物辨識?")
+        Text(text = stringResource(id = R.string.app_ask_biometric))
     }, text = {
-        Text(text = "如果要繼續設定，程式將引導您進入系統設定")
+        Text(text = stringResource(id = R.string.app_ask_biometric_des))
     }, onDismissRequest = {
         onDismissRequest()
     }, confirmButton = {
         TextButton(onClick = {
-            onDismissRequest()
-            Toast.makeText(context, "您的裝置尚未註冊生物辨識!", Toast.LENGTH_LONG).show()
-        }) {
-            Text("取消")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
             onPromptBiometricResultChange()
             onDismissRequest()
         }) {
-            Text("確定")
+            Text(stringResource(id = R.string.app_confirm))
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDismissRequest()
+            Toast.makeText(context, context.getString(R.string.app_biometric_not_registered), Toast.LENGTH_LONG).show()
+        }) {
+            Text(stringResource(id = R.string.app_cancel))
         }
     })
 

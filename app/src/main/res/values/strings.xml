@@ -20,4 +20,21 @@
     <string name="app_folder_details_title">View %1$s Folder Details</string>
     <string name="app_folder_screen_title">My Folder</string>
     <string name="app_search_vault_title">Search Vault</string>
+    <string name="app_biometric_not_registered">Your device has not yet registered biometric data!</string>
+    <string name="app_security_setting">Security Settings</string>
+    <string name="app_change_main_pw">Change Main Password</string>
+    <string name="app_biometric_unavailable">Your device does not support biometric recognition!</string>
+    <string name="app_biometric_temp_unavailable">The biometric recognition feature is temporarily unavailable!</string>
+    <string name="app_biometric_error">An error occurred while setting up biometric recognition!</string>
+    <string name="app_use_biometric">Use biometric recognition</string>
+    <string name="app_info">Info</string>
+    <string name="app_ask_biometric">Would you like to register biometric recognition?</string>
+    <string name="app_ask_biometric_des">" If you wish to continue with the setup, the program will guide you to the system settings."</string>
+    <string name="app_confirm">Confirm</string>
+    <string name="app_cancel">Cancel</string>
+    <string name="app_camera_permission">Unable to obtain camera permissions!</string>
+    <string name="app_cancel_scan">Scan canceled!</string>
+    <string name="app_scan_qrcode">Scan QR Code</string>
+    <string name="app_auto_scan">Automated scanning in progress...</string>
+    <string name="app_scan_qrcode_des">Vault Guard will only capture the TOTP verification code from the image \\nand will not store any images.</string>
 </resources>

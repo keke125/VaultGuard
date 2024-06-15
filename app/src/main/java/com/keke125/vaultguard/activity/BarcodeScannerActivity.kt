@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.keke125.vaultguard.R
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -75,7 +77,7 @@ class BarcodeScannerActivity : ComponentActivity() {
         }
         if (!permissionGranted) {
             Toast.makeText(
-                baseContext, "無法取得相機權限", Toast.LENGTH_SHORT
+                baseContext, baseContext.getString(R.string.app_camera_permission), Toast.LENGTH_SHORT
             ).show()
             setResult(RESULT_CANCELED, intent)
             finish()
@@ -167,7 +169,7 @@ class BarcodeScannerActivity : ComponentActivity() {
                                     }
                                 }
                             }.addOnCanceledListener {
-                                Toast.makeText(this, "取消掃描!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, getString(R.string.app_cancel_scan), Toast.LENGTH_SHORT).show()
                             }.addOnFailureListener {
                                 Toast.makeText(
                                     this, it.localizedMessage, Toast.LENGTH_SHORT
@@ -219,7 +221,7 @@ class BarcodeScannerActivity : ComponentActivity() {
                             }) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                             }
-                        }, title = { Text("掃描QR Code") })
+                        }, title = { Text(stringResource(id = R.string.app_scan_qrcode)) })
                     }) { innerPadding ->
                         Column(
                             modifier = Modifier
@@ -242,13 +244,13 @@ class BarcodeScannerActivity : ComponentActivity() {
                                         )
                                     })
                             Text(
-                                text = "自動掃描中...",
+                                text = stringResource(id = R.string.app_auto_scan),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Vault Guard只會取得圖片中的TOTP驗證碼，\n不會儲存任何圖片。",
+                                text = stringResource(id = R.string.app_scan_qrcode_des),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
