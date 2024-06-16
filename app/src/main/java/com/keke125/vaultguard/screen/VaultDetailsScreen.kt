@@ -296,7 +296,7 @@ fun VaultDetailsScreen(
                         )
                     }
                     OutlinedTextField(
-                        value = if (viewModel.folderUiState.folder != null) viewModel.folderUiState.folder!!.name else "(未分類)",
+                        value = if (viewModel.folderUiState.folder != null) viewModel.folderUiState.folder!!.name else stringResource(id = R.string.app_uncategorized),
                         onValueChange = {},
                         label = { Text(stringResource(id = R.string.app_folder)) },
                         readOnly = true,

@@ -37,7 +37,7 @@
     <string name="app_cancel_scan">取消掃描!</string>
     <string name="app_scan_qrcode">掃描QR Code</string>
     <string name="app_auto_scan">自動掃描中…</string>
-    <string name="app_scan_qrcode_des">Vault Guard只會取得圖片中的TOTP驗證碼，\\n不會儲存任何圖片。</string>
+    <string name="app_scan_qrcode_des">Vault Guard只會取得圖片中的TOTP驗證碼，\n不會儲存任何圖片。</string>
     <string name="app_old_pw">舊密碼</string>
     <string name="app_new_pw">新密碼</string>
     <string name="app_old_pw_required">請輸入舊密碼!</string>
@@ -71,7 +71,7 @@
     <string name="app_main_pw_required2">請輸入主密碼</string>
     <string name="app_login_success">登入成功</string>
     <string name="app_login_fail">登入失敗!</string>
-    <string name="app_biometric_auth_fail1">驗證錯誤: $errString!</string>
+    <string name="app_biometric_auth_fail1">驗證錯誤: %1$s!</string>
     <string name="app_biometric_auth_fail2">驗證失敗!</string>
     <string name="app_biometric_title">登入Vault Guard</string>
     <string name="app_biometric_subtitle">使用生物辨識登入Vault Guard</string>
@@ -81,9 +81,9 @@
     <string name="app_basic_info">基本資訊</string>
     <string name="app_vault_name1">名稱 (必填)</string>
     <string name="app_scan_success">掃描成功</string>
-    <string name="app_totp_error1">無法取得TOTP驗證碼\\n請檢查QR Code是否正確!</string>
+    <string name="app_totp_error1">無法取得TOTP驗證碼!\n請檢查QR Code是否正確</string>
     <string name="app_totp_error2">無法取得TOTP驗證碼!</string>
-    <string name="app_scan_fail">掃描QR Code時發生錯誤!\\n請檢查相機權限並完成掃描</string>
+    <string name="app_scan_fail">掃描QR Code時發生錯誤!\n請檢查相機權限並完成掃描</string>
     <string name="app_vault_username1">帳號 (必填)</string>
     <string name="app_vault_pw">密碼</string>
     <string name="app_hide_pw">隱藏密碼</string>

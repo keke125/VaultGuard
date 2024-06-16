@@ -348,7 +348,7 @@ fun BiometricScreen(
             ) {
                 super.onAuthenticationError(errorCode, errString)
                 Toast.makeText(
-                    context, context.getString(R.string.app_biometric_auth_fail1), Toast.LENGTH_SHORT
+                    context, String.format(context.getString(R.string.app_biometric_auth_fail1), errString.toString()), Toast.LENGTH_SHORT
                 ).show()
                 onBiometricAuthCancel(true)
                 authViewModel.authWithBiometric(false)

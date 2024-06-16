@@ -52,7 +52,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 contentColor = MaterialTheme.colorScheme.primary,
             ) {
                 NavigationBar {
-                    BottomNavigationItem().bottomNavigationItems()
+                    BottomNavigationItem(navController = navController).bottomNavigationItems()
                         .forEachIndexed { _, navigationItem ->
                             NavigationBarItem(selected = navigationItem.route == currentDestination.route,
                                 label = {

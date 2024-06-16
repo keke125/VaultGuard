@@ -81,7 +81,7 @@ fun ImportVaultScreen(
     val coroutineScope = rememberCoroutineScope()
     val (isDropdownExpanded, onDropdownExpandedChange) = remember { mutableStateOf(false) }
     val (importType, onImportTypeChange) = remember { mutableIntStateOf(0) }
-    val (importTypeName, onImportTypeNameChange) = remember { mutableStateOf("Google 密碼管理工具") }
+    val (importTypeName, onImportTypeNameChange) = remember { mutableStateOf(context.getString(R.string.app_google_pw_manager)) }
     val openGPMResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
