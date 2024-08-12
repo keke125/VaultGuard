@@ -5,4 +5,4 @@ test:
   stage: test
   script:
     - gem install fastlane -NV
-    - fastlane test
+    - fastlane -v
