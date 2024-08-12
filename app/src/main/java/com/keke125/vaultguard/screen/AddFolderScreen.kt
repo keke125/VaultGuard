@@ -103,7 +103,7 @@ fun AddFolderScreen(
                             viewModel.updateUiState(viewModel.folderUiState.folderDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_name1)) },
+                        label = { Text(stringResource(id = R.string.app_password_name1)) },
                         leadingIcon = { Icon(Icons.Default.Folder, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )

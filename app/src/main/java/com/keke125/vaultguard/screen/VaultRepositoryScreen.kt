@@ -67,7 +67,7 @@ fun VaultsRepositoryScreen(navController: NavController) {
                         context.startActivity(Intent(context, ExportVaultActivity::class.java))
                     })
                     HorizontalDivider()
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_clear_vault_repo)) }, modifier = Modifier.clickable {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_clear_vault)) }, modifier = Modifier.clickable {
                         context.startActivity(Intent(context, DeleteVaultsActivity::class.java))
                     })
                     HorizontalDivider()

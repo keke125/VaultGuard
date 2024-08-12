@@ -85,7 +85,7 @@ import java.util.TimerTask
 
 object VaultDetailsDestination : NavigationDestination {
     override val route = "vault_details"
-    override val titleRes = R.string.app_vault_details_title
+    override val titleRes = R.string.app_password_details_title
     const val VAULTID = "vaultId"
     val routeWithArgs = "$route/{$VAULTID}"
 }
@@ -204,7 +204,7 @@ fun VaultDetailsScreen(
                         onValueChange = {},
                         singleLine = true,
                         readOnly = true,
-                        label = { Text(stringResource(id = R.string.app_vault_name2)) },
+                        label = { Text(stringResource(id = R.string.app_password_name2)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         trailingIcon = {
                             IconButton(onClick = {
@@ -222,7 +222,7 @@ fun VaultDetailsScreen(
                         onValueChange = {},
                         singleLine = true,
                         readOnly = true,
-                        label = { Text(stringResource(id = R.string.app_vault_username2)) },
+                        label = { Text(stringResource(id = R.string.app_password_username2)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, "") },
                         trailingIcon = {
                             IconButton(onClick = {
@@ -239,7 +239,7 @@ fun VaultDetailsScreen(
                         value = uiState.value.vaultDetails.password,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
+                        label = { Text(stringResource(id = R.string.app_password_pw)) },
                         leadingIcon = { Icon(Icons.Default.Password, "") },
                         trailingIcon = {
                             Row {
@@ -361,7 +361,7 @@ fun VaultDetailsScreen(
                                     viewModel.deleteItem()
                                 }
                                 navController.popBackStack()
-                                Toast.makeText(context, context.getString(R.string.app_delete_vault_success), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.app_delete_password_success), Toast.LENGTH_SHORT).show()
                             })
                         }
                     }
@@ -379,9 +379,9 @@ fun DeletePasswordConfirm(
     AlertDialog(icon = {
         Icon(Icons.Default.Warning, "警告")
     }, title = {
-        Text(text = stringResource(id = R.string.app_ask_delete_vault))
+        Text(text = stringResource(id = R.string.app_ask_delete_password))
     }, text = {
-        Text(text = stringResource(id = R.string.app_ask_delete_vault_desc))
+        Text(text = stringResource(id = R.string.app_ask_delete_password_desc))
     }, onDismissRequest = {
         onPasswordDeleteRequiredChange(false)
     }, confirmButton = {
@@ -411,7 +411,7 @@ fun MoreOptionsDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_delete_vault)) }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_delete_password)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Delete, contentDescription = null
                         )

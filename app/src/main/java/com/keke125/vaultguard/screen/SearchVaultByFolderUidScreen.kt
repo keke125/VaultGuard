@@ -51,7 +51,7 @@ import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 object SearchVaultByFolderUidDestination : NavigationDestination {
     override val route = "search_vault_by_folder_uid"
-    override val titleRes = R.string.app_search_vault_title
+    override val titleRes = R.string.app_search_password_title
     const val FOLDERID = "folderId"
     val routeWithArgs = "$route/{$FOLDERID}"
 }
@@ -118,7 +118,7 @@ fun SearchVaultByFolderUidScreen(
                     onActiveChange = {
                         onSearchActiveChange(it)
                     },
-                    placeholder = { Text(stringResource(id = R.string.app_search_vault)) },
+                    placeholder = { Text(stringResource(id = R.string.app_search_password)) },
                     content = {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -164,7 +164,7 @@ fun SearchVaultByFolderUidScreen(
                                     }
                                 }
                             } else if (keyword.isNotEmpty()) {
-                                Text(stringResource(id = R.string.app_search_vault_empty))
+                                Text(stringResource(id = R.string.app_search_password_empty))
                             }
                         }
                     },

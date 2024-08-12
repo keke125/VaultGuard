@@ -18,7 +18,7 @@ data class BottomNavigationItem(
     fun bottomNavigationItems(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(
-                label = navController.context.getString(R.string.app_vault_repository),
+                label = navController.context.getString(R.string.app_vault),
                 icon = Icons.Default.Lock,
                 route = Screen.Vault.route,
                 navController

@@ -77,7 +77,7 @@ fun SearchVaultScreen(
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
                     }
-                }, title = { Text(stringResource(R.string.app_search_vault_title)) })
+                }, title = { Text(stringResource(R.string.app_search_password_title)) })
             }) { innerPadding ->
                 SearchBar(query = keyword, onQueryChange = {
                     onKeywordChange(it)
@@ -102,7 +102,7 @@ fun SearchVaultScreen(
                     }
                 }, active = isSearchActive, onActiveChange = {
                     onSearchActiveChange(it)
-                }, placeholder = { Text(stringResource(id = R.string.app_search_vault)) }, content = {
+                }, placeholder = { Text(stringResource(id = R.string.app_search_password)) }, content = {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -147,7 +147,7 @@ fun SearchVaultScreen(
                                 }
                             }
                         } else if (keyword.isNotEmpty()) {
-                            Text(stringResource(id = R.string.app_search_vault_empty))
+                            Text(stringResource(id = R.string.app_search_password_empty))
                         }
                     }
                 }, modifier = Modifier

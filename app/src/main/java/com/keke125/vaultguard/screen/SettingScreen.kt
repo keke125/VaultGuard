@@ -51,7 +51,7 @@ fun SettingScreen(navController: NavController) {
                         .padding(vertical = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_repository)) }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault)) }, leadingContent = {
                         Icon(
                             Icons.Default.Storage,
                             contentDescription = null,

@@ -81,7 +81,7 @@ import kotlinx.coroutines.launch
 
 object AddVaultDestination : NavigationDestination {
     override val route = "add_vault"
-    override val titleRes = R.string.app_add_vault_title
+    override val titleRes = R.string.app_add_password_title
     const val FOLDERID = "folderId"
     val routeWithArgs = "${route}/{$FOLDERID}"
 }
@@ -200,7 +200,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_name1)) },
+                        label = { Text(stringResource(id = R.string.app_password_name1)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -210,7 +210,7 @@ fun AddVaultScreen(
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(username = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_username1)) },
+                        label = { Text(stringResource(id = R.string.app_password_username1)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -219,7 +219,7 @@ fun AddVaultScreen(
                         onValueChange = {
                             viewModel.updateUiState(vaultUiState.vaultDetails.copy(password = it))
                         },
-                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
+                        label = { Text(stringResource(id = R.string.app_password_pw)) },
                         leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {

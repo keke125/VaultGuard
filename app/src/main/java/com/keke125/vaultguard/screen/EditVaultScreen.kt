@@ -81,7 +81,7 @@ import kotlinx.coroutines.launch
 
 object EditVaultDestination : NavigationDestination {
     override val route = "edit_vault"
-    override val titleRes = R.string.app_edit_vault_title
+    override val titleRes = R.string.app_edit_password_title
     const val VAULTID = "vaultId"
     val routeWithArgs = "$route/{$VAULTID}"
 }
@@ -202,7 +202,7 @@ fun EditVaultScreen(
                             viewModel.updateUiState(viewModel.vaultUiState.vaultDetails.copy(name = it))
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_name1)) },
+                        label = { Text(stringResource(id = R.string.app_password_name1)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -216,7 +216,7 @@ fun EditVaultScreen(
                             )
                         },
                         singleLine = true,
-                        label = { Text(stringResource(id = R.string.app_vault_username1)) },
+                        label = { Text(stringResource(id = R.string.app_password_username1)) },
                         leadingIcon = { Icon(Icons.Default.AccountCircle, null) },
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
@@ -229,7 +229,7 @@ fun EditVaultScreen(
                                 )
                             )
                         },
-                        label = { Text(stringResource(id = R.string.app_vault_pw)) },
+                        label = { Text(stringResource(id = R.string.app_password_pw)) },
                         leadingIcon = { Icon(Icons.Default.Password, null) },
                         trailingIcon = {
                             Row {

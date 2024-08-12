@@ -82,7 +82,7 @@ fun DeleteVaultsScreen(
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = { Text(stringResource(id = R.string.app_clear_vault_repo)) }, navigationIcon = {
+        ), title = { Text(stringResource(id = R.string.app_clear_vault)) }, navigationIcon = {
             IconButton(onClick = {
                 activity?.finish()
             }) {
@@ -154,9 +154,9 @@ fun DeleteVaultsScreen(
                                     password = ""
                                 )
                             )
-                            Toast.makeText(context, context.getString(R.string.app_clear_vault_repo_success), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.app_clear_vault_success), Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, context.getString(R.string.app_clear_vault_repo_fail), Toast.LENGTH_SHORT)
+                            Toast.makeText(context, context.getString(R.string.app_clear_vault_fail), Toast.LENGTH_SHORT)
                                 .show()
                         }
                     })

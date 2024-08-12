@@ -246,7 +246,7 @@ fun VaultDialog(
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
                     ListItem(headlineContent = { Text(vault.name, maxLines = 1, overflow = TextOverflow.Ellipsis) })
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_details_title)) }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_password_details_title)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Visibility, contentDescription = null
                         )
@@ -254,7 +254,7 @@ fun VaultDialog(
                         navigateToViewVault(vault.uid)
                         onExpandedChange(false)
                     })
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_edit_vault_title)) }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_edit_password_title)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Edit, contentDescription = null
                         )
@@ -305,8 +305,8 @@ fun VaultRepositoryDialog(
         expanded -> {
             BasicAlertDialog(onDismissRequest = { onExpandedChange(false) }) {
                 Column {
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault_repository)) })
-                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_lock_vault_repo)) }, leadingContent = {
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_vault)) })
+                    ListItem(headlineContent = { Text(stringResource(id = R.string.app_lock_vault)) }, leadingContent = {
                         Icon(
                             Icons.Outlined.Lock, contentDescription = null
                         )
@@ -323,7 +323,7 @@ fun VaultRepositoryDialog(
 
 fun copyText(clipboardManager: ClipboardManager, username: String, context: Context) {
     // When setting the clipboard text.
-    clipboardManager.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.app_vault_username2), username))
+    clipboardManager.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.app_password_username2), username))
     // Only show a toast for Android 12 and lower.
     //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
     Toast.makeText(
@@ -332,7 +332,7 @@ fun copyText(clipboardManager: ClipboardManager, username: String, context: Cont
 }
 
 fun copyPassword(clipboardManager: ClipboardManager, password: String, context: Context) {
-    val clipData = ClipData.newPlainText(context.getString(R.string.app_vault_pw), password)
+    val clipData = ClipData.newPlainText(context.getString(R.string.app_password_pw), password)
     clipData.apply {
         description.extras = PersistableBundle().apply {
             putBoolean("android.content.extra.IS_SENSITIVE", true)
