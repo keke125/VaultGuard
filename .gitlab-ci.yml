@@ -4,4 +4,5 @@ test:
   image: fabernovel/android:api-34-v1.8.0
   stage: test
   script:
+    - gem install fastlane -NV
     - fastlane test
