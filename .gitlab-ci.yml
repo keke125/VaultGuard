@@ -1,0 +1,3 @@
+include:
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Android.gitlab-ci.yml
+  - template: Android.gitlab-ci.yml
