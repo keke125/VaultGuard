@@ -1,3 +1,5 @@
-include:
-  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Android.gitlab-ci.yml
-  - template: Android.gitlab-ci.yml
+test:
+  image: fabernovel/android:api-34-v1.8.0
+  stage: test
+  script:
+    - fastlane test
