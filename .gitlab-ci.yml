@@ -1,4 +1,6 @@
 test:
+  tags:
+    - amd64
   image: fabernovel/android:api-34-v1.8.0
   stage: test
   script:
