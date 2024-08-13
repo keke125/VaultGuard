@@ -6,5 +6,6 @@ build:
   script:
     - apt update -y && apt install -y curl
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - chmod +x gradlew
     - bundle install
     - bundle exec fastlane build
