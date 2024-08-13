@@ -19,6 +19,8 @@ build:
       - app/build/outputs/apk/release/app-release.apk
 
 deploy:
+  tags:
+    - high performance
   image: fabernovel/android:api-33-v1.7.0
   stage: deploy
   script:
