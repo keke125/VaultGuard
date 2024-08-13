@@ -1,12 +1,37 @@
+import java.util.Properties
+
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.devtools.ksp")
 }
+fun readProperties(propertiesFile: File) = Properties().apply {
+    propertiesFile.inputStream().use { fis ->
+        load(fis)
+    }
+}
+
+var keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("release-keystore.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties = readProperties(keystorePropertiesFile)
+}
 
 android {
     namespace = "com.keke125.vaultguard"
     compileSdk = 34
+
+    signingConfigs {
+        create("release") {
+            storeFile = if (keystoreProperties["storeFile"].toString().isNotEmpty()) file(
+                keystoreProperties["storeFile"].toString()
+            ) else null
+            storePassword = keystoreProperties["storePassword"].toString()
+            keyAlias = keystoreProperties["keyAlias"].toString()
+            keyPassword = keystoreProperties["keyPassword"].toString()
+        }
+    }
 
     defaultConfig {
         applicationId = "com.keke125.vaultguard"
@@ -24,7 +49,7 @@ android {
         }
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments["room.schemaLocation"]="$projectDir/schemas"
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
     }
@@ -39,6 +64,8 @@ android {
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
             isShrinkResources = true
+
+            signingConfig = signingConfigs.getByName("release")
             ndk {
                 debugSymbolLevel = "FULL"
             }
