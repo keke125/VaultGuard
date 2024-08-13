@@ -3,6 +3,8 @@ build:
     - amd64
   image: fabernovel/android:api-34-v1.8.0
   stage: build
+  variables:
+    SECURE_FILES_DOWNLOAD_PATH: ${CI_PROJECT_DIR}
   script:
     - apt update -y && apt install -y curl
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
