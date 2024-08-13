@@ -13,17 +13,8 @@ build:
     - chmod +x gradlew
     - bundle install
     - bundle exec fastlane build
+    - bundle exec fastlane beta
   artifacts:
     paths:
       - app/build/outputs/bundle/release/app-release.aab
       - app/build/outputs/apk/release/app-release.apk
-
-deploy:
-  tags:
-    - high performance
-  image: fabernovel/android:api-33-v1.7.0
-  stage: deploy
-  script:
-    - bundle install
-    - bundle exec fastlane build
-    - fastlane beta
