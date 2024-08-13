@@ -1,6 +1,6 @@
 build:
   tags:
-    - high_perfomance
+    - high performance
   image: fabernovel/android:api-34-v1.8.0
   stage: build
   script:
