@@ -1,8 +1,10 @@
-test:
+build:
   tags:
     - amd64
   image: fabernovel/android:api-34-v1.8.0
-  stage: test
+  stage: build
   script:
-    - gem install fastlane -NV
-    - fastlane -v
+    - apt update -y && apt install -y curl
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - bundle install
+    - bundle exec fastlane build
