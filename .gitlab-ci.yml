@@ -24,4 +24,6 @@ deploy:
   image: fabernovel/android:api-33-v1.7.0
   stage: deploy
   script:
+    - bundle install
+    - bundle exec fastlane build
     - fastlane beta
