@@ -29,5 +29,6 @@ platform :android do
       aab: 'app/build/outputs/bundle/release/app-release.aab',
       release_status: 'draft'
     )
+  end
 
 end
