@@ -1,6 +1,6 @@
 build:
   tags:
-    - amd64
+    - high_perfomance
   image: fabernovel/android:api-34-v1.8.0
   stage: build
   script:
