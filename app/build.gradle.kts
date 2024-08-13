@@ -13,7 +13,7 @@ fun readProperties(propertiesFile: File) = Properties().apply {
 }
 
 var keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("release-keystore.properties")
+val keystorePropertiesFile = rootProject.file(".secure_files/release-keystore.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties = readProperties(keystorePropertiesFile)
 }
@@ -23,6 +23,7 @@ android {
     compileSdk = 34
 
     signingConfigs {
+        println(keystoreProperties["storeFile"].toString())
         create("release") {
             storeFile = if (keystoreProperties["storeFile"].toString().isNotEmpty()) file(
                 keystoreProperties["storeFile"].toString()
