@@ -17,3 +17,9 @@ build:
     paths:
       - app/build/outputs/bundle/release/app-release.aab
       - app/build/outputs/apk/release/app-release.apk
+
+deploy:
+  image: fabernovel/android:api-33-v1.7.0
+  stage: deploy
+  script:
+    - fastlane beta
