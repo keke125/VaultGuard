@@ -2,7 +2,7 @@ The English version is below.
 
 # Vault Guard - 您的密碼管理器
 
-Vault Guard 為免費且開放原始碼的`Android`應用程式，提供使用者密碼管理的功能。
+**Vault Guard** 為免費且開放原始碼的`Android`應用程式，提供使用者密碼管理的功能。
 
 ## 簡介
 
@@ -74,6 +74,8 @@ https://vaultguard.keke125.com/
 https://forms.gle/FRXiX5q3aiSbkp296
 
 # Vault Guard - Your Password Manager
+
+**Vault Guard** is a free and open-source Android application that provides users with password management features.
 
 ## Introduce
 
