@@ -35,51 +35,107 @@ https://vaultguard.keke125.com/
 
 ## 程式截圖
 
+
+
 ## 主要特色
-- 資料安全: 此程式將安全地儲存您的密碼，我們透過256位元的AES(CBC模式)演算法加密資料庫，加密資料庫的金鑰也受到額外的密碼保護，密碼為隨機產生的字串，並使用由安卓系統提供的硬體支援的金鑰庫(Hardware-backed Keystore)產生的金鑰加密儲存密碼，最後存放於您的手機。
-- 隱私: 我們尊重您的隱私，您的密碼只會經加密後儲存於您的手機，您可以檢視程式所需的權限，我們不會向您請求任何不必要的權限，只有特定功能需要權限，例如生物辨識解鎖密碼庫需要生物辨識權限及掃瞄QR Code(TOTP驗證碼)需要相機權限。
-- 備份: 當您想要更換手機時，可使用我們提供的匯出功能，您可將匯出的檔案重新匯入到您的新手機，由於密碼匯出後並不會經過加密，請您妥善保管匯出的檔案。
-- 匯入: 程式支援從Google密碼管理器匯入的功能，您可先於Google密碼管理器匯出密碼，並將密碼匯入到我們的程式。
-- 開源: 程式以MIT授權條款開放原始碼，您可以於 https://github.com/keke125/VaultGuard 查看完整的程式碼，並請依照授權條款的規範合理使用程式及程式碼。
-- 免費: 使用程式並不需要任何費用，我們也不會加入廣告，請您放心使用。
-- 帳號授權: 設定主密碼、鎖定密碼庫(登出)及解鎖密碼庫(登入)功能，如果您的裝置支援生物辨識，您也可以使用生物辨識登入。為了您的安全，程式在您登入後超過1小時會將您登出。
-- TOTP驗證碼: 您可將TOTP驗證碼一起存入密碼庫，幫助您進行多因子驗證。
-- 搜尋密碼: 您可透過名稱、帳號、網址搜尋密碼。
+- 資料安全: 您的資料將加密並只會儲存於您的手機，他人（包含開發者）皆無法透過網路存取您的密碼庫，請放心使用。
+
+- 隱私: 我們不會收集關於您的任何資訊，程式並沒有存取網路的權限，另外，只有在您需要使用特定功能時，我們才會跟您索取相關權限，例如生物辨識解鎖密碼庫需要生物辨識權限、掃瞄QR Code(TOTP驗證碼)需要相機權限。
+
+- 備份及還原（匯出及匯入密碼庫）: 當您想要更換手機或是定期備份時，可使用「匯出密碼庫」功能，之後，您可使用「匯入密碼庫」功能將匯出的檔案重新匯入到您的新手機，由於密碼匯出後並不會經過加密，請您妥善保管匯出的檔案。
+
+- 從Google密碼管理器匯入密碼: 程式支援從Google密碼管理器匯入的功能，您可先於Google密碼管理器匯出密碼，並將密碼匯入到我們的程式。
+
+- 開源: 程式以MIT授權條款開放原始碼，您可以於 https://github.com/keke125/VaultGuard 查看完整的程式碼。
+
+- 免費: 使用程式並不需要任何費用，我們也不會加入廣告。
+
+- 鎖定密碼庫: 為了您的安全，程式將在您登入後超過1小時，自動鎖定密碼庫，請輸入主密碼解鎖，您也可啟用生物辨識功能來解鎖。
+
+- 多因子（兩步驟）驗證: 您可將TOTP驗證碼存入密碼庫，幫助您進行多因子（兩步驟）驗證。
+
 - 相容性: 我們支援Android 7.0及以上的版本。
-- 資料夾: 您可根據您的需求將密碼放入不同的資料夾，方便您分類管理密碼，您也可在資料夾內新增、檢視、更新、刪除及搜尋密碼，也可將資料夾及底下的所有密碼一起刪除。
-- 深色主題: 程式原生支援深色模式，您可根據您的需求在淺色及深色模式之間切換。
+
+- 資料夾: 您可將密碼放入不同的資料夾管理，您也可在資料夾內新增、檢視、更新、刪除及搜尋密碼，也可將資料夾及底下的密碼一起刪除。
+
 - 快速設定: 您可在系統選單頁面中新增圖塊(tile)，即可快速開啟程式。
-- 清空密碼庫: 刪除所有密碼及資料夾。
+
 - 支援語言: 程式支援繁體中文及英文。
+
+感謝您使用我們的程式!
+
+## Q & A
+
+- 忘記主密碼怎麼辦?  
+由於加密金鑰及資料皆儲存於您的手機，我們無法幫您重設主密碼，您需將程式資料刪除或解除安裝後重新安裝，但這將導致過去儲存的密碼被刪除，如果您擔心忘記主密碼，您可定期使用`匯出密碼庫`的功能來備份密碼庫，這樣可透過`匯入密碼庫`的功能來還原之前儲存的密碼。
+
 
 ## 加入測試
 https://forms.gle/FRXiX5q3aiSbkp296
 
-感謝您使用我們的程式!
-
 # Vault Guard - Your Password Manager
+
+## Introduce
+
+This project is an Android application that provides users with functions to generate, save, search, and back up passwords. It also offers a feature to generate TOTP (Time-Based One-Time Password) codes, allowing users to use the app either as a password manager or solely as an authenticator for two-step verification.
+
+We value the security and privacy of user data; therefore, all data is encrypted and stored on the user's device. To prevent data loss due to unexpected incidents, the app also provides a backup function. However, please note that the exported files are not encrypted, so they must be stored securely. We recommend "offline storage" and multiple backups, such as on a clean USB drive or a secure folder within the device.
+
+⚠️ Please note that since data is stored on the user's device, it is crucial for users to remember their main password. Forgetting the main password will result in the inability to access the vault, requiring users to delete the app data or uninstall and reinstall the app, which will cause all previously saved passwords to be deleted. If you are worried about forgetting your main password, you can use the `Export Vault` feature, which allows you to restore previously saved passwords through the `Import Vault` feature.
+
+## Demo
+Since the app is currently in the testing phase (with an estimated release of the official version soon), please [join the testing program](https://forms.gle/FRXiX5q3aiSbkp296) first and then download the app from Google Play. Alternatively, you can find the `APK` file named `VaultGuard-1.x.x-android` in the [Release](https://gitlab.keke125.com/keke125/VaultGuard/-/releases) and install it. We recommend installing the latest version.
+
+## Technology
+
+### Programming Language, Project Management, Database
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?&style=for-the-badge&logo=kotlin&logoColor=white) ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white) ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+
+### Version Control
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+
+### Supported Operating System
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+
+## License
+[![Licence](https://img.shields.io/github/license/keke125/pixel-art-filter-web?style=for-the-badge)](LICENSE)
 
 ## Official Website
 https://vaultguard.keke125.com/
 
+## App Screenshots
+
 ## Feature
-- Data Security: This app securely stores your passwords using 256-bit AES (CBC mode) encryption. The database encryption key is also protected by an additional password. The password is a randomly generated string, and the encryption key is stored using a hardware-backed keystore provided by the Android system. This ensures that your passwords are safely stored on your device.
-- Privacy: We respect your privacy. Your passwords are only stored on your device in an encrypted form. You can review the permissions required by the app. We do not request any unnecessary permissions. Specific functions may require permissions, such as biometric recognition for unlocking the app and camera access for scanning QR Codes (TOTP verification codes).
-- Backup: If you want to switch devices, you can use our export feature. The exported file can be imported to your new device. Since the exported passwords are not encrypted, please keep the exported file secure.
-- Import: The app supports importing from Google Password Manager. You can export your passwords from Google Password Manager and then import them into our app.
-- Open Source: The app is open-sourced under the MIT license. You can view the complete source code at https://github.com/keke125/VaultGuard and use the app and code according to the license terms.
-- Free: Using the app is free of charge, and we will not include any ads. You can use it with confidence.
-- Account Authorization: You can set a main password, lock the vault repository (log out), and unlock the vault repository (log in). If your device supports biometric recognition, you can also log in using biometric authentication. For your security, the app will log you out after 1 hour since the last login .
-- TOTP Verification Codes: You can store TOTP verification codes to help with multi-factor authentication.
-- Search Passwords: You can search for passwords by name, account, or URL.
+- Data Security: Your data will be encrypted and stored only on your device; others (including the developers) will not be able to access your vault via the internet. Please use it with confidence.
+
+- Privacy: We do not collect any information about you. The app does not have network access permissions. Additionally, we only request permissions when you need to use specific features, such as biometric authentication for unlocking the vault or camera access for scanning QR codes (TOTP codes).
+
+- Backup and Restore (Export and Import Vault): When you want to switch phones or back up regularly, you can use the "Export Vault" feature. Later, you can use the "Import Vault" feature to import the exported file to your new device. Since the exported file is not encrypted, please handle it with care.
+
+- Import Passwords from Google Password Manager: The app supports importing passwords from Google Password Manager. You can first export your passwords from Google Password Manager and then import them into our app.
+
+- Open Source: The app is open source under the MIT License. You can view the full source code at https://github.com/keke125/VaultGuard.
+
+- Free: Using the app is free of charge, and we do not include ads.
+
+- Locking the Vault: For your safety, the app will automatically lock the vault after you log in for more than 1 hour. Please enter your main password to unlock it. You can also enable biometric authentication to unlock it.
+
+- Multi-Factor (Two-Step) Authentication: You can store TOTP verification codes in the vault to assist with multi-factor (two-step) authentication.
+
 - Compatibility: We support Android 7.0 and above.
-- Folders: You can organize your passwords into different folders for easier management. You can add, view, update, delete, and search for passwords within folders. You can also delete folders along with all the passwords within them.
-- Dark Theme: The app natively supports dark mode. You can switch between light and dark modes according to your preference.
-- Quick Settings: You can add a tile in the system menu for quick access to the app.
-- Clear Password Vault: Delete all passwords and folders.
+
+- Folders: You can manage passwords in different folders. You can also add, view, update, delete, and search for passwords within folders, as well as delete folders and their contained passwords.
+
+- Quick Setup: You can add a tile in the system menu page to quickly open the app.
+
 - Supported Languages: The app supports Traditional Chinese and English.
+
+Thank you for using our app!
+
+## Q & A
+
+- What to do if you forget your main password?  
+  Since the encryption key and data are stored on your device, we cannot help you reset your main password. You will need to delete the app data or uninstall and reinstall the app, but this will result in the deletion of all previously saved passwords. If you are worried about forgetting your main password, you can regularly use the `Export Vault` feature to back up your vault. This way, you can restore your previously saved passwords using the `Import Vault` feature.
 
 ## Join the test
 https://forms.gle/FRXiX5q3aiSbkp296
-
-Thank you for using our app!
