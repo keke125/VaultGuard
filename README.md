@@ -14,7 +14,7 @@ The English version is below.
 
 ## Demo
 
-由於程式目前處於測試階段(預估近期可上架正式版)，請先 [加入測試](https://forms.gle/FRXiX5q3aiSbkp296) 後再從`Google Play`下載程式，或是您也可以從 [Release](https://gitlab.keke125.com/keke125/VaultGuard/-/releases) 找到檔名為`VaultGuard-1.x.x-android`的`APK`檔並安裝，我們建議您安裝最新版本。 
+由於程式目前處於測試階段(預估近期可上架正式版)，請先 [加入測試](https://forms.gle/FRXiX5q3aiSbkp296) 後再從`Google Play`下載程式，或是您也可以從 [Release](https://github.com/keke125/VaultGuard/releases) 找到檔名為`VaultGuard-1.x.x-android`的`APK`檔並安裝，我們建議您安裝最新版本。 
 
 ## 技術
 
@@ -86,7 +86,7 @@ We value the security and privacy of user data; therefore, all data is encrypted
 ⚠️ Please note that since data is stored on the user's device, it is crucial for users to remember their main password. Forgetting the main password will result in the inability to access the vault, requiring users to delete the app data or uninstall and reinstall the app, which will cause all previously saved passwords to be deleted. If you are worried about forgetting your main password, you can use the `Export Vault` feature, which allows you to restore previously saved passwords through the `Import Vault` feature.
 
 ## Demo
-Since the app is currently in the testing phase (with an estimated release of the official version soon), please [join the testing program](https://forms.gle/FRXiX5q3aiSbkp296) first and then download the app from Google Play. Alternatively, you can find the `APK` file named `VaultGuard-1.x.x-android` in the [Release](https://gitlab.keke125.com/keke125/VaultGuard/-/releases) and install it. We recommend installing the latest version.
+Since the app is currently in the testing phase (with an estimated release of the official version soon), please [join the testing program](https://forms.gle/FRXiX5q3aiSbkp296) first and then download the app from Google Play. Alternatively, you can find the `APK` file named `VaultGuard-1.x.x-android` in the [Release](https://github.com/keke125/VaultGuard/releases) and install it. We recommend installing the latest version.
 
 ## Technology
 
