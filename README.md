@@ -35,31 +35,31 @@ https://vaultguard.keke125.com/
 
 ## 程式截圖
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_212754.png" alt=""><figcaption><p>新增密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_212754.png" alt=""><figcaption><p>新增密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213046.png" alt=""><figcaption><p>編輯密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213046.png" alt=""><figcaption><p>編輯密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213214.png" alt=""><figcaption><p>檢視密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213214.png" alt=""><figcaption><p>檢視密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213508.png" alt=""><figcaption><p>搜尋密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213508.png" alt=""><figcaption><p>搜尋密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213615.png" alt=""><figcaption><p>檢視資料夾內的密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213615.png" alt=""><figcaption><p>檢視資料夾內的密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213720.png" alt=""><figcaption><p>編輯及刪除資料夾</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213720.png" alt=""><figcaption><p>編輯及刪除資料夾</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_213828.png" alt=""><figcaption><p>密碼產生器</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_213828.png" alt=""><figcaption><p>密碼產生器</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214012.png" alt=""><figcaption><p>匯入密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214012.png" alt=""><figcaption><p>匯入密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214141.png" alt=""><figcaption><p>匯出密碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214141.png" alt=""><figcaption><p>匯出密碼</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214252.png" alt=""><figcaption><p>如裝置未設定生物辨識，將引導使用者註冊生物辨識</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214252.png" alt=""><figcaption><p>如裝置未設定生物辨識，將引導使用者註冊生物辨識</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214537.png" alt=""><figcaption><p>使用生物辨識解鎖密碼庫</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214537.png" alt=""><figcaption><p>使用生物辨識解鎖密碼庫</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214733.png" alt=""><figcaption><p>可新增圖塊，以便快速開啟密碼庫</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214733.png" alt=""><figcaption><p>可新增圖塊，以便快速開啟密碼庫</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240610_214933.png" alt=""><figcaption><p>掃描QR Code，以便取得TOTP驗證碼</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240610_214933.png" alt=""><figcaption><p>掃描QR Code，以便取得TOTP驗證碼</p></figcaption></figure>
 
 ## 主要特色
 - 資料安全: 您的資料將加密並只會儲存於您的手機，他人（包含開發者）皆無法透過網路存取您的密碼庫，請放心使用。
@@ -134,31 +134,31 @@ https://vaultguard.keke125.com/
 
 ## App Screenshots
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240902_214112.png" alt=""><figcaption><p>Add Password</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240902_214112.png" alt=""><figcaption><p>Add Password</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_160508.png" alt=""><figcaption><p>Edit Password</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_160508.png" alt=""><figcaption><p>Edit Password</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_160557.png" alt=""><figcaption><p>View Password Details</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_160557.png" alt=""><figcaption><p>View Password Details</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/Screenshot_20240903_160740.png" alt=""><figcaption><p>Search Password</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_160740.png" alt=""><figcaption><p>Search Password</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_161750.png" alt=""><figcaption><p>View Passwords in the Folder</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_161750.png" alt=""><figcaption><p>View Passwords in the Folder</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_161927.png" alt=""><figcaption><p>Edit and Remove Folder</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_161927.png" alt=""><figcaption><p>Edit and Remove Folder</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_162115.png" alt=""><figcaption><p>Password Generator</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_162115.png" alt=""><figcaption><p>Password Generator</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_162243.png" alt=""><figcaption><p>Import Vault</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_162243.png" alt=""><figcaption><p>Import Vault</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_162345.png" alt=""><figcaption><p>Export Vault</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_162345.png" alt=""><figcaption><p>Export Vault</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_162506.png" alt=""><figcaption><p>If the device does not have biometric authentication set up, the user will be prompted to register for biometric authentication.</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_162506.png" alt=""><figcaption><p>If the device does not have biometric authentication set up, the user will be prompted to register for biometric authentication.</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_162732.png" alt=""><figcaption><p>Unlock the Vault Using Biometric Authentication.</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_162732.png" alt=""><figcaption><p>Unlock the Vault Using Biometric Authentication.</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_163132.png" alt=""><figcaption><p>You can add a tile for quick access to the vault.</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_163132.png" alt=""><figcaption><p>You can add a tile for quick access to the vault.</p></figcaption></figure>
 
-<figure><img src="https://gitlab.keke125.com/keke125/vault-guard-website/-/raw/main/.gitbook/assets/Screenshot_20240903_163313.png" alt=""><figcaption><p>Scan a QR code to obtain a TOTP verification code.</p></figcaption></figure>
+<figure><img src="img/Screenshot_20240903_163313.png" alt=""><figcaption><p>Scan a QR code to obtain a TOTP verification code.</p></figcaption></figure>
 
 ## Feature
 - Data Security: Your data will be encrypted and stored only on your device; others (including the developers) will not be able to access your vault via the internet. Please use it with confidence.
