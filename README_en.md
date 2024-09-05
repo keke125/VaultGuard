@@ -34,6 +34,14 @@ Since the app is currently in the testing phase (with an estimated release of th
 ## Official Website
 https://vaultguard.keke125.com/
 
+## Q & A
+
+- What to do if you forget your main password?  
+  Since the encryption key and data are stored on your device, we cannot help you reset your main password. You will need to delete the app data or uninstall and reinstall the app, but this will result in the deletion of all previously saved passwords. If you are worried about forgetting your main password, you can regularly use the `Export Vault` feature to back up your vault. This way, you can restore your previously saved passwords using the `Import Vault` feature.
+
+- What is a TOTP Verification Code?  
+A TOTP (Time-Based One-Time Password) verification code is a time-based, one-time password used in two-factor authentication (2FA) or multi-factor authentication (MFA) systems. It generates a short-lived code based on the current time, typically a 6-digit or 8-digit number, which automatically updates every 30 or 60 seconds. Due to its short validity period, the potential damage from theft is much smaller compared to traditional passwords. Because it is relatively low-cost to implement, it is commonly used as a method of two-factor authentication.
+
 ## App Screenshots
 
 <figure><img src="img/Screenshot_20240902_214112.png" alt=""><figcaption><p>Add Password</p></figcaption></figure>
@@ -88,14 +96,6 @@ https://vaultguard.keke125.com/
 - Supported Languages: The app supports Traditional Chinese and English.
 
 Thank you for using our app!
-
-## Q & A
-
-- What to do if you forget your main password?  
-  Since the encryption key and data are stored on your device, we cannot help you reset your main password. You will need to delete the app data or uninstall and reinstall the app, but this will result in the deletion of all previously saved passwords. If you are worried about forgetting your main password, you can regularly use the `Export Vault` feature to back up your vault. This way, you can restore your previously saved passwords using the `Import Vault` feature.
-
-- What is a TOTP Verification Code?  
-A TOTP (Time-Based One-Time Password) verification code is a time-based, one-time password used in two-factor authentication (2FA) or multi-factor authentication (MFA) systems. It generates a short-lived code based on the current time, typically a 6-digit or 8-digit number, which automatically updates every 30 or 60 seconds. Due to its short validity period, the potential damage from theft is much smaller compared to traditional passwords. Because it is relatively low-cost to implement, it is commonly used as a method of two-factor authentication.
 
 ## Join the test
 https://forms.gle/FRXiX5q3aiSbkp296
