@@ -6,7 +6,7 @@ The English version is below.
 
 ## 簡介
 
-本專案為`Android`應用程式，程式提供使用者產生、儲存、搜尋、備份密碼的功能，同時也提供產生TOTP驗證碼的功能，使用者可以將其作為密碼器使用，或是單純用於兩步驟驗證的驗證器使用。
+本專案為`Android`應用程式，程式提供使用者產生、儲存、搜尋、備份密碼的功能，同時也提供產生TOTP驗證碼的功能，使用者可以將其作為密碼器使用，或是單純用於兩步驟驗證的驗證器(例如: Google Authenticator、Microsoft Authenticator、Authy)使用。
 
 我們重視使用者的資料安全及隱私，所有資料皆加密儲存於使用者的手機，為了避免意外發生，程式也提供備份功能，不過匯出的檔案不會經過加密，需妥善保存，建議將檔案「離線保存」並多備份，例如: 乾淨的隨身碟、手機內的安全資料夾。
 
@@ -93,6 +93,9 @@ https://vaultguard.keke125.com/
 - 忘記主密碼怎麼辦?  
 由於加密金鑰及資料皆儲存於您的手機，我們無法幫您重設主密碼，您需將程式資料刪除或解除安裝後重新安裝，但這將導致過去儲存的密碼被刪除，如果您擔心忘記主密碼，您可定期使用`匯出密碼庫`的功能來備份密碼庫，這樣可透過`匯入密碼庫`的功能來還原之前儲存的密碼。
 
+- 什麼是TOTP驗證碼?  
+TOTP（Time-Based One-Time Password）驗證碼是一種基於時間的一次性驗證碼，用於雙因素驗證（2FA）或多因素驗證（MFA）系統，它會根據當前時間產生一個短暫有效的驗證碼，通常是6位或8位數字，並每隔30秒或60秒自動更新，因為有效期較短，相比密碼來說被盜用的損失也較小，因為實作成本較低，常作為一種雙重驗證的方式。
+
 
 ## 加入測試
 https://forms.gle/FRXiX5q3aiSbkp296
@@ -103,7 +106,7 @@ https://forms.gle/FRXiX5q3aiSbkp296
 
 ## Introduction
 
-This project is an Android application that provides users with functions to generate, save, search, and back up passwords. It also offers a feature to generate TOTP (Time-Based One-Time Password) codes, allowing users to use the app either as a password manager or solely as an authenticator for two-step verification.
+This project is an Android application that provides users with functions to generate, save, search, and back up passwords. It also offers a feature to generate TOTP (Time-Based One-Time Password) codes, allowing users to use the app either as a password manager or solely as an authenticator (e.g., Google Authenticator, Microsoft Authenticator, Authy) for two-step verification.
 
 We value the security and privacy of user data; therefore, all data is encrypted and stored on the user's device. To prevent data loss due to unexpected incidents, the app also provides a backup function. However, please note that the exported files are not encrypted, so they must be stored securely. We recommend "offline storage" and multiple backups, such as on a clean USB drive or a secure folder within the device.
 
@@ -188,6 +191,9 @@ Thank you for using our app!
 
 - What to do if you forget your main password?  
   Since the encryption key and data are stored on your device, we cannot help you reset your main password. You will need to delete the app data or uninstall and reinstall the app, but this will result in the deletion of all previously saved passwords. If you are worried about forgetting your main password, you can regularly use the `Export Vault` feature to back up your vault. This way, you can restore your previously saved passwords using the `Import Vault` feature.
+
+- What is a TOTP Verification Code?  
+A TOTP (Time-Based One-Time Password) verification code is a time-based, one-time password used in two-factor authentication (2FA) or multi-factor authentication (MFA) systems. It generates a short-lived code based on the current time, typically a 6-digit or 8-digit number, which automatically updates every 30 or 60 seconds. Due to its short validity period, the potential damage from theft is much smaller compared to traditional passwords. Because it is relatively low-cost to implement, it is commonly used as a method of two-factor authentication.
 
 ## Join the test
 https://forms.gle/FRXiX5q3aiSbkp296
