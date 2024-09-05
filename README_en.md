@@ -1,3 +1,7 @@
+[中文版](README.md)
+
+[English Version](README_en.md)
+
 # Vault Guard - Your Password Manager
 
 **Vault Guard** is a free and open-source Android application that provides users with password management features.
