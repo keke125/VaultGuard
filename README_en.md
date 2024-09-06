@@ -14,8 +14,8 @@ We value the security and privacy of user data; therefore, all data is encrypted
 
 ⚠️ Please note that since data is stored on the user's device, it is crucial for users to remember their main password. Forgetting the main password will result in the inability to access the vault, requiring users to delete the app data or uninstall and reinstall the app, which will cause all previously saved passwords to be deleted. If you are worried about forgetting your main password, you can use the `Export Vault` feature, which allows you to restore previously saved passwords through the `Import Vault` feature.
 
-## Demo
-Since the app is currently in the testing phase (with an estimated release of the official version soon), please [join the testing program](https://forms.gle/FRXiX5q3aiSbkp296) first and then download the app from Google Play. Alternatively, you can find the `APK` file named `VaultGuard-1.x.x-android` in the [Release](https://github.com/keke125/VaultGuard/releases) and install it. We recommend installing the latest version.
+## Download
+Please download the app from [Google Play](https://play.google.com/store/apps/details?id=com.keke125.vaultguard) . Alternatively, you can find the `APK` file named `VaultGuard-1.x.x-android` in the [Release](https://github.com/keke125/VaultGuard/releases) and install it. We recommend installing the latest version.
 
 ## Technology
 
