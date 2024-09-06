@@ -14,9 +14,9 @@
 
 ⚠️ 請注意，由於資料儲存於使用者的手機，請使用者務必牢記主密碼，忘記主密碼將導致無法存取密碼庫，需將程式資料刪除或解除安裝後重新安裝，這將導致過去儲存的密碼被刪除，如果擔心忘記主密碼，可使用`匯出密碼庫`的功能，這樣可透過`匯入密碼庫`的功能還原過去儲存的密碼。
 
-## Demo
+## 下載
 
-由於程式目前處於測試階段(預估近期可上架正式版)，請先 [加入測試](https://forms.gle/FRXiX5q3aiSbkp296) 後再從`Google Play`下載程式，或是您也可以從 [Release](https://github.com/keke125/VaultGuard/releases) 找到檔名為`VaultGuard-1.x.x-android`的`APK`檔並安裝，我們建議您安裝最新版本。 
+請從 [Google Play](https://play.google.com/store/apps/details?id=com.keke125.vaultguard) 下載程式，或是您也可以從 [Release](https://github.com/keke125/VaultGuard/releases) 找到檔名為`VaultGuard-1.x.x-android`的`APK`檔並安裝，我們建議您安裝最新版本。 
 
 ## 技術
 
