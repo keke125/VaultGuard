@@ -97,5 +97,6 @@ A TOTP (Time-Based One-Time Password) verification code is a time-based, one-tim
 
 Thank you for using our app!
 
-## Join the test
-https://forms.gle/FRXiX5q3aiSbkp296
+## CLOC (Count Lines of Code)
+![image](https://github.com/user-attachments/assets/b018813c-5b5a-45fb-9d9a-17a013ac459e)
+
