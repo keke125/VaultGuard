@@ -98,5 +98,5 @@ TOTP（Time-Based One-Time Password）驗證碼是一種基於時間的一次性
 
 感謝您使用我們的程式!
 
-## 加入測試
-https://forms.gle/FRXiX5q3aiSbkp296
+## 程式碼行數
+![image](https://github.com/user-attachments/assets/cb8ce5da-f6d0-47dd-a724-ea7cd1659e19)
