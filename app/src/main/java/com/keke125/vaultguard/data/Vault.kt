@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.TypeConverters
 
 @Entity(
@@ -13,8 +14,10 @@ import androidx.room.TypeConverters
             entity = Folder::class,
             parentColumns = ["uid"],
             childColumns = ["folderUid"],
-            onDelete = ForeignKey.CASCADE)
-    ]
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["folderUid"])]
 )
 @TypeConverters(Converters::class)
 data class Vault(

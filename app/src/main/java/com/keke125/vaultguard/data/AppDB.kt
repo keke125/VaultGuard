@@ -11,10 +11,10 @@ import java.security.SecureRandom
 
 
 @Database(
-    version = 9,
+    version = 10,
     entities = [Vault::class,Folder::class],
     autoMigrations = [
-        AutoMigration (from = 8, to = 9)
+        AutoMigration (from = 9, to = 10)
     ],
     exportSchema = true
 )
