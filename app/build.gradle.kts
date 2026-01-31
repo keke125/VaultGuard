@@ -38,8 +38,8 @@ android {
         applicationId = "com.keke125.vaultguard"
         minSdk = 24
         targetSdk = 35
-        versionCode = 32
-        versionName = "1.8.2"
+        versionCode = 33
+        versionName = "1.9.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
