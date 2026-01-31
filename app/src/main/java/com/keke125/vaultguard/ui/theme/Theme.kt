@@ -57,8 +57,10 @@ fun VaultGuardTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            if (Build.VERSION.SDK_INT < 35) {
+                window.statusBarColor = colorScheme.primary.toArgb()
+            }
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
