@@ -1,6 +1,7 @@
 package com.keke125.vaultguard.navigation
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +41,6 @@ import com.keke125.vaultguard.screen.VaultDetailsScreen
 import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.screen.VaultsRepositoryScreen
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -77,6 +77,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         NavHost(
             navController = navController,
             startDestination = Screen.Vault.route,
+            modifier = modifier.fillMaxWidth().padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable(Screen.Vault.route) {
                 VaultScreen(
