@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
@@ -115,10 +115,10 @@ fun EditVaultScreen(
                     val url = result.data
                     if (url != null) {
                         if (url.getStringExtra("url") != null) {
-                            if (getSecretFromUri(Uri.parse(url.getStringExtra("url"))) != null) {
+                            if (getSecretFromUri(url.getStringExtra("url")!!.toUri()) != null) {
                                 viewModel.updateUiState(
                                     viewModel.vaultUiState.vaultDetails.copy(
-                                        totp = getSecretFromUri(Uri.parse(url.getStringExtra("url")))!!
+                                        totp = getSecretFromUri(url.getStringExtra("url")!!.toUri())!!
                                     )
                                 )
                                 Toast.makeText(

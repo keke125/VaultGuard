@@ -191,7 +191,7 @@ class BarcodeScannerActivity : ComponentActivity() {
 
                         // Preview
                         val preview = Preview.Builder().build().also {
-                            it.setSurfaceProvider(previewView.surfaceProvider)
+                            it.surfaceProvider = previewView.surfaceProvider
                         }
 
                         // Select back camera as a default

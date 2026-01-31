@@ -3,7 +3,6 @@ package com.keke125.vaultguard.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keke125.vaultguard.data.UserPreferencesRepository
-import com.keke125.vaultguard.service.PasswordService
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

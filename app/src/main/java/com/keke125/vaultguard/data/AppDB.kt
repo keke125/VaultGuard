@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import com.keke125.vaultguard.service.KeyService
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.security.SecureRandom
+import androidx.core.content.edit
 
 
 @Database(
@@ -48,9 +49,8 @@ abstract class AppDB : RoomDatabase() {
                             charset[SecureRandom().nextInt(charset.size)].toString()
                         }
                         val encryptedPassword = keyService.encrypt(dbPassword, context)
-                        with(sharedPref.edit()) {
+                        sharedPref.edit {
                             putString("DB_PASSWORD", encryptedPassword)
-                            apply()
                         }
                     }
                 }

@@ -12,6 +12,7 @@ import java.util.Calendar
 import java.util.Date
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+import androidx.core.content.edit
 
 
 class PasswordService(context: Context) {
@@ -37,9 +38,8 @@ class PasswordService(context: Context) {
 
     fun updatePassword(password: String) {
         val passwordHashed = generatePasswordHash(password)
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putString("PASSWORD_HASHED", passwordHashed)
-            apply()
         }
     }
 
@@ -97,17 +97,15 @@ class PasswordService(context: Context) {
         if (diff == 0) {
             if (Build.VERSION.SDK_INT >= 26) {
                 val currentTime = Instant.now()
-                with(sharedPref.edit()) {
+                sharedPref.edit {
                     putBoolean("IS_AUTHENTICATED", true)
                     putString("LOGIN_TIME", currentTime.toString())
-                    apply()
                 }
             } else {
                 val currentTime = System.currentTimeMillis()
-                with(sharedPref.edit()) {
+                sharedPref.edit {
                     putBoolean("IS_AUTHENTICATED", true)
                     putString("LOGIN_TIME", currentTime.toString())
-                    apply()
                 }
             }
         }
@@ -115,9 +113,8 @@ class PasswordService(context: Context) {
     }
 
     fun logout() {
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putBoolean("IS_AUTHENTICATED", false)
-            apply()
         }
     }
 
@@ -125,23 +122,20 @@ class PasswordService(context: Context) {
         if(isAuthenticationSuccessful){
             if (Build.VERSION.SDK_INT >= 26) {
                 val currentTime = Instant.now()
-                with(sharedPref.edit()) {
+                sharedPref.edit {
                     putBoolean("IS_AUTHENTICATED", true)
                     putString("LOGIN_TIME", currentTime.toString())
-                    apply()
                 }
             } else {
                 val currentTime = System.currentTimeMillis()
-                with(sharedPref.edit()) {
+                sharedPref.edit {
                     putBoolean("IS_AUTHENTICATED", true)
                     putString("LOGIN_TIME", currentTime.toString())
-                    apply()
                 }
             }
         }
-        with(sharedPref.edit()) {
+        sharedPref.edit {
             putBoolean("IS_AUTHENTICATED", isAuthenticationSuccessful)
-            apply()
         }
     }
 
