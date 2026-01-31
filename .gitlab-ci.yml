@@ -5,9 +5,10 @@ workflow:
 build:
   tags:
     - high performance
-  image: fabernovel/android:api-34-v1.8.0
+  image: fabernovel/android:api-35-v1.11.0
   stage: build
   script:
+    - jenv global 17
     - apt update -y && apt install -y curl
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - chmod +x gradlew
