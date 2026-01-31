@@ -75,7 +75,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         NavHost(
             navController = navController,
             startDestination = Screen.Vault.route,
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable(Screen.Vault.route) {
                 VaultScreen(navController = navController,
