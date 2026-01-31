@@ -1,6 +1,6 @@
 package com.keke125.vaultguard.navigation
 
-import androidx.compose.foundation.layout.padding
+import android.annotation.SuppressLint
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +40,7 @@ import com.keke125.vaultguard.screen.VaultDetailsScreen
 import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.screen.VaultsRepositoryScreen
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -54,7 +55,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 NavigationBar {
                     BottomNavigationItem(navController = navController).bottomNavigationItems()
                         .forEachIndexed { _, navigationItem ->
-                            NavigationBarItem(selected = navigationItem.route == currentDestination.route,
+                            NavigationBarItem(
+                                selected = navigationItem.route == currentDestination.route,
                                 label = {
                                     Text(navigationItem.label, textAlign = TextAlign.Center)
                                 },
@@ -75,16 +77,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
         NavHost(
             navController = navController,
             startDestination = Screen.Vault.route,
-            modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable(Screen.Vault.route) {
-                VaultScreen(navController = navController,
+                VaultScreen(
+                    navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
                     navigateToSearchVault = { navController.navigate(Screen.SearchVault.route) })
             }
             composable(Screen.SearchVault.route) {
-                SearchVaultScreen(navController = navController,
+                SearchVaultScreen(
+                    navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") })
             }
@@ -127,7 +130,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 SignupScreen(navController = navController)
             }
             composable(Screen.Folder.route) {
-                FolderScreen(navController = navController,
+                FolderScreen(
+                    navController = navController,
                     navigateToViewFolder = { navController.navigate("${FolderDetailsDestination.route}/${it}") })
             }
             composable(AddFolderDestination.route) {
@@ -147,7 +151,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     type = NavType.IntType
                 })
             ) {
-                FolderDetailsScreen(navController = navController,
+                FolderDetailsScreen(
+                    navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
                     navigateToSearchVaultByFolderUid = { navController.navigate("${SearchVaultByFolderUidDestination.route}/${it}") })

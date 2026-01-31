@@ -1,6 +1,5 @@
 package com.keke125.vaultguard.screen
 
-import android.annotation.SuppressLint
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.foundation.clickable
@@ -29,16 +28,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -47,7 +45,6 @@ import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.SearchVaultViewModel
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchVaultScreen(
@@ -66,100 +63,108 @@ fun SearchVaultScreen(
             val (keyword, onKeywordChange) = remember { mutableStateOf("") }
             val (isSearchActive, onSearchActiveChange) = remember { mutableStateOf(false) }
             val focusRequester = remember { FocusRequester() }
-            var textFieldLoaded by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
             Scaffold(topBar = {
-                TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ), navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
-                    }
-                }, title = { Text(stringResource(R.string.app_search_password_title)) })
+                TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ), navigationIcon = {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                        }
+                    }, title = { Text(stringResource(R.string.app_search_password_title)) })
             }) { innerPadding ->
-                SearchBar(query = keyword, onQueryChange = {
-                    onKeywordChange(it)
-                    viewModel.updateKeyword(it)
-                }, onSearch = {
-                    if (it == "") {
-                        onSearchActiveChange(false)
-                    } else {
+                SearchBar(
+                    query = keyword,
+                    onQueryChange = {
                         onKeywordChange(it)
                         viewModel.updateKeyword(it)
-                    }
-                }, leadingIcon = {
-                    Icon(
-                        Icons.Default.Search, contentDescription = null
-                    )
-                }, trailingIcon = {
-                    IconButton(onClick = {
-                        onKeywordChange("")
-                        viewModel.updateKeyword("")
-                    }) {
-                        Icon(Icons.Rounded.Cancel, contentDescription = "清除關鍵字")
-                    }
-                }, active = isSearchActive, onActiveChange = {
-                    onSearchActiveChange(it)
-                }, placeholder = { Text(stringResource(id = R.string.app_search_password)) }, content = {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        if (vaultUiState.vaultList.isNotEmpty() && keyword.isNotEmpty()) {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                items(vaultUiState.vaultList) { vault ->
-                                    val (expanded, onExpandedChange) = remember {
-                                        mutableStateOf(false)
-                                    }
-                                    ListItem(headlineContent = { Text(vault.name) },
-                                        supportingContent = { Text(vault.username) },
-                                        leadingContent = {
-                                            Icon(
-                                                Icons.Default.AccountCircle,
-                                                contentDescription = null,
-                                            )
-                                        },
-                                        trailingContent = {
-                                            IconButton(onClick = { onExpandedChange(true) }) {
+                    },
+                    onSearch = {
+                        if (it == "") {
+                            onSearchActiveChange(false)
+                        } else {
+                            onKeywordChange(it)
+                            viewModel.updateKeyword(it)
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Search, contentDescription = null
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            onKeywordChange("")
+                            viewModel.updateKeyword("")
+                        }) {
+                            Icon(Icons.Rounded.Cancel, contentDescription = "清除關鍵字")
+                        }
+                    },
+                    active = isSearchActive,
+                    onActiveChange = {
+                        onSearchActiveChange(it)
+                    },
+                    placeholder = { Text(stringResource(id = R.string.app_search_password)) },
+                    content = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (vaultUiState.vaultList.isNotEmpty() && keyword.isNotEmpty()) {
+                                LazyColumn(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    items(vaultUiState.vaultList) { vault ->
+                                        val (expanded, onExpandedChange) = remember {
+                                            mutableStateOf(false)
+                                        }
+                                        ListItem(
+                                            headlineContent = { Text(vault.name) },
+                                            supportingContent = { Text(vault.username) },
+                                            leadingContent = {
                                                 Icon(
-                                                    imageVector = Icons.Default.MoreVert,
-                                                    contentDescription = "更多內容"
+                                                    Icons.Default.AccountCircle,
+                                                    contentDescription = null,
                                                 )
-                                            }
-                                        },
-                                        modifier = Modifier.clickable {
-                                            navigateToViewVault(vault.uid)
-                                        })
-                                    HorizontalDivider()
-                                    VaultDialog(
-                                        expanded,
-                                        onExpandedChange,
-                                        vault,
-                                        clipboard,
-                                        context,
-                                        navigateToViewVault,
-                                        navigateToEditVault
-                                    )
+                                            },
+                                            trailingContent = {
+                                                IconButton(onClick = { onExpandedChange(true) }) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.MoreVert,
+                                                        contentDescription = "更多內容"
+                                                    )
+                                                }
+                                            },
+                                            modifier = Modifier.clickable {
+                                                navigateToViewVault(vault.uid)
+                                            })
+                                        HorizontalDivider()
+                                        VaultDialog(
+                                            expanded,
+                                            onExpandedChange,
+                                            vault,
+                                            clipboard,
+                                            context,
+                                            navigateToViewVault,
+                                            navigateToEditVault
+                                        )
+                                    }
                                 }
+                            } else if (keyword.isNotEmpty()) {
+                                Text(stringResource(id = R.string.app_search_password_empty))
                             }
-                        } else if (keyword.isNotEmpty()) {
-                            Text(stringResource(id = R.string.app_search_password_empty))
                         }
-                    }
-                }, modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .onGloballyPositioned {
-                        if (!textFieldLoaded) {
-                            focusRequester.requestFocus()
-                            textFieldLoaded = true
-                        }
-                    }
-                    .padding(innerPadding)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .padding(top = innerPadding.calculateTopPadding())
                 )
             }
         }
