@@ -3,17 +3,16 @@ package com.keke125.vaultguard.screen
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -21,12 +20,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -66,19 +62,10 @@ fun SearchVaultScreen(
             LaunchedEffect(Unit) {
                 focusRequester.requestFocus()
             }
-            Scaffold(topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ), navigationIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
-                        }
-                    }, title = { Text(stringResource(R.string.app_search_password_title)) })
-            }) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
                 SearchBar(
                     query = keyword,
                     onQueryChange = {
@@ -94,9 +81,11 @@ fun SearchVaultScreen(
                         }
                     },
                     leadingIcon = {
-                        Icon(
-                            Icons.Default.Search, contentDescription = null
-                        )
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                        }
                     },
                     trailingIcon = {
                         IconButton(onClick = {
@@ -164,7 +153,7 @@ fun SearchVaultScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
-                        .padding(top = innerPadding.calculateTopPadding())
+                        .align(Alignment.TopCenter)
                 )
             }
         }
