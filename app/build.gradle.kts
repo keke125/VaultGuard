@@ -20,7 +20,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.keke125.vaultguard"
-    compileSdk = 36
+    compileSdk = 37
 
     signingConfigs {
         create("release") {
@@ -35,7 +35,7 @@ android {
     defaultConfig {
         applicationId = "com.keke125.vaultguard"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 34
         versionName = "1.9.1"
 
