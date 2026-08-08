@@ -4,7 +4,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
 }
 fun readProperties(propertiesFile: File) = Properties().apply {
     propertiesFile.inputStream().use { fis ->
@@ -23,14 +23,12 @@ android {
     compileSdk = 35
 
     signingConfigs {
-        println(keystoreProperties["storeFile"].toString())
         create("release") {
-            storeFile = if (keystoreProperties["storeFile"].toString().isNotEmpty()) file(
-                keystoreProperties["storeFile"].toString()
-            ) else null
-            storePassword = keystoreProperties["storePassword"].toString()
-            keyAlias = keystoreProperties["keyAlias"].toString()
-            keyPassword = keystoreProperties["keyPassword"].toString()
+            val storeFilePath = keystoreProperties["storeFile"]?.toString()
+            storeFile = if (!storeFilePath.isNullOrEmpty()) file(storeFilePath) else null
+            storePassword = keystoreProperties["storePassword"]?.toString()
+            keyAlias = keystoreProperties["keyAlias"]?.toString()
+            keyPassword = keystoreProperties["keyPassword"]?.toString()
         }
     }
 
@@ -45,14 +43,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
-        }
+
     }
 
     buildTypes {
@@ -97,6 +88,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -114,7 +109,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
-    annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.runtime.livedata)

@@ -7,6 +7,7 @@ biometricVersion = "1.1.0"
 cameraCore = "1.4.2"
 gson = "2.11.0"
 kotlin = "1.9.23"
+ksp = "1.9.23-1.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -70,3 +71,4 @@ zetetic-sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
