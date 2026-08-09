@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -117,7 +116,7 @@ class BarcodeScannerActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-                    val lifecycleOwner = LocalLifecycleOwner.current
+                    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
                     val previewView = remember {
                         PreviewView(this)
                     }
