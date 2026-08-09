@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface FoldersRepository {
     fun getAllFolders(): Flow<List<Folder>>
 
-    fun getFolderByUid(uid: Int): Flow<Folder>
+    fun getFolderByUid(uid: Int): Flow<Folder?>
 
     suspend fun insertFolder(folder: Folder)
 

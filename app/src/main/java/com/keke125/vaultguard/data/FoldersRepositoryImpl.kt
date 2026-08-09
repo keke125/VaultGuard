@@ -6,7 +6,7 @@ class FoldersRepositoryImpl(private val folderDAO: FolderDAO) : FoldersRepositor
 
     override fun getAllFolders(): Flow<List<Folder>> = folderDAO.getAll()
 
-    override fun getFolderByUid(uid: Int): Flow<Folder> = folderDAO.findById(uid)
+    override fun getFolderByUid(uid: Int): Flow<Folder?> = folderDAO.findById(uid)
 
     override suspend fun insertFolder(folder: Folder) = folderDAO.insert(folder)
 

@@ -17,7 +17,7 @@ interface FolderDAO {
     fun findByName(name: String): Flow<List<Folder>>
 
     @Query("SELECT * FROM folder WHERE uid = :uid")
-    fun findById(uid: Int): Flow<Folder>
+    fun findById(uid: Int): Flow<Folder?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg folders: Folder)

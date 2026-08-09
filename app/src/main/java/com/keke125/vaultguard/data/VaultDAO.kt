@@ -20,7 +20,7 @@ interface VaultDAO {
     fun loadAllByIds(vaultIds: IntArray): Flow<List<Vault>>
 
     @Query("SELECT * FROM vault WHERE uid = :uid")
-    fun findById(uid: Int): Flow<Vault>
+    fun findById(uid: Int): Flow<Vault?>
 
     @Query("SELECT * FROM vault WHERE name LIKE '%' || :name || '%'")
     fun findByName(name: String): Flow<List<Vault>>

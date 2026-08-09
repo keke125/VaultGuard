@@ -46,10 +46,10 @@ class EditVaultViewModel(
         viewModelScope.launch {
             vaultUiState = vaultsRepository.getVaultByUid(itemId).filterNotNull().first()
                 .toVaultDetailsUiState()
-            if (vaultUiState.vaultDetails.folderUid != null){
+            if (vaultUiState.vaultDetails.folderUid != null && vaultUiState.vaultDetails.folderUid != 0){
                 foldersRepository.getFolderByUid(vaultUiState.vaultDetails.folderUid!!)
                     .collect { folder ->
-                        folderName.value = folder.name
+                        folderName.value = folder?.name
                     }
             }else{
                 folderName.value = null

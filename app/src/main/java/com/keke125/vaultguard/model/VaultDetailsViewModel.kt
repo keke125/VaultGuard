@@ -29,7 +29,7 @@ class VaultDetailsViewModel(
             val vaultDetailsUiState = VaultDetailsUiState(vaultDetails = vault.toVaultDetails())
 
             viewModelScope.launch {
-                if (vault.folderUid != null) {
+                if (vault.folderUid != null && vault.folderUid != 0) {
                     foldersRepository.getFolderByUid(vault.folderUid).collect { folder ->
                         folderUiState = FolderUiState(folder = folder)
                     }

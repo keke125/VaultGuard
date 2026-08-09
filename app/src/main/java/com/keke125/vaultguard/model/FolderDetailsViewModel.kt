@@ -7,8 +7,10 @@ import com.keke125.vaultguard.data.Folder
 import com.keke125.vaultguard.data.FoldersRepository
 import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.screen.FolderDetailsDestination
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -20,7 +22,9 @@ class FolderDetailsViewModel(
 ) : ViewModel() {
     val folderId: Int = checkNotNull(savedStateHandle[FolderDetailsDestination.FOLDERID])
 
-    val uiState: StateFlow<FolderDetailsUiState> =
+    val uiState: StateFlow<FolderDetailsUiState> = if (folderId == 0) {
+        MutableStateFlow(FolderDetailsUiState()).asStateFlow()
+    } else {
         foldersRepository.getFolderByUid(folderId).filterNotNull().map {
             FolderDetailsUiState(folderDetails = it.toFolderDetails())
         }.stateIn(
@@ -28,6 +32,7 @@ class FolderDetailsViewModel(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = FolderDetailsUiState()
         )
+    }
 
     val vaultUiState: StateFlow<VaultUiState> = if (folderId == 0) {
         vaultsRepository.getVaultsByFolderUid(null).map { VaultUiState(it) }.stateIn(
