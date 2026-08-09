@@ -1,13 +1,13 @@
 [versions]
-agp = "8.13.0"
+agp = "9.3.1"
 apacheCommonsCsv = "1.5"
 barcodeScanning = "17.3.0"
 biometricKtx = "1.2.0-alpha05"
 biometricVersion = "1.1.0"
 cameraCore = "1.4.2"
 gson = "2.11.0"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.20"
+kotlin = "2.2.10"
+ksp = "2.3.6"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -18,9 +18,9 @@ activityCompose = "1.9.1"
 composeBom = "2024.06.00"
 navigationCompose = "2.7.7"
 datastorePreferences = "1.1.1"
-roomKtx = "2.6.1"
-roomRuntime = "2.6.1"
-roomCompiler = "2.6.1"
+roomKtx = "2.8.4"
+roomRuntime = "2.8.4"
+roomCompiler = "2.8.4"
 appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.1"
@@ -72,3 +72,4 @@ zetetic-sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
