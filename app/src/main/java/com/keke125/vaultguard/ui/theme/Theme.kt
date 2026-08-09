@@ -1,7 +1,7 @@
 package com.keke125.vaultguard.ui.theme
 
-import android.app.Activity
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -54,13 +54,16 @@ fun VaultGuardTheme(
         else -> LightColorScheme
     }
     val view = LocalView.current
+    val activity = LocalActivity.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            if (Build.VERSION.SDK_INT < 35) {
-                window.statusBarColor = colorScheme.primary.toArgb()
+            activity?.window?.let { window ->
+                if (Build.VERSION.SDK_INT < 35) {
+                    window.statusBarColor = colorScheme.primary.toArgb()
+                }
+                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                    !darkTheme
             }
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
