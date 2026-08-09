@@ -63,7 +63,7 @@ class FileService {
                 vaults.add(vault)
             }
             return vaults
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return null
         }
     }
@@ -118,7 +118,7 @@ class FileService {
                 }
             }
             return Pair(vaults, folders)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return null
         }
     }

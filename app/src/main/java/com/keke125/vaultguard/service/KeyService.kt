@@ -42,7 +42,7 @@ class KeyService {
                 } else {
                     Log.d("VaultGuard", "Security Level: " + keyInfo.securityLevel)
                 }
-            } catch (e: InvalidKeySpecException) {
+            } catch (_: InvalidKeySpecException) {
                 Log.d("VaultGuard", "Invalid key spec")
             }
             return keyStore.getKey(aesKeyAlias, null) as SecretKey
