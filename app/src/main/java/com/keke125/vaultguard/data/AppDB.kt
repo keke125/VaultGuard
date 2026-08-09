@@ -57,7 +57,7 @@ abstract class AppDB : RoomDatabase() {
                 val passphrase = dbPassword?.toByteArray()
                 val factory = SupportOpenHelperFactory(passphrase)
                 Room.databaseBuilder(context, AppDB::class.java, "app_db")
-                    .openHelperFactory(factory).fallbackToDestructiveMigration().build()
+                                .openHelperFactory(factory).fallbackToDestructiveMigration(false).build()
                     .also { Instance = it }
             }
         }
