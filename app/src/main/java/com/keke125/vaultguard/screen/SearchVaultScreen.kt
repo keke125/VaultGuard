@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,94 +68,101 @@ fun SearchVaultScreen(
                     .fillMaxSize()
             ) {
                 SearchBar(
-                    query = keyword,
-                    onQueryChange = {
-                        onKeywordChange(it)
-                        viewModel.updateKeyword(it)
-                    },
-                    onSearch = {
-                        if (it == "") {
-                            onSearchActiveChange(false)
-                        } else {
-                            onKeywordChange(it)
-                            viewModel.updateKeyword(it)
-                        }
-                    },
-                    leadingIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
-                        }
-                    },
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            onKeywordChange("")
-                            viewModel.updateKeyword("")
-                        }) {
-                            Icon(Icons.Rounded.Cancel, contentDescription = "清除關鍵字")
-                        }
-                    },
-                    active = isSearchActive,
-                    onActiveChange = {
-                        onSearchActiveChange(it)
-                    },
-                    placeholder = { Text(stringResource(id = R.string.app_search_password)) },
-                    content = {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            if (vaultUiState.vaultList.isNotEmpty() && keyword.isNotEmpty()) {
-                                LazyColumn(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    items(vaultUiState.vaultList) { vault ->
-                                        val (expanded, onExpandedChange) = remember {
-                                            mutableStateOf(false)
-                                        }
-                                        ListItem(
-                                            headlineContent = { Text(vault.name) },
-                                            supportingContent = { Text(vault.username) },
-                                            leadingContent = {
-                                                Icon(
-                                                    Icons.Default.AccountCircle,
-                                                    contentDescription = null,
-                                                )
-                                            },
-                                            trailingContent = {
-                                                IconButton(onClick = { onExpandedChange(true) }) {
-                                                    Icon(
-                                                        imageVector = Icons.Default.MoreVert,
-                                                        contentDescription = "更多內容"
-                                                    )
-                                                }
-                                            },
-                                            modifier = Modifier.clickable {
-                                                navigateToViewVault(vault.uid)
-                                            })
-                                        HorizontalDivider()
-                                        VaultDialog(
-                                            expanded,
-                                            onExpandedChange,
-                                            vault,
-                                            clipboard,
-                                            context,
-                                            navigateToViewVault,
-                                            navigateToEditVault
-                                        )
-                                    }
+                    inputField = {
+                        SearchBarDefaults.InputField(
+                            query = keyword,
+                            onQueryChange = {
+                                onKeywordChange(it)
+                                viewModel.updateKeyword(it)
+                            },
+                            onSearch = {
+                                if (it == "") {
+                                    onSearchActiveChange(false)
+                                } else {
+                                    onKeywordChange(it)
+                                    viewModel.updateKeyword(it)
                                 }
-                            } else if (keyword.isNotEmpty()) {
-                                Text(stringResource(id = R.string.app_search_password_empty))
-                            }
-                        }
+                            },
+                            expanded = isSearchActive,
+                            onExpandedChange = {
+                                onSearchActiveChange(it)
+                            },
+                            placeholder = { Text(stringResource(id = R.string.app_search_password)) },
+                            leadingIcon = {
+                                IconButton(onClick = {
+                                    navController.popBackStack()
+                                }) {
+                                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回上一頁")
+                                }
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = {
+                                    onKeywordChange("")
+                                    viewModel.updateKeyword("")
+                                }) {
+                                    Icon(Icons.Rounded.Cancel, contentDescription = "清除關鍵字")
+                                }
+                            },
+                        )
+                    },
+                    expanded = isSearchActive,
+                    onExpandedChange = {
+                        onSearchActiveChange(it)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
                         .align(Alignment.TopCenter)
-                )
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        if (vaultUiState.vaultList.isNotEmpty() && keyword.isNotEmpty()) {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                items(vaultUiState.vaultList) { vault ->
+                                    val (expanded, onExpandedChange) = remember {
+                                        mutableStateOf(false)
+                                    }
+                                    ListItem(
+                                        headlineContent = { Text(vault.name) },
+                                        supportingContent = { Text(vault.username) },
+                                        leadingContent = {
+                                            Icon(
+                                                Icons.Default.AccountCircle,
+                                                contentDescription = null,
+                                            )
+                                        },
+                                        trailingContent = {
+                                            IconButton(onClick = { onExpandedChange(true) }) {
+                                                Icon(
+                                                    imageVector = Icons.Default.MoreVert,
+                                                    contentDescription = "更多內容"
+                                                )
+                                            }
+                                        },
+                                        modifier = Modifier.clickable {
+                                            navigateToViewVault(vault.uid)
+                                        })
+                                    HorizontalDivider()
+                                    VaultDialog(
+                                        expanded,
+                                        onExpandedChange,
+                                        vault,
+                                        clipboard,
+                                        context,
+                                        navigateToViewVault,
+                                        navigateToEditVault
+                                    )
+                                }
+                            }
+                        } else if (keyword.isNotEmpty()) {
+                            Text(stringResource(id = R.string.app_search_password_empty))
+                        }
+                    }
+                }
             }
         }
     }
