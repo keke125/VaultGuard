@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keke125.vaultguard.data.VaultsRepository
 import com.keke125.vaultguard.screen.SearchVaultByFolderUidDestination
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -18,30 +20,27 @@ class SearchVaultByFolderUidViewModel(
     private val folderId: Int =
         checkNotNull(savedStateHandle[SearchVaultByFolderUidDestination.FOLDERID])
 
-    var searchVaultByFolderUidUiState: StateFlow<SearchVaultUiState> =
-        vaultsRepository.getAllVaultsFilteredByFolderUid("", if (folderId == 0) null else folderId)
-            .filterNotNull().map {
-                SearchVaultUiState(vaultList = it)
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = SearchVaultUiState()
+    private val _searchKeyword = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val searchVaultByFolderUidUiState: StateFlow<SearchVaultUiState> = _searchKeyword
+        .flatMapLatest { keyword ->
+            vaultsRepository.getAllVaultsFilteredByFolderUid(
+                keyword, if (folderId == 0) null else folderId
             )
+        }
+        .map { SearchVaultUiState(vaultList = it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = SearchVaultUiState()
+        )
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-
     fun updateKeyword(keyword: String) {
-        searchVaultByFolderUidUiState = vaultsRepository.getAllVaultsFilteredByFolderUid(
-            keyword, if (folderId == 0) null else folderId
-        ).filterNotNull().map {
-            SearchVaultUiState(vaultList = it)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = SearchVaultUiState()
-        )
+        _searchKeyword.value = keyword
     }
 }

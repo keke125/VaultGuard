@@ -4,18 +4,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.data.VaultsRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class SearchVaultViewModel(private val vaultsRepository: VaultsRepository) : ViewModel() {
 
-    var searchVaultUiState: StateFlow<SearchVaultUiState> =
-        vaultsRepository.getAllVaultsFiltered("").filterNotNull().map {
-            SearchVaultUiState(vaultList = it)
-        }.stateIn(
+    private val _searchKeyword = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val searchVaultUiState: StateFlow<SearchVaultUiState> = _searchKeyword
+        .flatMapLatest { keyword ->
+            vaultsRepository.getAllVaultsFiltered(keyword)
+        }
+        .map { SearchVaultUiState(vaultList = it) }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = SearchVaultUiState()
@@ -25,15 +32,8 @@ class SearchVaultViewModel(private val vaultsRepository: VaultsRepository) : Vie
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-
     fun updateKeyword(keyword: String) {
-        searchVaultUiState = vaultsRepository.getAllVaultsFiltered(keyword).filterNotNull().map {
-            SearchVaultUiState(vaultList = it)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = SearchVaultUiState()
-        )
+        _searchKeyword.value = keyword
     }
 }
 
