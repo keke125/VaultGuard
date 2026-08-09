@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
@@ -127,7 +126,7 @@ fun FolderScreen(
                         }
                     }
                 } else {
-                    startActivity(context, Intent(context, LoginActivity::class.java), null)
+                    context.startActivity(Intent(context, LoginActivity::class.java), null)
                     onTryLoginAuthChange(true)
                     onTryTimeoutChange(true)
                 }

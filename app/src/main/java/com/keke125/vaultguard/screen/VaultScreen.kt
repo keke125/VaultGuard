@@ -41,6 +41,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,20 +51,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.activity.LoginActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.model.VaultViewModel
+import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -211,7 +210,7 @@ fun VaultScreen(
                         ) { authViewModel.logout() }
                     }
                 } else {
-                    startActivity(context, Intent(context, LoginActivity::class.java), null)
+                    context.startActivity( Intent(context, LoginActivity::class.java), null)
                     onTryLoginAuthChange(true)
                     onTryTimeoutChange(true)
                 }

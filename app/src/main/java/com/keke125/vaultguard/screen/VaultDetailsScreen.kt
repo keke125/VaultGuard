@@ -63,7 +63,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -476,7 +475,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
 
                             try {
                                 Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
-                                startActivity(context, sendIntent, null)
+                                context.startActivity(sendIntent, null)
                             } catch (e: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
@@ -495,7 +494,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                             val it =
                                 packageManager.getLaunchIntentForPackage(url.removePrefix("androidapp://"))
                             if (it != null) {
-                                startActivity(context, it, null)
+                                context.startActivity(it, null)
                             } else {
                                 Toast.makeText(
                                     context, context.getString(R.string.app_open_url_error1), Toast.LENGTH_SHORT
@@ -510,7 +509,7 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
 
                             try {
                                 Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
-                                startActivity(context, sendIntent, null)
+                                context.startActivity(sendIntent, null)
                             } catch (e: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
