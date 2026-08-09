@@ -58,6 +58,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -78,7 +79,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
@@ -132,7 +132,7 @@ fun VaultDetailsScreen(
             } else {
                 if (uiState.value.vaultDetails.createdDateTime.isNotEmpty() and uiState.value.vaultDetails.createdDateTime.isNotBlank()) {
                     val parseSimpleDateFormat =
-                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", LocalLocale.current.platformLocale)
                     parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.createdDateTime)!!)
                 } else {
                     ""
@@ -151,7 +151,7 @@ fun VaultDetailsScreen(
             } else {
                 if (uiState.value.vaultDetails.lastModifiedDateTime.isNotEmpty() and uiState.value.vaultDetails.lastModifiedDateTime.isNotBlank()) {
                     val parseSimpleDateFormat =
-                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", LocalLocale.current.platformLocale)
                     parseSimpleDateFormat.format(parseSimpleDateFormat.parse(uiState.value.vaultDetails.lastModifiedDateTime)!!)
                 } else {
                     ""
@@ -455,11 +455,11 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                                 intentSender.sendIntent(
                                     context, intentSender.creatorUid, null, null, null
                                 )
-                            } catch (e: IntentSender.SendIntentException) {
+                            } catch (_: IntentSender.SendIntentException) {
                                 Toast.makeText(
                                     context, context.getString(R.string.app_open_url_error1), Toast.LENGTH_SHORT
                                 ).show()
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.app_open_url_error2),
@@ -476,13 +476,13 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                             try {
                                 Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
                                 context.startActivity(sendIntent, null)
-                            } catch (e: ActivityNotFoundException) {
+                            } catch (_: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.app_open_url_error2),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                             }
                         } else {
@@ -510,13 +510,13 @@ fun ViewUrl(url: String, context: Context, clipboardManager: ClipboardManager) {
                             try {
                                 Toast.makeText(context, context.getString(R.string.app_open_url), Toast.LENGTH_SHORT).show()
                                 context.startActivity(sendIntent, null)
-                            } catch (e: ActivityNotFoundException) {
+                            } catch (_: ActivityNotFoundException) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.app_open_url_error2),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 Toast.makeText(context, context.getString(R.string.app_open_url_error3), Toast.LENGTH_SHORT).show()
                             }
                         } else {
