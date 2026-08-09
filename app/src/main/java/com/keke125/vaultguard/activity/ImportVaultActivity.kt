@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -74,7 +74,7 @@ fun ImportVaultScreen(
     viewModel: ImportVaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
     context: Context
 ) {
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     val vaultUiState by viewModel.vaultUiState.collectAsState()
     val folderUiState by viewModel.folderUiState.collectAsState()
     val contentResolver = context.contentResolver

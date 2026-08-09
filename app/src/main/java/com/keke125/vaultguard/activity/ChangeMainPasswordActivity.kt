@@ -1,10 +1,10 @@
 package com.keke125.vaultguard.activity
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -67,7 +66,7 @@ fun ChangeMainPasswordScreen(
     viewModel: ChangeMainPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory),
     changeMainPasswordUiState: ChangeMainPasswordUiState = viewModel.changeMainPasswordUiState
 ) {
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     val (isOldPasswordVisible, onOldPasswordVisibleChange) = remember { mutableStateOf(false) }
     val (isNewPasswordVisible, onNewPasswordVisibleChange) = remember { mutableStateOf(false) }
     Scaffold(topBar = {

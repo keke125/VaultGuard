@@ -1,8 +1,8 @@
 package com.keke125.vaultguard.screen
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -50,6 +50,7 @@ fun SignupScreen(
     navController: NavController,
     viewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val activity = LocalActivity.current
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -143,8 +144,7 @@ fun SignupScreen(
         }
     }
     BackHandler(enabled = true) {
-        val activity = navController.context as Activity
-        activity.moveTaskToBack(true)
+        activity?.moveTaskToBack(true)
     }
 }
 

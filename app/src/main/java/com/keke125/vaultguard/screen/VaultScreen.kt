@@ -1,6 +1,5 @@
 package com.keke125.vaultguard.screen
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -8,6 +7,7 @@ import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -81,6 +81,7 @@ fun VaultScreen(
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
+            val activity = LocalActivity.current
             val context = navController.context
             val authUiState by authViewModel.authUiState.collectAsState()
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -218,8 +219,7 @@ fun VaultScreen(
                 navController.navigate(Screen.Signup.route)
             }
             BackHandler(enabled = true) {
-                val activity = context as Activity
-                activity.moveTaskToBack(true)
+                activity?.moveTaskToBack(true)
             }
         }
     }

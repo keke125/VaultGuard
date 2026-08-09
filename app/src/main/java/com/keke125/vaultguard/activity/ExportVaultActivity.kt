@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,7 +41,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -84,7 +84,7 @@ fun ExportVaultScreen(
 ) {
     val vaultUiState by viewModel.vaultUiState.collectAsState()
     val folderUiState by viewModel.folderUiState.collectAsState()
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     val jsonString =
         viewModel.exportVaultAndFolder(vaultUiState.vaultList, folderUiState.folderList)
     val contentResolver = context.contentResolver

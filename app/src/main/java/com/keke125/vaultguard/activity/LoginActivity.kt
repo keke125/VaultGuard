@@ -1,10 +1,10 @@
 package com.keke125.vaultguard.activity
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
@@ -78,7 +78,7 @@ fun LoginScreen(
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val activity = context as Activity
+            val activity = LocalActivity.current
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
             }
@@ -90,7 +90,7 @@ fun LoginScreen(
                 .observeAsState()
             val biometricManager = BiometricManager.from(context)
             if (authViewModel.isAuthenticated() && authViewModel.isNotTimeout()) {
-                activity.finish()
+                activity?.finish()
             } else {
                 if (biometricAuthUiState != null) {
                     if (biometricAuthUiState!!.isBiometricEnabled and !biometricAuthCancel) {
@@ -181,7 +181,7 @@ fun LoginScreen(
                                         Toast.makeText(
                                             context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                         ).show()
-                                        activity.finish()
+                                        activity?.finish()
                                     } else {
                                         Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT)
                                             .show()
@@ -248,7 +248,7 @@ fun LoginScreen(
                                     Toast.makeText(
                                         context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                     ).show()
-                                    activity.finish()
+                                    activity?.finish()
                                 } else {
                                     Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT).show()
                                 }
@@ -314,7 +314,7 @@ fun LoginScreen(
                                 Toast.makeText(
                                     context, context.getString(R.string.app_login_success), Toast.LENGTH_SHORT
                                 ).show()
-                                activity.finish()
+                                activity?.finish()
                             } else {
                                 Toast.makeText(context, context.getString(R.string.app_login_fail), Toast.LENGTH_SHORT).show()
                             }
@@ -326,9 +326,9 @@ fun LoginScreen(
             }
         }
     }
+    val activity = LocalActivity.current
     BackHandler(enabled = true) {
-        val activity = context as Activity
-        activity.moveTaskToBack(true)
+        activity?.moveTaskToBack(true)
     }
 }
 
@@ -338,9 +338,10 @@ fun BiometricScreen(
     onBiometricAuthCancel: (Boolean) -> Unit,
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val activity = LocalActivity.current
     val (isTryAuth, onTryAuth) = remember { mutableStateOf(false) }
     val executor = ContextCompat.getMainExecutor(context)
-    val biometricPrompt = BiometricPrompt(context as FragmentActivity,
+    val biometricPrompt = BiometricPrompt(activity as FragmentActivity,
         executor,
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(
@@ -375,7 +376,7 @@ fun BiometricScreen(
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)
         .build()
     if (isTryAuth) {
-        context.finish()
+        activity.finish()
     } else {
         biometricPrompt.authenticate(promptInfo)
     }

@@ -1,6 +1,5 @@
 package com.keke125.vaultguard.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -8,6 +7,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -117,7 +117,7 @@ class AuthSettingActivity : AppCompatActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSettingViewModel) {
-    val activity = context as? Activity
+    val activity = LocalActivity.current
     Scaffold(topBar = {
         TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -229,9 +229,11 @@ fun BiometricAuthSettingScreen(context: Context, viewModel: BiometricAuthSetting
                             false
                         )
                     }, onPromptBiometricResultChange = {
-                        startActivityForResult(
-                            context as FragmentActivity, enrollIntent, 100, null
-                        )
+                        (activity as? FragmentActivity)?.let {
+                            startActivityForResult(
+                                it, enrollIntent, 100, null
+                            )
+                        }
                     }, context = context)
                 }
             }
