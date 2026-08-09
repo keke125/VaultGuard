@@ -55,7 +55,7 @@ class AddVaultViewModel(
         }
     }
 
-    var foldersUiState: StateFlow<FoldersUiState> = foldersRepository.getAllFolders().map {
+    val foldersUiState: StateFlow<FoldersUiState> = foldersRepository.getAllFolders().map {
         FoldersUiState(folderList = it)
     }.stateIn(
         scope = viewModelScope,
