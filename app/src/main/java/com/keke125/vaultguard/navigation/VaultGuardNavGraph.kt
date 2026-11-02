@@ -11,14 +11,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.keke125.vaultguard.model.AppViewModelProvider
+import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.screen.AddFolderDestination
 import com.keke125.vaultguard.screen.AddFolderScreen
 import com.keke125.vaultguard.screen.AddVaultDestination
@@ -31,6 +37,7 @@ import com.keke125.vaultguard.screen.FolderDetailsDestination
 import com.keke125.vaultguard.screen.FolderDetailsScreen
 import com.keke125.vaultguard.screen.FolderScreen
 import com.keke125.vaultguard.screen.PasswordGeneratorScreen
+import com.keke125.vaultguard.screen.RequireAuthentication
 import com.keke125.vaultguard.screen.SearchVaultByFolderUidDestination
 import com.keke125.vaultguard.screen.SearchVaultByFolderUidScreen
 import com.keke125.vaultguard.screen.SearchVaultScreen
@@ -42,7 +49,24 @@ import com.keke125.vaultguard.screen.VaultScreen
 import com.keke125.vaultguard.screen.VaultsRepositoryScreen
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    var isSignup by remember { mutableStateOf(authViewModel.isSignup()) }
+    if (!isSignup) {
+        SignupScreen(onSignupComplete = { isSignup = true })
+    } else {
+        // Every destination in the nav graph requires an authenticated, non-expired session.
+        // The NavHost leaves composition while locked, so no vault data stays on screen.
+        RequireAuthentication(authViewModel) {
+            MainNavHost(modifier, onLockVault = { authViewModel.logout() })
+        }
+    }
+}
+
+@Composable
+private fun MainNavHost(modifier: Modifier = Modifier, onLockVault: () -> Unit) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -84,7 +108,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     navController = navController,
                     navigateToViewVault = { navController.navigate("${VaultDetailsDestination.route}/${it}") },
                     navigateToEditVault = { navController.navigate("${EditVaultDestination.route}/${it}") },
-                    navigateToSearchVault = { navController.navigate(Screen.SearchVault.route) })
+                    navigateToSearchVault = { navController.navigate(Screen.SearchVault.route) },
+                    onLockVault = onLockVault)
             }
             composable(Screen.SearchVault.route) {
                 SearchVaultScreen(
@@ -126,9 +151,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
             composable(Screen.VaultRepository.route) {
                 VaultsRepositoryScreen(navController = navController)
-            }
-            composable(Screen.Signup.route) {
-                SignupScreen(navController = navController)
             }
             composable(Screen.Folder.route) {
                 FolderScreen(

@@ -3,7 +3,6 @@ package com.keke125.vaultguard.screen
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -41,7 +40,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,18 +49,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.activity.LoginActivity
 import com.keke125.vaultguard.data.Vault
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.model.VaultViewModel
-import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -74,8 +66,8 @@ fun VaultScreen(
     navigateToViewVault: (Int) -> Unit,
     navigateToEditVault: (Int) -> Unit,
     navigateToSearchVault: () -> Unit,
-    vaultViewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    onLockVault: () -> Unit,
+    vaultViewModel: VaultViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
         Surface(
@@ -83,34 +75,11 @@ fun VaultScreen(
         ) {
             val activity = LocalActivity.current
             val context = navController.context
-            val authUiState by authViewModel.authUiState.collectAsState()
-            val lifecycleOwner = LocalLifecycleOwner.current
-
-            DisposableEffect(lifecycleOwner) {
-                val observer = LifecycleEventObserver { _, event ->
-                    if (event == Lifecycle.Event.ON_RESUME) {
-                        authViewModel.refreshAuthStatus()
-                    }
-                }
-                lifecycleOwner.lifecycle.addObserver(observer)
-                onDispose {
-                    lifecycleOwner.lifecycle.removeObserver(observer)
-                }
-            }
-
             val vaultUiState by vaultViewModel.vaultUiState.collectAsState()
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val (vaultRepositoryExpanded, onVaultRepositoryExpandedChange) = remember {
                 mutableStateOf(false)
             }
-            val (tryLoginAuth, onTryLoginAuthChange) = remember {
-                mutableStateOf(false)
-            }
-            val (tryTimeout, onTryTimeoutChange) = remember {
-                mutableStateOf(false)
-            }
-            if (authViewModel.isSignup()) {
-                if (authUiState.isAuthenticated || (tryLoginAuth && tryTimeout)) {
                     Scaffold(floatingActionButton = {
                         FloatingActionButton(
                             onClick = {
@@ -207,17 +176,8 @@ fun VaultScreen(
                         }
                         VaultRepositoryDialog(
                             vaultRepositoryExpanded, onVaultRepositoryExpandedChange,
-                            onTryLoginAuthChange,
-                        ) { authViewModel.logout() }
+                        ) { onLockVault() }
                     }
-                } else {
-                    context.startActivity( Intent(context, LoginActivity::class.java), null)
-                    onTryLoginAuthChange(true)
-                    onTryTimeoutChange(true)
-                }
-            } else {
-                navController.navigate(Screen.Signup.route)
-            }
             BackHandler(enabled = true) {
                 activity?.moveTaskToBack(true)
             }
@@ -327,7 +287,6 @@ fun VaultDialog(
 fun VaultRepositoryDialog(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
-    onTryAuthChange: (Boolean) -> Unit,
     lockVaultRepository: () -> Unit
 ) {
     when {
@@ -341,7 +300,6 @@ fun VaultRepositoryDialog(
                         )
                     }, modifier = Modifier.clickable {
                         lockVaultRepository()
-                        onTryAuthChange(false)
                         onExpandedChange(false)
                     })
                 }

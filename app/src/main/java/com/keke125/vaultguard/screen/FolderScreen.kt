@@ -1,7 +1,6 @@
 package com.keke125.vaultguard.screen
 
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,8 +26,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -37,11 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.keke125.vaultguard.R
-import com.keke125.vaultguard.activity.LoginActivity
 import com.keke125.vaultguard.model.AppViewModelProvider
-import com.keke125.vaultguard.model.AuthViewModel
 import com.keke125.vaultguard.model.FolderViewModel
-import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 
@@ -50,23 +44,13 @@ import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 fun FolderScreen(
     navController: NavController,
     navigateToViewFolder: (Int) -> Unit,
-    folderViewModel: FolderViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    folderViewModel: FolderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     VaultGuardTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val context = navController.context
             val folderUiState by folderViewModel.foldersUiState.collectAsState()
-            val (tryLoginAuth, onTryLoginAuthChange) = remember {
-                mutableStateOf(false)
-            }
-            val (tryTimeout, onTryTimeoutChange) = remember {
-                mutableStateOf(false)
-            }
-            if (authViewModel.isSignup()) {
-                if ((authViewModel.isAuthenticated() && authViewModel.isNotTimeout()) || (tryLoginAuth && tryTimeout)) {
                     Scaffold(floatingActionButton = {
                         FloatingActionButton(
                             onClick = {
@@ -125,14 +109,6 @@ fun FolderScreen(
                             }
                         }
                     }
-                } else {
-                    context.startActivity(Intent(context, LoginActivity::class.java), null)
-                    onTryLoginAuthChange(true)
-                    onTryTimeoutChange(true)
-                }
-            } else {
-                navController.navigate(Screen.Signup.route)
-            }
         }
     }
 }

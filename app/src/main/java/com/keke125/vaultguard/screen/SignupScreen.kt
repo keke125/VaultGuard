@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,16 +39,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.keke125.vaultguard.R
 import com.keke125.vaultguard.model.AppViewModelProvider
 import com.keke125.vaultguard.model.AuthViewModel
-import com.keke125.vaultguard.navigation.Screen
 import com.keke125.vaultguard.ui.theme.VaultGuardTheme
 
 @Composable
 fun SignupScreen(
-    navController: NavController,
+    onSignupComplete: () -> Unit,
     viewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val activity = LocalActivity.current
@@ -55,7 +54,9 @@ fun SignupScreen(
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val context = navController.context
+            val context = LocalContext.current
+            val passwordRequiredMessage = stringResource(id = R.string.app_main_pw_required1)
+            val setSuccessMessage = stringResource(id = R.string.app_set_success)
             val (signupPassword, onSignupPasswordChange) = remember { mutableStateOf("") }
             val (isPasswordVisible, onPasswordVisibleChange) = remember {
                 mutableStateOf(false)
@@ -65,7 +66,6 @@ fun SignupScreen(
                     false
                 )
             }
-            if (!viewModel.isSignup()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -112,7 +112,7 @@ fun SignupScreen(
                     Button(onClick = {
                         if (signupPassword.isEmpty() || signupPassword.isBlank()) {
                             Toast.makeText(
-                                context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
+                                context, passwordRequiredMessage, Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             onSignupConfirmExpandedChange(true)
@@ -121,22 +121,19 @@ fun SignupScreen(
                         Text(stringResource(id = R.string.app_set))
                     }
                 }
-            } else {
-                navController.navigate(Screen.Vault.route)
-            }
             when {
                 isSignupConfirmExpanded -> {
                     SignupConfirm(onSignupConfirmExpandedChange, onSignedUp = {
                         if (signupPassword.isEmpty() || signupPassword.isBlank()) {
                             Toast.makeText(
-                                context, context.getString(R.string.app_main_pw_required1), Toast.LENGTH_SHORT
+                                context, passwordRequiredMessage, Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             Toast.makeText(
-                                context, context.getString(R.string.app_set_success), Toast.LENGTH_SHORT
+                                context, setSuccessMessage, Toast.LENGTH_SHORT
                             ).show()
                             viewModel.updateMainPassword(signupPassword)
-                            navController.navigate(Screen.Vault.route)
+                            onSignupComplete()
                         }
                     })
                 }
