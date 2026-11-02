@@ -2,7 +2,6 @@
 agp = "9.5.0"
 apacheCommonsCsv = "1.14.1"
 barcodeScanning = "17.3.0"
-biometricKtx = "1.2.0-alpha05"
 biometricVersion = "1.1.0"
 cameraCore = "1.6.2"
 gson = "2.14.0"
@@ -30,7 +29,6 @@ sqlite = "2.7.1"
 
 [libraries]
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometricVersion" }
-androidx-biometric-ktx = { module = "androidx.biometric:biometric-ktx", version.ref = "biometricKtx" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }

@@ -112,7 +112,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.apache.commons.csv)
     implementation(libs.androidx.biometric)
-    implementation(libs.androidx.biometric.ktx)
     implementation(libs.androidx.security.crypto)
     implementation(libs.kotlin.onetimepassword)
     implementation(libs.barcode.scanning)
