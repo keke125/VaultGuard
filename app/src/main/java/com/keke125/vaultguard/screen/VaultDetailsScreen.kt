@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -273,15 +273,15 @@ fun VaultDetailsScreen(
                             label = { Text(stringResource(id = R.string.app_totp)) },
                             leadingIcon = { Icon(Icons.Default.Key, null) },
                             trailingIcon = {
-                                Row {
-                                    Text(
-                                        text = time.toString(),
-                                        modifier = Modifier.offset(x = 30.dp, y = 11.dp)
-                                    )
-                                    CircularProgressIndicator(
-                                        progress = { ((time.toFloat() / 30.0)).toFloat() },
-                                        modifier = Modifier.offset(y = 3.dp)
-                                    )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Box(
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator(
+                                            progress = { time.toFloat() / 30f }
+                                        )
+                                        Text(text = time.toString())
+                                    }
                                     IconButton(onClick = {
                                         copyText(
                                             clipboardManager, totp, context
