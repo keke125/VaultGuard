@@ -74,6 +74,7 @@
     <string name="app_biometric_auth_fail2">Authentication Failed!</string>
     <string name="app_biometric_title">Login to Vault Guard</string>
     <string name="app_biometric_subtitle">Use biometric authentication to login to Vault Guard</string>
+    <string name="app_biometric_login">Login with biometrics</string>
     <string name="app_save">Save</string>
     <string name="app_save_success">Save successful</string>
     <string name="app_back_prev_screen">Go back to the previous page</string>

@@ -75,6 +75,7 @@
     <string name="app_biometric_auth_fail2">驗證失敗!</string>
     <string name="app_biometric_title">登入Vault Guard</string>
     <string name="app_biometric_subtitle">使用生物辨識登入Vault Guard</string>
+    <string name="app_biometric_login">使用生物辨識登入</string>
     <string name="app_save">儲存</string>
     <string name="app_save_success">儲存成功</string>
     <string name="app_back_prev_screen">返回上一頁</string>
